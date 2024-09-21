@@ -11,7 +11,6 @@ const tracks = [
     { title: "Destroy Lonely - if looks could kill", path: "assets/music/iflookscouldkill.mp3" },
     { title: "Ken Carson - Succubus", path: "assets/music/Succubus.mp3" },
     { title: "Don Toliver - Bandit", path: "assets/music/Bandit.mp3" },
-    { title: "Yeat - No Morë Talk", path: "assets/music/NoMoreTalk.mp3" },
     { title: "Yeat - Shade", path: "assets/music/Shade.mp3" },
     { title: "che x SEMATARY - 666", path: "assets/music/666.mp3" },
     { title: "SGGKobe - thrax", path: "assets/music/thrax.mp3" },
