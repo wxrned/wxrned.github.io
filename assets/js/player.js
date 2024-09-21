@@ -11,11 +11,14 @@ const tracks = [
     { title: "Destroy Lonely - if looks could kill", path: "assets/music/iflookscouldkill.mp3" },
     { title: "Ken Carson - Succubus", path: "assets/music/Succubus.mp3" },
     { title: "Don Toliver - Bandit", path: "assets/music/Bandit.mp3" },
+    { title: "Yeat - No Morë Talk", path: "assets/music/NoMoreTalk.mp3" },
     { title: "Yeat - Shade", path: "assets/music/Shade.mp3" },
     { title: "che x SEMATARY - 666", path: "assets/music/666.mp3" },
     { title: "SGGKobe - thrax", path: "assets/music/thrax.mp3" },
     { title: "Ndotz - Embrace It", path: "assets/music/EmbraceIt.mp3" },
     { title: "DJ Scheme - Blue Bills", path: "assets/music/BlueBills.mp3" },
+    { title: "Ken Carson - Green Room", path: "assets/music/GreenRoom.mp3" },
+    { title: "Ken Carson - RICK OWENS", path: "assets/music/RickOwens.mp3" },
     { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" }
 ];
 
