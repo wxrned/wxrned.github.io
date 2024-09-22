@@ -18,6 +18,8 @@ const tracks = [
     { title: "DJ Scheme - Blue Bills", path: "assets/music/BlueBills.mp3" },
     { title: "Ken Carson - Green Room", path: "assets/music/GreenRoom.mp3" },
     { title: "Ken Carson - RICK OWENS", path: "assets/music/RickOwens.mp3" },
+    { title: "Never Get Used To People - Life Letters", path: "assets/music/LifeLetters.mp3" },
+    { title: "Ken Carson - Lose It", path: "assets/music/LoseIt.mp3" },
     { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" }
 ];
 
