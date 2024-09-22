@@ -20,6 +20,8 @@ const tracks = [
     { title: "Ken Carson - RICK OWENS", path: "assets/music/RickOwens.mp3" },
     { title: "Never Get Used To People - Life Letters", path: "assets/music/LifeLetters.mp3" },
     { title: "Ken Carson - Lose It", path: "assets/music/LoseIt.mp3" },
+    { title: "NXVAMANE - Fresh (Slowed)", path: "assets/music/Fresh.mp3" },
+    { title: "King Von - 2AM", path: "assets/music/2AM.mp3" },
     { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" }
 ];
 
