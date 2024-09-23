@@ -171,7 +171,7 @@ button:hover {
     appearance: none;
     width: 12px;
     height: 12px;
-    background: #006b99;
+    background: var(--text-color-light);
     border-radius: 50%;
     cursor: url("../cursors/16px_pointer.png"), pointer;
     transition: background 0.3s ease-in-out;
@@ -184,7 +184,7 @@ button:hover {
 #seek-bar::-moz-range-thumb {
     width: 12px;
     height: 12px;
-    background: #006b99;
+    background: var(--text-color-light);
     border-radius: 50%;
     cursor: url("../cursors/16px_pointer.png"), pointer;
     transition: background 0.3s ease-in-out;
