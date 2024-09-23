@@ -27,6 +27,8 @@ const tracks = [
     { title: "$uicideboy$ - Bizarro", path: "assets/music/Bizarro.mp3" },
     { title: "King Von - 2AM", path: "assets/music/2AM.mp3" },
     { title: "Yeat - Balenci", path: "assets/music/Balenci.mp3" },
+    { title: "Yeat - Sidëwayz 2", path: "assets/music/Sidewayz2.mp3" },
+    { title: "$uicideboy$ - 1000 Blunts", path: "assets/music/1000Blunts.mp3" },
     { title: "Yeat - Mountain Climbërs", path: "assets/music/MountainClimbers.mp3" },
     { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" }
 ];
