@@ -1,66 +1,145 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     
+
     <meta property="og:title" content="@.wxrn">
+
     <meta property="og:description" content="Six, six, six. I'm so fucking sick.">
+
     <meta property="og:image" id="embed-icon" content="https://wxrn.lol/assets/img/pfp.gif">
+
     <meta name="theme-color" content="#878ece">
 
+
+
     <link rel="stylesheet" href="assets/css/style.css">
+
     <link rel="shortcut icon" id="short-icon" href="assets/img/pfp.gif" type="image/x-icon">
+
     
+
     <script src="https://kit.fontawesome.com/b756c00e57.js" crossorigin="anonymous"></script>
 
-    <title>​</title>
-</head>
-<body>
-    <main>
-        <img id="dc-pfp" src="assets/img/pfp.gif">
-        <span id="who">warn</span>
-        <span id="footer"></span>
-        <!-- Music Player -->
-        <div class="music-player">
-            <!-- Music slider -->
-            <input type="range" id="seek-bar" value="0" min="0" max="100" step="1">
-    
-            <!-- Control buttons -->
-            <div class="controls">
-                <button id="prev"><i class="icon fa-solid fa-backward"></i></button>
-                <button id="play-pause"><i class="icon fa-solid fa-play"></i></button>
-                <button id="next"><i class="icon fa-solid fa-forward"></i></button>
-            </div>
-        </div>
-        <!-- Social Links -->
-        <div class="flexbox">
-            <a href="https://t.me/wxrned" target="_blank"><button><i class="icon fa-brands telegram"></i>@wxrned</button></a>
-            <a href="https://www.tiktok.com/@wxrned_" target="_blank"><button><i class="icon fa-brands tiktok"></i>@wxrned_</button></a>
-            <a href="discord" target="_blank"><button><i class="icon fa-brands discord"></i>/mag</button></a>
-        </div>
-    </main>
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js"></script>
 
-    <div id="overlay"></div>
-    <div id="popup">
-        <h2>ʚ ♡ ɞ</h2>
-        <ul>
-            <li><img src="" id="gaby" alt="1279469477305520128"><span style="color: pink;" class="friend-name">gaby <3</span></li>
-            <li><img src="" id="shiku" alt="1128162075336769567"><span class="friend-name">shiku</span></li>
-            <li><img src="" id="1pm" alt="1241137218119012523"><span class="friend-name">1pm</span></li>
-            <li><img src="" id="cautious" alt="1192130088033079327"><span class="friend-name">cautious</span></li>
-            <li><img src="" id="custom" alt="869687741955309578"><span class="friend-name">custom</span></li>
-            <li><img src="" id="ria" alt="1155516642063814737"><span class="friend-name">ria</span></li>
-        </ul>
-        <button onclick="closePopup()">close</button>
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js"></script>
+
+
+
+    <title></title>
+
+</head>
+
+<body>
+
+    <div id="view-counter" class="view-counter">
+
+      <span><i class="fa-regular fa-eye"></i> </span><span id="page_views">0</span>
+
     </div>
 
-    <audio id="audio" src=""></audio>
+    <main>
+
+        <img id="dc-pfp" src="assets/img/pfp.gif">
+
+        <span id="who">warn</span>
+
+        <span id="footer"></span>
+
+        <!-- Music Player -->
+
+        <div class="music-player">
+
+            <!-- Music slider -->
+
+            <input type="range" id="seek-bar" value="0" min="0" max="100" step="1">
+
     
+
+            <!-- Control buttons -->
+
+            <div class="controls">
+
+                <button id="prev"><i class="icon fa-solid fa-backward"></i></button>
+
+                <button id="play-pause"><i class="icon fa-solid fa-play"></i></button>
+
+                <button id="next"><i class="icon fa-solid fa-forward"></i></button>
+
+            </div>
+
+        </div>
+
+        <!-- Social Links -->
+
+        <div class="flexbox">
+
+            <a href="https://t.me/wxrned" target="_blank"><button><i class="icon fa-brands telegram"></i>@wxrned</button></a>
+
+            <a href="https://www.tiktok.com/@wxrned_" target="_blank"><button><i class="icon fa-brands tiktok"></i>@wxrned_</button></a>
+
+            <a href="discord" target="_blank"><button><i class="icon fa-brands discord"></i>/mag</button></a>
+
+        </div>
+
+    </main>
+
+
+
+    <div id="overlay"></div>
+
+    <div id="popup">
+
+        <h2>ʚ ♡ ɞ</h2>
+
+        <ul>
+
+            <li><img src="" id="gaby" alt="1279469477305520128"><span style="color: pink;" class="friend-name">gaby <3</span></li>
+
+            <li><img src="" id="shiku" alt="1128162075336769567"><span class="friend-name">shiku</span></li>
+
+            <li><img src="" id="1pm" alt="1241137218119012523"><span class="friend-name">1pm</span></li>
+
+            <li><img src="" id="cautious" alt="1192130088033079327"><span class="friend-name">cautious</span></li>
+
+            <li><img src="" id="custom" alt="869687741955309578"><span class="friend-name">custom</span></li>
+
+            <li><img src="" id="ria" alt="1155516642063814737"><span class="friend-name">ria</span></li>
+
+        </ul>
+
+        <button onclick="closePopup()">close</button>
+
+    </div>
+
+
+
+    <audio id="audio" src=""></audio>
+
+    
+
     <script src="assets/js/inspect.js"></script>
+
     <script src="assets/js/title.js"></script>
+
     <script src="assets/js/player.js"></script>
+
     <script src="assets/js/popup.js"></script>
+
     <script src="assets/js/popupAvatars.js"></script>
+
+    <script src="assets/js/viewCount.js"></script>
+
+    <script src="https://api.ipify.org/?format=json&callback=get_viewers_ip"></script>
+
 </body>
+
 </html>
