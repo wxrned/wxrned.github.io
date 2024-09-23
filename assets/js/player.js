@@ -22,6 +22,9 @@ const tracks = [
     { title: "lucidbeatz - Let U Go", path: "assets/music/LetUGo.mp3" },
     { title: "Ken Carson - Lose It", path: "assets/music/LoseIt.mp3" },
     { title: "NXVAMANE - Fresh (Slowed)", path: "assets/music/Fresh.mp3" },
+    { title: "Anuel AA - LHNA", path: "assets/music/LHNA.mp3" },
+    { title: "Anuel AA - Diamantes en Mis Dientes", path: "assets/music/DiamantesEnMisDientes.mp3" },
+    { title: "$uicideboy$ - Bizarro", path: "assets/music/Bizarro.mp3" },
     { title: "King Von - 2AM", path: "assets/music/2AM.mp3" },
     { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" }
 ];
@@ -40,7 +43,7 @@ function shuffleTracks() {
 function loadTrack(index, animationClass) {
     currentTrack = index;
     audioPlayer.src = tracks[currentTrack].path;
-    footer.textContent = `ʚ ${tracks[currentTrack].title} ɞ`;
+    footer.textContent = `〤 ${tracks[currentTrack].title} 〤`;
 
     // Apply animation
     footer.classList.remove('slide-in-right', 'slide-in-left');
