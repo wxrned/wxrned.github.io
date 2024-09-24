@@ -17,6 +17,8 @@ function get_viewers_ip(json) {
   let ip = json.ip;
 
   if (json.security.vpn || json.security.proxy) {
+    document.getElementById("check-p").innerHTML =
+      "You are currently using a VPN or Proxy. Click anywhere to enter the site.";
     document.getElementById("entry-overlay").style.display = "flex";
     window.addEventListener("click", enterSite);
   } else {
@@ -66,7 +68,7 @@ function countViews(ip) {
     .child("page_views")
     .on("value", function (snapshot) {
       views = snapshot.numChildren();
-      document.getElementById("page_views").innerHTML = views;
+      animateCountUp(views);
     });
 }
 
@@ -84,3 +86,24 @@ fetch("https://api.ipify.org/?format=json")
   .catch((error) => {
     console.error("Error fetching IP:", error);
   });
+
+function animateCountUp(targetNumber) {
+  const pageViewsElement = document.getElementById("page_views");
+  const currentNumber = parseInt(pageViewsElement.innerHTML);
+  const increment = Math.ceil((targetNumber - currentNumber) / 100); // Increment step
+  const duration = 1000; // Duration of the animation in milliseconds
+  const steps = Math.ceil(duration / 50); // Number of steps for the animation
+  let count = currentNumber;
+
+  const interval = setInterval(() => {
+    count += increment;
+    if (increment > 0 && count >= targetNumber) {
+      count = targetNumber; // Stop at target number
+      clearInterval(interval);
+    } else if (increment < 0 && count <= targetNumber) {
+      count = targetNumber; // Stop at target number
+      clearInterval(interval);
+    }
+    pageViewsElement.innerHTML = count;
+  }, 50);
+}
