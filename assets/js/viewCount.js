@@ -18,7 +18,7 @@ function get_viewers_ip(json) {
 
   if (json.security.vpn || json.security.proxy) {
     document.getElementById("check-p").innerHTML =
-      "You are currently using a VPN or Proxy. Click anywhere to enter the site.";
+      "vpn/proxy detected.<br>click to enter.";
     document.getElementById("entry-overlay").style.display = "flex";
     window.addEventListener("click", enterSite);
   } else {
