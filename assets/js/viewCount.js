@@ -16,22 +16,25 @@ var database = firebase.database();
 function get_viewers_ip(json) {
   let ip = json.ip;
 
-  if (json.security.vpn) {
+  if (json.security.vpn || json.security.proxy) {
     document.getElementById("entry-overlay").style.display = "flex";
-    console.log("VPN detected. Click to enter the site.");
-
+    console.log("VPN or Proxy detected. Click to enter the site.");
     window.addEventListener("click", enterSite);
   } else {
     console.log("Viewer IP:", ip);
     countViews(ip);
+    enterSite();
   }
 }
 
 function enterSite() {
   const mainContent = document.querySelector("main");
-  mainContent.classList.add("fade-in");
 
   document.getElementById("entry-overlay").style.display = "none";
+
+  mainContent.style.display = "flex";
+  mainContent.classList.add("fade-in");
+
   window.removeEventListener("click", enterSite);
 
   fetch("https://api.ipify.org/?format=json")
