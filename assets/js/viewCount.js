@@ -1,3 +1,4 @@
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCTzKMUnEqwoEiiYN-NEqZO5fbcUPJFYxY",
   authDomain: "wxrnlol-eb507.firebaseapp.com",
@@ -16,19 +17,15 @@ function get_viewers_ip(json) {
 }
 
 function countViews(ip) {
-  var views;
-  var ip_to_string = viewers_ip.toString();
+    var views;
+    var ip_to_string = ip.toString().replace(/\./g, "-");
 
-  for(var i, i = 0; i < ip_to_string.length; i++){
-    ip_to_string = ip_to_string.replace(".", "-");
-  }
-  
-  firebase.database().ref().child("page_views/" + ip_to_string).set({
-    viewers_ip: viewers_ip
-  });
+    firebase.database().ref().child("page_views/" + ip_to_string).set({
+        viewers_ip: ip
+    });
 
-  firebase.database().ref().child("page_views").on("value", function (snapshot) {
-    views = snapshot.numChildren();
-    document.getElementById("page_views").innerHTML = views;
-  });
+    firebase.database().ref().child("page_views").on("value", function (snapshot) {
+        views = snapshot.numChildren();
+        document.getElementById("page_views").innerHTML = views;
+    });
 }
