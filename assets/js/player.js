@@ -30,6 +30,8 @@ const tracks = [
     { title: "Yeat - Sidëwayz 2", path: "assets/music/Sidewayz2.mp3" },
     { title: "$uicideboy$ - 1000 Blunts", path: "assets/music/1000Blunts.mp3" },
     { title: "Yeat - Mountain Climbërs", path: "assets/music/MountainClimbers.mp3" },
+    { title: "Khea x Duki - Loca", path: "assets/music/Loca.mp3" },
+    { title: "Duki - Goteo", path: "assets/music/Goteo.mp3" },
     { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" }
 ];
 
