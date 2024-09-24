@@ -9,7 +9,7 @@ const firebaseConfig = {
   measurementId: "G-4MHBKXVH15"
 };
 
-Firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
 function get_viewers_ip(json) {
   let ip = json.ip;
@@ -20,11 +20,11 @@ function countViews(ip) {
     var views;
     var ip_to_string = ip.toString().replace(/\./g, "-");
 
-    Firebase.database().ref().child("page_views/" + ip_to_string).set({
+    firebase.database().ref().child("page_views/" + ip_to_string).set({
         viewers_ip: ip
     });
 
-    Firebase.database().ref().child("page_views").on("value", function (snapshot) {
+    firebase.database().ref().child("page_views").on("value", function (snapshot) {
         views = snapshot.numChildren();
         document.getElementById("page_views").innerHTML = views;
     });
