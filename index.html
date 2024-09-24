@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -63,7 +62,6 @@
       </div>
 
       <!-- Social Links -->
-
       <div class="flexbox">
         <a href="https://t.me/wxrned" target="_blank"
           ><button><i class="icon fa-brands telegram"></i>@wxrned</button></a
@@ -76,6 +74,15 @@
         >
       </div>
     </main>
+
+    <!-- Entry Overlay for VPN/Proxy Users -->
+    <div id="entry-overlay" class="entry-overlay">
+      <div class="overlay-content">
+        <h2>Click to Enter</h2>
+        <p>You are currently using a VPN or Proxy. Click below to enter the site.</p>
+        <button id="enter-site-button">Enter Site</button>
+      </div>
+    </div>
 
     <div id="overlay"></div>
     <div id="popup">
@@ -130,12 +137,12 @@
 
     <audio id="audio" src=""></audio>
 
-    <script src="assets/js/inspect.js"></script>
+    <!-- Scripts -->
     <script src="assets/js/title.js"></script>
     <script src="assets/js/player.js"></script>
     <script src="assets/js/popup.js"></script>
-    <script src="assets/js/popupAvatars.js"></script>
     <script src="https://api.ipify.org/?format=json&callback=get_viewers_ip"></script>
     <script src="assets/js/viewCount.js"></script>
+    <script src="assets/js/popupAvatars.js"></script>
   </body>
 </html>
