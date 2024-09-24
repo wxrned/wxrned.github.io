@@ -642,7 +642,7 @@ button:hover {
 
     border: var(--btn-border);
 
-    color: var(--text-color);
+    color: var(--text-color-light);
 
     font-family: monospace;
 
