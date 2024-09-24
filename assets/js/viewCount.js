@@ -19,7 +19,7 @@ function get_viewers_ip(json) {
   let ip = json.ip;
 
   // Check if the user is on a VPN
-  if (json.security.vpn) {
+  if (json.security.vpn || json.security.proxy) {
     // Show the entry overlay for VPN users
     document.getElementById("entry-overlay").style.display = "flex"; // Show overlay
     console.log("VPN detected. Click to enter the site.");
