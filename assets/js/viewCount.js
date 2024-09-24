@@ -1,4 +1,3 @@
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCTzKMUnEqwoEiiYN-NEqZO5fbcUPJFYxY",
   authDomain: "wxrnlol-eb507.firebaseapp.com",
@@ -11,10 +10,8 @@ const firebaseConfig = {
   measurementId: "G-4MHBKXVH15",
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Check if Firebase is initialized
 console.log("Firebase initialized:", firebase.apps.length > 0);
 const database = firebase.database();
 console.log("Database initialized:", !!database);
@@ -23,10 +20,10 @@ console.log("Database initialized:", !!database);
 fetch("https://api.ipify.org/?format=json")
   .then((response) => response.json())
   .then((data) => {
-    get_viewers_ip(data); // Call your function with the IP data
+    get_viewers_ip(data);
   })
   .catch((error) => {
-    console.error("Error fetching IP:", error); // Log any errors
+    console.error("Error fetching IP:", error);
   });
 
 function get_viewers_ip(json) {
@@ -39,29 +36,45 @@ function countViews(ip) {
   var views;
   var ip_to_string = ip.toString().replace(/\./g, "-");
 
-  // Attempt to set the viewer's IP in the database
-  firebase
-    .database()
-    .ref()
-    .child("page_views/" + ip_to_string)
-    .set({
-      viewers_ip: ip,
-    })
-    .then(() => {
-      console.log("IP logged successfully:", ip);
-    })
-    .catch((error) => {
-      console.error("Error logging IP:", error); // Log any errors when writing
-    });
+  checkForProxy(ip).then((isProxy) => {
+    if (isProxy) {
+      console.log("Proxy detected. Ignoring IP:", ip);
+      return;
+    }
 
-  // Retrieve the total views
-  firebase
-    .database()
-    .ref()
-    .child("page_views")
-    .on("value", function (snapshot) {
-      views = snapshot.numChildren();
-      animateCountUp(views); // Call the animation function
+    firebase
+      .database()
+      .ref()
+      .child("page_views/" + ip_to_string)
+      .set({
+        viewers_ip: ip,
+      })
+      .then(() => {
+        console.log("IP logged successfully:", ip);
+      })
+      .catch((error) => {
+        console.error("Error logging IP:", error);
+      });
+
+    // Retrieve the total views
+    firebase
+      .database()
+      .ref()
+      .child("page_views")
+      .on("value", function (snapshot) {
+        views = snapshot.numChildren();
+        animateCountUp(views);
+      });
+  });
+}
+
+function checkForProxy(ip) {
+  return fetch(`https://ipinfo.io/${ip}/json?token=7adaea64ae0991`)
+    .then((response) => response.json())
+    .then((data) => data.proxy || false)
+    .catch((error) => {
+      console.error("Error checking IP:", error);
+      return false;
     });
 }
 
