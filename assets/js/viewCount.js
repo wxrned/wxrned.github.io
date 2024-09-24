@@ -18,10 +18,8 @@ function get_viewers_ip(json) {
 
   if (json.security.vpn || json.security.proxy) {
     document.getElementById("entry-overlay").style.display = "flex";
-    console.log("VPN or Proxy detected. Click to enter the site.");
     window.addEventListener("click", enterSite);
   } else {
-    console.log("Viewer IP:", ip);
     countViews(ip);
     enterSite();
   }
@@ -31,6 +29,8 @@ function enterSite() {
   const mainContent = document.querySelector("main");
 
   document.getElementById("entry-overlay").style.display = "none";
+  document.getElementById("entry-overlay").style.visibility = "hidden";
+  document.getElementById("entry-overlay").style.opacity = 0;
 
   mainContent.style.display = "flex";
   mainContent.classList.add("fade-in");
@@ -41,7 +41,6 @@ function enterSite() {
     .then((response) => response.json())
     .then((data) => {
       const ip = data.ip;
-      console.log("Viewer IP on entry:", ip);
       countViews(ip);
     })
     .catch((error) => {
