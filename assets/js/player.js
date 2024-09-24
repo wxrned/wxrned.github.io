@@ -1,4 +1,4 @@
-const audioPlayer = document.getElementById('audio');
+const audioPlayer = document.getElementById('audio'); 
 const playPauseBtn = document.getElementById('play-pause');
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
@@ -7,37 +7,33 @@ const seekBar = document.getElementById('seek-bar');
 
 const defaultFooterText = '〤 CutNation 〤';
 
-const tracks = [
-    { title: "Destroy Lonely - if looks could kill", path: "assets/music/iflookscouldkill.mp3" },
-    { title: "Ken Carson - Succubus", path: "assets/music/Succubus.mp3" },
-    { title: "Don Toliver - Bandit", path: "assets/music/Bandit.mp3" },
-    { title: "Yeat - Shade", path: "assets/music/Shade.mp3" },
-    { title: "che x SEMATARY - 666", path: "assets/music/666.mp3" },
-    { title: "SGGKobe - thrax", path: "assets/music/thrax.mp3" },
-    { title: "Ndotz - Embrace It", path: "assets/music/EmbraceIt.mp3" },
-    { title: "DJ Scheme - Blue Bills", path: "assets/music/BlueBills.mp3" },
-    { title: "Ken Carson - Green Room", path: "assets/music/GreenRoom.mp3" },
-    { title: "Ken Carson - RICK OWENS", path: "assets/music/RickOwens.mp3" },
-    { title: "Never Get Used To People - Life Letters", path: "assets/music/LifeLetters.mp3" },
-    { title: "lucidbeatz - Let U Go", path: "assets/music/LetUGo.mp3" },
-    { title: "Ken Carson - Lose It", path: "assets/music/LoseIt.mp3" },
-    { title: "NXVAMANE - Fresh (Slowed)", path: "assets/music/Fresh.mp3" },
-    { title: "Anuel AA - LHNA", path: "assets/music/LHNA.mp3" },
-    { title: "Anuel AA - Diamantes en Mis Dientes", path: "assets/music/DiamantesEnMisDientes.mp3" },
-    { title: "$uicideboy$ - Bizarro", path: "assets/music/Bizarro.mp3" },
-    { title: "King Von - 2AM", path: "assets/music/2AM.mp3" },
-    { title: "Yeat - Balenci", path: "assets/music/Balenci.mp3" },
-    { title: "Yeat - Sidëwayz 2", path: "assets/music/Sidewayz2.mp3" },
-    { title: "$uicideboy$ - 1000 Blunts", path: "assets/music/1000Blunts.mp3" },
-    { title: "Yeat - Mountain Climbërs", path: "assets/music/MountainClimbers.mp3" },
-    { title: "Khea x Duki - Loca", path: "assets/music/Loca.mp3" },
-    { title: "Duki - Goteo", path: "assets/music/Goteo.mp3" },
-    { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" }
-];
-
+let tracks = []; // Empty for now, will be populated by API
 let currentTrack = 0;
 audioPlayer.volume = 0.10;
 let isDragging = false;
+
+// Function to fetch playlist songs from the API
+async function fetchPlaylistSongs() {
+    try {
+        const response = await fetch(`https://185.228.81.59:3000/api/refresh_music`);
+        const data = await response.json();
+        
+        if (data.success) {
+            // Update the tracks array with the downloaded songs
+            tracks = data.downloadedSongs.map(song => ({
+                title: song.replace('.mp3', ''),
+                path: `/songs/${song}`
+            }));
+            console.log('Tracks updated:', tracks);
+            
+            loadRandomTrack();
+        } else {
+            console.error('Failed to download playlist:', data.message);
+        }
+    } catch (error) {
+        console.error('Error fetching playlist songs:', error);
+    }
+}
 
 function shuffleTracks() {
     for (let i = tracks.length - 1; i > 0; i--) {
@@ -58,14 +54,14 @@ function loadTrack(index, animationClass) {
 }
 
 function loadRandomTrack() {
-    shuffleTracks();
-    loadTrack(0, 'slide-in-right');
+    if (tracks.length > 0) {
+        shuffleTracks();
+        loadTrack(0, 'slide-in-right');
+    }
 }
 
 function showDefaultFooter(animationClass) {
     footer.textContent = defaultFooterText;
-
-    // Apply animation
     footer.classList.remove('slide-in-right', 'slide-in-left');
     void footer.offsetWidth;
     footer.classList.add(animationClass);
@@ -77,7 +73,7 @@ playPauseBtn.addEventListener('click', () => {
         playPauseBtn.innerHTML = '<i class="icon fa-solid fa-pause"></i>';
         footer.textContent = `ʚ ${tracks[currentTrack].title} ɞ`;
         footer.classList.remove('slide-in-right', 'slide-in-left');
-        void footer.offsetWidth;  // trigger reflow for animation
+        void footer.offsetWidth;
         footer.classList.add('slide-in-right');
     } else {
         audioPlayer.pause();
@@ -121,6 +117,7 @@ audioPlayer.addEventListener('timeupdate', updateSeekBar);
 
 audioPlayer.addEventListener('ended', playNextTrack);
 
-window.addEventListener('load', () => showDefaultFooter('slide-in-right'));
-
-loadRandomTrack();
+window.addEventListener('load', () => {
+    showDefaultFooter('slide-in-right');
+    fetchPlaylistSongs();
+});
