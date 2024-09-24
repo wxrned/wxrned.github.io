@@ -1,3 +1,4 @@
+// Firebase initialization code
 const firebaseConfig = {
   apiKey: "AIzaSyCTzKMUnEqwoEiiYN-NEqZO5fbcUPJFYxY",
   authDomain: "wxrnlol-eb507.firebaseapp.com",
@@ -12,89 +13,74 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-console.log("Firebase initialized:", firebase.apps.length > 0);
-const database = firebase.database();
-console.log("Database initialized:", !!database);
-
-// Fetch viewer IP
-fetch("https://api.ipify.org/?format=json")
-  .then((response) => response.json())
-  .then((data) => {
-    get_viewers_ip(data);
-  })
-  .catch((error) => {
-    console.error("Error fetching IP:", error);
-  });
+var database = firebase.database();
 
 function get_viewers_ip(json) {
   let ip = json.ip;
-  console.log("Viewer IP:", ip);
-  countViews(ip);
+
+  // Check if the user is on a VPN
+  if (json.security.vpn) {
+    // Show the entry overlay for VPN users
+    document.getElementById("entry-overlay").style.display = "flex"; // Show overlay
+    console.log("VPN detected. Click to enter the site.");
+  } else {
+    console.log("Viewer IP:", ip);
+    countViews(ip); // Directly count views if not on a VPN
+  }
 }
 
 function countViews(ip) {
   var views;
   var ip_to_string = ip.toString().replace(/\./g, "-");
 
-  checkForProxy(ip).then((isProxy) => {
-    if (isProxy) {
-      console.log("Proxy detected. Ignoring IP:", ip);
-      return;
-    }
+  firebase
+    .database()
+    .ref()
+    .child("page_views/" + ip_to_string)
+    .set({
+      viewers_ip: ip,
+    });
 
-    firebase
-      .database()
-      .ref()
-      .child("page_views/" + ip_to_string)
-      .set({
-        viewers_ip: ip,
-      })
-      .then(() => {
-        console.log("IP logged successfully:", ip);
-      })
-      .catch((error) => {
-        console.error("Error logging IP:", error);
-      });
-
-    // Retrieve the total views
-    firebase
-      .database()
-      .ref()
-      .child("page_views")
-      .on("value", function (snapshot) {
-        views = snapshot.numChildren();
-        animateCountUp(views);
-      });
-  });
-}
-
-function checkForProxy(ip) {
-  return fetch(`https://ipinfo.io/${ip}/json?token=7adaea64ae0991`)
-    .then((response) => response.json())
-    .then((data) => data.proxy || false)
-    .catch((error) => {
-      console.error("Error checking IP:", error);
-      return false;
+  firebase
+    .database()
+    .ref()
+    .child("page_views")
+    .on("value", function (snapshot) {
+      views = snapshot.numChildren();
+      document.getElementById("page_views").innerHTML = views;
     });
 }
 
-function animateCountUp(targetNumber) {
-  const pageViewsElement = document.getElementById("page_views");
-  const currentNumber = parseInt(pageViewsElement.innerHTML);
-  const increment = Math.ceil((targetNumber - currentNumber) / 100);
-  const duration = 1000;
-  const steps = Math.ceil(duration / 50);
-  let count = currentNumber;
+// Function to handle the Enter button click
+document.getElementById("enter-site-button").onclick = function () {
+  const overlay = document.getElementById("entry-overlay");
+  overlay.style.display = "none"; // Hide the overlay
+  // Call countViews or any necessary functions after entering
+  fetch("https://api.ipify.org/?format=json")
+    .then((response) => response.json())
+    .then((data) => {
+      const ip = data.ip; // Get IP again when user agrees to enter
+      console.log("Viewer IP on entry:", ip);
+      countViews(ip);
+    })
+    .catch((error) => {
+      console.error("Error fetching IP:", error); // Log any errors
+    });
+};
 
-  const interval = setInterval(() => {
-    count += increment;
-    if (increment > 0 && count >= targetNumber) {
-      count = targetNumber;
-      clearInterval(interval);
-    } else if (increment < 0 && count <= targetNumber) {
-      count = targetNumber;
-      clearInterval(interval);
-    }
-    pageViewsElement.innerHTML = count;
-  }, 50);
-}
+// Example usage to fetch the user's IP with security check
+fetch("https://api.ipify.org/?format=json")
+  .then((response) => response.json())
+  .then((data) => {
+    // Assuming your security check API is set up to fetch the IP's security status
+    fetch(
+      `https://vpnapi.io/api/${data.ip}?key=09743a6399ca4bc4a635c51ecb847a6c`
+    )
+      .then((response) => response.json())
+      .then((securityData) => {
+        get_viewers_ip(securityData); // Pass the security data to the function
+      });
+  })
+  .catch((error) => {
+    console.error("Error fetching IP:", error); // Log any errors
+  });
