@@ -11,6 +11,8 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+console.log(firebase);
+
 function get_viewers_ip(json) {
   let ip = json.ip;
   countViews(ip);
