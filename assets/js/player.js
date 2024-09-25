@@ -85,7 +85,7 @@ async function fetchLyrics(geniusId) {
 
   if (song) {
       const lyricsPath = song.path;
-      const lyricsResponse = await fetch(`https://genius.com${lyricsPath}`);
+      const lyricsResponse = await fetch(`https://genius.com${lyricsPath}`, { mode: 'no-cors' });
       const lyricsHtml = await lyricsResponse.text();
 
       const parser = new DOMParser();
