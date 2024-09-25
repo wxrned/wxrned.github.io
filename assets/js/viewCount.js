@@ -105,5 +105,5 @@ function animateCountUp(targetNumber) {
       clearInterval(interval);
     }
     pageViewsElement.innerHTML = count;
-  }, 50);
+  }, 40);
 }
