@@ -3,6 +3,7 @@ const playPauseBtn = document.getElementById('play-pause');
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
 const footer = document.getElementById('footer');
+const lyricsBtn = document.getElementById('lyrics')
 const seekBar = document.getElementById('seek-bar');
 
 const defaultFooterText = '〤 CutNation 〤';
@@ -111,6 +112,28 @@ seekBar.addEventListener('input', () => {
 
 seekBar.addEventListener('change', () => {
     isDragging = false;
+});
+
+lyricsBtn.addEventListener('click', () => {
+  const currentGeniusId = tracks[currentTrack].geniusId;
+  if (currentGeniusId) {
+    const popup = window.open("", "LyricsPopup", "width=600,height=400");
+    popup.document.write(`
+      <html>
+        <head>
+          <title>Lyrics</title>
+        </head>
+        <body>
+          <div id='rg_embed_link_${currentGeniusId}' class='rg_embed_link' data-song-id='${currentGeniusId}'>
+            Read <a href='https://genius.com/songs/${currentGeniusId}'>Lyrics on Genius</a>
+          </div>
+          <script crossorigin src='//genius.com/songs/${currentGeniusId}/embed.js'></script>
+        </body>
+      </html>
+    `);
+  } else {
+    alert('No lyrics available for this track.');
+  }
 });
 
 audioPlayer.addEventListener('timeupdate', updateSeekBar);
