@@ -1,11 +1,10 @@
 async function fetchAvatarsForAll() {
     const liElements = document.querySelectorAll('#popup li');
     const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-    const myUserId = 'YOUR_DISCORD_USER_ID'; // Replace with your actual Discord user ID
-    const myAvatarElement = document.querySelector('#dc-pfp'); // Get the element for your own avatar
-    const faviconElement = document.querySelector('#short-icon'); // Get the favicon element
+    const myUserId = '1158429903629336646';
+    const myAvatarElement = document.querySelector('#dc-pfp');
+    const faviconElement = document.querySelector('#short-icon');
 
-    // Function to fetch and set an avatar
     const fetchAndSetAvatar = async (imgElement, userId) => {
         try {
             let response = await fetch(`https://api.wxrn.lol/api/avatar/${userId}`);
