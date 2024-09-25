@@ -15,7 +15,9 @@ async function fetchAvatarsForAll() {
             const data = await response.json();
             if (data.avatarUrl) {
                 imgElement.src = data.avatarUrl;
-                applyColorsFromImage(myAvatarElement);
+                imgElement.onload = function() {
+                    applyColorsFromImage(imgElement);
+                };
                 return data.avatarUrl;
             } else if (data.error) {
                 console.error(`Error for user ${userId}: ${data.error}`);
