@@ -121,7 +121,7 @@ lyricsBtn.addEventListener('click', () => {
     popup.document.write(`
       <html>
         <head>
-          <title>Lyrics</title>
+          <title>${tracks[currentTrack].title} | Lyrics</title>
         </head>
         <body>
           <div id='rg_embed_link_${currentGeniusId}' class='rg_embed_link' data-song-id='${currentGeniusId}'>
