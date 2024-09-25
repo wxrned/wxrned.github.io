@@ -16,7 +16,7 @@ async function fetchAvatarsForAll() {
             if (data.avatarUrl) {
                 imgElement.src = data.avatarUrl;
                 imgElement.onload = function() {
-                    applyColorsFromImage(imgElement);
+                    applyColorsFromImage('dc-pfp');
                 };
                 return data.avatarUrl;
             } else if (data.error) {
