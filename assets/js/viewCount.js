@@ -18,7 +18,7 @@ function get_viewers_ip(json) {
 
   if (json.security.vpn || json.security.proxy) {
     document.getElementById("check-p").innerHTML =
-      "vpn/proxy detected.<br>click to enter.";
+      "You are currently using a VPN or Proxy. Click anywhere to enter the site.";
     document.getElementById("entry-overlay").style.display = "flex";
     window.addEventListener("click", enterSite);
   } else {
@@ -76,7 +76,7 @@ fetch("https://api.ipify.org/?format=json")
   .then((response) => response.json())
   .then((data) => {
     fetch(
-      `https://vpnapi.io/api/${data.ip}?key=09743a6399ca4bc4a635c51ecb847a6c`
+      `https://vpnapi.io/api/${data.ip}?key=0840c7c180ee4f9a81d591f222762774`
     )
       .then((response) => response.json())
       .then((securityData) => {
