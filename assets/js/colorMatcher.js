@@ -1,5 +1,5 @@
 window.addEventListener('load', function() {
-    const img = document.getElementById('gif'); // Ensure the GIF has the id "gif"
+    const img = document.getElementById('dc-pfp'); // Ensure the GIF has the id "gif"
     const colorThief = new ColorThief();
 
     img.addEventListener('load', function() {
