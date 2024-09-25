@@ -32,7 +32,7 @@ const tracks = [
   { title: "Destroy Lonely - NEVEREVER", path: "assets/music/NEVEREVER.mp3", geniusId: "8565075" },
   { title: "Duki - Goteo", path: "assets/music/Goteo.mp3", geniusId: "4569310" },
   { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3", geniusId: "10809184" },
-];  
+];
 
 let currentTrack = 0;
 audioPlayer.volume = 0.1;
@@ -76,29 +76,23 @@ function showDefaultFooter(animationClass) {
 }
 
 async function fetchLyrics(geniusId) {
-  const response = await fetch(`${GENIUS_API_URL}/songs/${geniusId}`, {
-    headers: {
-      Authorization: `Bearer ${GENIUS_API_TOKEN}`
-    }
-  });
-
+  const response = await fetch(`https://api.wxrn.lol/api/songs/${geniusId}`);
   if (!response.ok) {
-    throw new Error('Failed to fetch lyrics');
+      throw new Error('Failed to fetch lyrics');
   }
-
   const data = await response.json();
   const song = data.response.song;
 
   if (song) {
-    const lyricsPath = song.path;
-    const lyricsResponse = await fetch(`https://genius.com${lyricsPath}`);
-    const lyricsHtml = await lyricsResponse.text();
+      const lyricsPath = song.path;
+      const lyricsResponse = await fetch(`https://genius.com${lyricsPath}`);
+      const lyricsHtml = await lyricsResponse.text();
 
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(lyricsHtml, 'text/html');
-    const lyrics = doc.querySelector('.lyrics')?.innerText || 'Lyrics not found';
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(lyricsHtml, 'text/html');
+      const lyrics = doc.querySelector('.lyrics')?.innerText || 'Lyrics not found';
 
-    return lyrics;
+      return lyrics;
   }
 
   return 'Lyrics not found';
