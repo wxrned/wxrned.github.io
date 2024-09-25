@@ -122,11 +122,53 @@ lyricsBtn.addEventListener('click', () => {
       <html>
         <head>
           <title>${tracks[currentTrack].title} | Lyrics</title>
+          <style>
+            body {
+              background-color: var(--bg-color);
+              font-family: monospace;
+              padding: 20px;
+              color: var(--text-color);
+            }
+            a {
+              color: var(--ahref-color);
+              text-decoration: none;
+            }
+            a:hover {
+              color: var(--ahref-hover-color);
+            }
+            .lyrics-container {
+              background-color: var(--bg-color-light);
+              border-radius: 10px;
+              padding: 20px;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+              overflow-y: auto;
+              max-height: 80%;
+              margin-top: 20px;
+            }
+            button {
+              background-color: var(--btn-bg);
+              border: var(--btn-border);
+              border-radius: 5px;
+              padding: 10px;
+              color: var(--btn-color);
+              cursor: pointer;
+              width: 100%;
+              margin-top: 10px;
+              font-family: monospace;
+            }
+            button:hover {
+              background-color: var(--btn-hover-bg);
+            }
+          </style>
         </head>
         <body>
-          <div id='rg_embed_link_${currentGeniusId}' class='rg_embed_link' data-song-id='${currentGeniusId}'>
-            Read <a href='https://genius.com/songs/${currentGeniusId}'>Lyrics on Genius</a>
+          <h2>${tracks[currentTrack].title} Lyrics</h2>
+          <div class="lyrics-container">
+            <div id='rg_embed_link_${currentGeniusId}' class='rg_embed_link' data-song-id='${currentGeniusId}'>
+              Read <a href='https://genius.com/songs/${currentGeniusId}'>Lyrics on Genius</a>
+            </div>
           </div>
+          <button onclick="window.close()">Close</button>
           <script crossorigin src='//genius.com/songs/${currentGeniusId}/embed.js'></script>
         </body>
       </html>
