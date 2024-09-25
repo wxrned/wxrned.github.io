@@ -71,6 +71,8 @@ const tracks = [
     { title: "Duki - Goteo", path: "assets/music/Goteo.mp3" },
     
     { title: "Destroy Lonely - NEVEREVER", path: "assets/music/NEVEREVER.mp3" },
+    
+    { title: "Yeat - No morë talk", path: "assets/music/NoMoreTalk.mp3" },
 
     { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" }
 
