@@ -41,5 +41,3 @@ function applyColorsFromImage(imgElementId) {
     const bgColor = `rgba(${Math.max(dominantColor[0] - 30, 0)}, ${Math.max(dominantColor[1] - 30, 0)}, ${Math.max(dominantColor[2] - 30, 0)}, 1)`;
     document.documentElement.style.setProperty('--bg-color', bgColor);
 }
-
-applyColorsFromImage('dc-pfp');
