@@ -32,7 +32,6 @@ async function fetchAvatarsForAll() {
         // If your avatar was successfully fetched, set the favicon as well
         if (avatarUrl && faviconElement) {
             faviconElement.href = avatarUrl;
-            applyColorsFromImage(myAvatarElement);
         } else if (!faviconElement) {
             console.error('No element with id="short-icon" found.');
         }
