@@ -25,7 +25,21 @@ async function fetchAvatarsForAll() {
         return null; // Return null if there was an error
     };
 
-    // Fetch and set avatars for all users in the list
+    if (myAvatarElement) {
+        myAvatarElement.src = "assets/img/black.png"; // Placeholder while fetching
+        const avatarUrl = await fetchAndSetAvatar(myAvatarElement, myUserId);
+
+        // If your avatar was successfully fetched, set the favicon as well
+        if (avatarUrl && faviconElement) {
+            faviconElement.href = avatarUrl;
+            applyColorsFromImage(myAvatarElement);
+        } else if (!faviconElement) {
+            console.error('No element with id="short-icon" found.');
+        }
+    } else {
+        console.error('No element with id="dc-pfp" found.');
+    }
+
     for (let li of liElements) {
         const imgElement = li.querySelector('img');
         if (imgElement) {
@@ -38,21 +52,6 @@ async function fetchAvatarsForAll() {
                 console.error('No Discord User ID found in the alt attribute.');
             }
         }
-    }
-
-    // Fetch and set your own avatar
-    if (myAvatarElement) {
-        myAvatarElement.src = "assets/img/black.png"; // Placeholder while fetching
-        const avatarUrl = await fetchAndSetAvatar(myAvatarElement, myUserId);
-
-        // If your avatar was successfully fetched, set the favicon as well
-        if (avatarUrl && faviconElement) {
-            faviconElement.href = avatarUrl;
-        } else if (!faviconElement) {
-            console.error('No element with id="short-icon" found.');
-        }
-    } else {
-        console.error('No element with id="dc-pfp" found.');
     }
 }
 
