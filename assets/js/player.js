@@ -69,6 +69,8 @@ const tracks = [
     { title: "Khea x Duki - Loca", path: "assets/music/Loca.mp3" },
 
     { title: "Duki - Goteo", path: "assets/music/Goteo.mp3" },
+    
+    { title: "Destroy Lonely - NEVEREVER", path: "assets/music/NEVEREVER.mp3" },
 
     { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" }
 
