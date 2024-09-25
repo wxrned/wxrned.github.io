@@ -655,6 +655,10 @@ button:hover {
     background-size: cover;
     background-attachment: scroll;
   }
+
+  button#lyrics {
+    display: none;
+  }
   
   .flexbox {
     flex-direction: column;
