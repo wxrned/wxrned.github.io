@@ -51,15 +51,15 @@ async function loadTrack(index, animationClass) {
   audioPlayer.src = tracks[currentTrack].path;
   footer.textContent = `〤 ${tracks[currentTrack].title} 〤`;
 
-  try {
-    const lyrics = await fetchLyrics(tracks[currentTrack].geniusId);
-    document.getElementById('lyrics-content').innerText = lyrics;
-  } catch (error) {
-    document.getElementById('lyrics-content').innerText = 'Error fetching lyrics';
-  }
+  // try {
+  //   const lyrics = await fetchLyrics(tracks[currentTrack].geniusId);
+  //   document.getElementById('lyrics-content').innerText = lyrics;
+  // } catch (error) {
+  //   document.getElementById('lyrics-content').innerText = 'Error fetching lyrics';
+  // }
 
   footer.classList.remove("slide-in-right", "slide-in-left");
-  void footer.offsetWidth; // trigger reflow for animation
+  void footer.offsetWidth;
   footer.classList.add(animationClass);
 }
 
