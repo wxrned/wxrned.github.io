@@ -1,9 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import Vibrant from '@vibrant/core';
-import NodeImage from '@vibrant/image-node';
-
-const __dirname = path.dirname(new URL(import.meta.url).pathname); // Define __dirname
+import { NodeImage } from '@vibrant/image-node';
 
 async function getFetch() {
     const fetch = await import('node-fetch');
@@ -59,8 +57,8 @@ async function main() {
     try {
         console.log("Starting script...");
 
-        const dataFilePath = path.join(__dirname, 'data.json');
-        const htmlFilePath = path.join(__dirname, 'index.html');
+        const dataFilePath = path.join(process.cwd(), 'data.json'); // Use process.cwd() for directory path
+        const htmlFilePath = path.join(process.cwd(), 'index.html');
 
         console.log(`Checking if ${dataFilePath} exists...`);
         if (!fs.existsSync(dataFilePath)) {
