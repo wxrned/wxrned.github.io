@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const ColorThief = require('color-thief-node'); // Ensure you have this installed
+const ColorThief = require('color-thief'); // Ensure you have this installed
 
 async function getDominantColor(imageUrl) {
   const colorThief = new ColorThief();
