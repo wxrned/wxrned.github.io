@@ -180,6 +180,10 @@ lyricsBtn.addEventListener('click', () => {
     }
 });
 
+audioPlayer.addEventListener('timeupdate', updateSeekBar);
+
+audioPlayer.addEventListener('ended', playNextTrack);
+
 // Event listener for slider input
 volumeSlider.addEventListener('input', function() {
     volumeValue = this.value / 100; // Convert to a value between 0 and 1
