@@ -9,9 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write  # Allow the action to write to the repository
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -43,16 +40,22 @@ jobs:
           git config --local user.name "GitHub Action"
           git config --local user.email "action@github.com"
           git add data.json
-          git commit -m "Update data.json with new avatar colors"
+          git commit -m "Update data.json with new avatar colors" || echo "No changes to commit"
           git push origin main || echo "Git push failed"
 
       - name: Update index.html meta tags
         run: node updateMetaTags.js
 
-      - name: Commit and push updated index.html
+      - name: Display Git status
+        run: |
+          git status
+          echo "Listing all modified files:"
+          git diff --name-only
+
+      - name: Commit and push updated index.html and package-lock.json
         run: |
           git config --local user.name "GitHub Action"
           git config --local user.email "action@github.com"
-          git add index.html
-          git commit -m "Update meta tags based on new data.json"
-          git push origin main
+          git add index.html package-lock.json  # Add both files
+          git commit -m "Update meta tags based on new data.json" || echo "No changes to commit"
+          git push origin main || echo "Git push failed"
