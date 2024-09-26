@@ -1,7 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import Vibrant from '@vibrant/core';
-import { NodeImage } from '@vibrant/image-node';
+
+// Import the CommonJS module using the default import syntax
+import pkg from '@vibrant/image-node';
+const { NodeImage } = pkg;
 
 async function getFetch() {
     const fetch = await import('node-fetch');
