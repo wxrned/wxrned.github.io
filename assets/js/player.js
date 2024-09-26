@@ -32,7 +32,6 @@ const tracks = [
     { title: "Destroy Lonely - NEVEREVER", path: "assets/music/NEVEREVER.mp3", geniusId: "8565075" },
     { title: "Duki - Goteo", path: "assets/music/Goteo.mp3", geniusId: "4569310" },
     { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3", geniusId: "10809184" },
-    { title: "Yeat - No morë talk", path: "assets/music/NoMoreTalk.mp3", geniusId: "8611944" },
     { title: "Playboi Carti - Fell In Luv", path: "assets/music/FellInLuv.mp3", geniusId: "3710605" },
 ];
 
@@ -185,35 +184,42 @@ audioPlayer.addEventListener('timeupdate', updateSeekBar);
 
 audioPlayer.addEventListener('ended', playNextTrack);
 
-// Event listener for slider input
 volumeSlider.addEventListener('input', function() {
-    volumeValue = this.value / 100; // Convert to a value between 0 and 1
-    document.documentElement.style.setProperty('--volume', volumeValue); // Update CSS variable
+    volumeValue = this.value / 100;
+    document.documentElement.style.setProperty('--volume', volumeValue);
 });
 
 // Volume control functionality
 volumeButton.addEventListener('mouseenter', () => {
-    volumeSlider.style.display = 'block'; // Show slider on hover over button
+    volumeSlider.style.display = 'block';
+    volumeSlider.classList.add('show');
 });
 
 volumeSlider.addEventListener('mouseenter', () => {
-    volumeSlider.style.display = 'block'; // Keep slider visible when hovering over it
+    volumeSlider.style.display = 'block';
+    volumeSlider.classList.add('show');
+});
+
+volumeButton.addEventListener('mouseleave', () => {
+  setTimeout(() => {
+    if (!volumeSlider.matches(':hover')) {
+      volumeSlider.style.display = 'none';
+      volumeSlider.classList.remove('show');
+    }
+  }, 250);
 });
 
 volumeSlider.addEventListener('mouseleave', () => {
-    volumeSlider.style.display = 'none'; // Hide slider when not hovering over the button or slider
+    volumeSlider.style.display = 'none';
+    volumeSlider.classList.remove('show');
 });
 
-// Update audio volume when slider value changes
 volumeSlider.addEventListener('input', (e) => {
-    audioPlayer.volume = e.target.value; // Set the audio volume
+    audioPlayer.volume = e.target.value;
 });
 
-// Set initial volume for the slider
 volumeSlider.value = audioPlayer.volume;
 
-// Show the default footer on load
 window.addEventListener('load', () => showDefaultFooter('slide-in-right'));
 
-// Load a random track on page load
 loadRandomTrack();
