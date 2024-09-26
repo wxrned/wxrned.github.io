@@ -1,16 +1,18 @@
 {
-  "name": "wxrned-github-pages",
+  "name": "your-project-name",
   "version": "1.0.0",
-  "description": "Dynamic meta tags update for wxrn's site",
+  "description": "Six, six, six. I'm so fucking sick.",
   "main": "updateMetaTags.js",
   "scripts": {
     "start": "node updateMetaTags.js"
   },
-  "author": "Your Name",
-  "license": "MIT",
   "dependencies": {
-    "canvas": "^2.9.0",
-    "fs": "0.0.1-security",
-    "node-fetch": "^3.2.0" 
+    "node-fetch": "^3.3.0", // Ensure you use the latest version that supports ESM
+    "color-thief": "^2.3.0", // Adjust the version as necessary
+    "canvas": "^2.8.0" // Only if you're using canvas for image processing
+  },
+  "type": "module", // Use this if you want to use ES modules
+  "engines": {
+    "node": ">=16.0.0" // Ensure you have a compatible Node.js version
   }
 }
