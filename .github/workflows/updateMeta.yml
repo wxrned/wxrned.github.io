@@ -20,7 +20,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install
+          npm ci  # Using npm ci instead of npm install for a clean install
+          npm ls  # List installed dependencies for debugging
+
+      - name: Display directory structure
+        run: |
+          ls -R  # Show directory structure for context
+          cat data.json  # Display the contents of data.json (check if it exists)
 
       - name: Run the dynamic avatar color extraction
         run: |
@@ -35,7 +41,7 @@ jobs:
           git push origin main
 
       - name: Update index.html meta tags
-        run: node updateMetaTags.js  # Run the update script again to apply changes to HTML
+        run: node updateMetaTags.js  # Run your update script again to apply changes to HTML
 
       - name: Commit and push updated index.html
         run: |
