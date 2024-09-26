@@ -30,6 +30,7 @@ const tracks = [
     { title: "Destroy Lonely - NEVEREVER", path: "assets/music/NEVEREVER.mp3", geniusId: "8565075" },
     { title: "Duki - Goteo", path: "assets/music/Goteo.mp3", geniusId: "4569310" },
     { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3", geniusId: "10809184" },
+    { title: "Playboi Carti - Fell In Luv", path: "assets/music/FellInLuv.mp3", geniusId: "3710605" },
 ];
 
 let currentTrack = 0;
