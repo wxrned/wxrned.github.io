@@ -3,6 +3,8 @@ import path from 'path';
 import Vibrant from '@vibrant/core';
 import NodeImage from '@vibrant/image-node';
 
+const __dirname = path.dirname(new URL(import.meta.url).pathname); // Define __dirname
+
 async function getFetch() {
     const fetch = await import('node-fetch');
     return fetch.default; // Import node-fetch as it uses ES Modules
