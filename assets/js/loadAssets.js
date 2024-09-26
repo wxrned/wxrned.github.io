@@ -36,7 +36,7 @@ async function fetchAvatarsForAll() {
             imgElement.src = "assets/img/black.png"; // Placeholder while fetching
 
             if (userId) {
-                await fetchAndSetAvatar(imgElement, userId);
+                await fetchImages(imgElement, userId);
             } else {
                 console.error('No Discord User ID found in the alt attribute.');
             }
