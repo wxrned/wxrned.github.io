@@ -28,25 +28,15 @@ async function fetchAvatarsForAll() {
         console.error('No element with id="dc-pfp" found.');
     }
 
-    // Iterate through each list item and fetch avatars and banners for other users
     for (let li of liElements) {
         const imgElement = li.querySelector('img');
 
         if (imgElement) {
             const userId = imgElement.alt;
-
             imgElement.src = "assets/img/black.png"; // Placeholder while fetching
 
             if (userId) {
-                const userData = await fetchImages(imgElement, userId);
-
-                // Check if the user has a banner, and set it as the background for the current user.
-                if (userData && userData.bannerUrl) {
-                    document.body.style.backgroundImage = `url(${userData.bannerUrl + "?size=1024"})`;
-                    document.body.style.backgroundSize = 'cover';
-                    document.body.style.backgroundPosition = 'center';
-                    console.log(`Updated background with banner for user ${userId}`);
-                }
+                await fetchAndSetAvatar(imgElement, userId);
             } else {
                 console.error('No Discord User ID found in the alt attribute.');
             }
