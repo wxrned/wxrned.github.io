@@ -11,36 +11,36 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  # Updated to use the latest version
+        uses: actions/checkout@v3
 
       - name: Set up Node.js environment
-        uses: actions/setup-node@v3  # Updated to use the latest version
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Specify Node.js 20 for compatibility
+          node-version: '20'  # Explicitly use Node.js version 20
 
       - name: Install dependencies
         run: |
-          npm install color-thief-node fs path
+          npm install
 
       - name: Run the dynamic avatar color extraction
         run: |
           node updateMetaTags.js
 
-      - name: Commit and push generated `data.json`
+      - name: Commit and push generated data.json
         run: |
           git config --local user.name "GitHub Action"
           git config --local user.email "action@github.com"
           git add data.json
-          git commit -m "Update `data.json` with new avatar colors"
+          git commit -m "Update data.json with new avatar colors"
           git push origin main
 
-      - name: Update `index.html` meta tags
-        run: node updateMetaTags.js  # Run your update script again to apply changes to HTML
+      - name: Update index.html meta tags
+        run: node updateMetaTags.js  # Run the update script again to apply changes to HTML
 
-      - name: Commit and push updated `index.html`
+      - name: Commit and push updated index.html
         run: |
-          git config --local user.name "wxrned"
-          git config --local user.email "wxrn.lol@gmail.com"
+          git config --local user.name "GitHub Action"
+          git config --local user.email "action@github.com"
           git add index.html
-          git commit -m "Update meta tags based on new `data.json`"
+          git commit -m "Update meta tags based on new data.json"
           git push origin main
