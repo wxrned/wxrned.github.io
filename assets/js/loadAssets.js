@@ -1,3 +1,4 @@
+// Assuming Color Thief is already included
 const colorThief = new ColorThief();
 
 async function fetchAvatarsForAll() {
@@ -97,13 +98,12 @@ function applyColorsFromImage(imgElement) {
         document.documentElement.style.setProperty('--icon-color', iconColor);
         document.documentElement.style.setProperty('--scroll-bar', dominantColorRgb);
 
-        // Apply a very darkened and blurred version of the color for the background
+        // Apply a very darkened version of the color for the background
         const darkenedBackgroundColor = adjustColorBrightness(dominantColorRgb, -80); // Darken by 80%
         document.documentElement.style.setProperty('--bg-color', darkenedBackgroundColor);
 
-        // Apply a blurred effect to the background
-        document.body.style.background = `${darkenedBackgroundColor}`;
-        document.body.style.filter = 'blur(10px)';
+        // Directly set the background color without any blur
+        document.body.style.backgroundColor = darkenedBackgroundColor;
 
         console.log('Colors applied based on the image:', {
             dominantColor: dominantColorRgb,
@@ -117,6 +117,7 @@ function applyColorsFromImage(imgElement) {
     }
 }
 
+// Helper function to adjust color brightness
 function adjustColorBrightness(color, percent) {
     const rgb = color.match(/\d+/g).map(Number);
     const adjust = (value, percent) => Math.min(255, Math.max(0, value + Math.floor(value * (percent / 100))));
@@ -124,4 +125,5 @@ function adjustColorBrightness(color, percent) {
     return `rgb(${adjustedColor[0]}, ${adjustedColor[1]}, ${adjustedColor[2]})`;
 }
 
+// Call the function to fetch avatars for all users
 fetchAvatarsForAll();
