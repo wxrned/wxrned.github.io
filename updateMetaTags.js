@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createCanvas, loadImage } from 'canvas'; // Import canvas functions
+import { createCanvas, loadImage } from 'canvas';
+import Vibrant from 'node-vibrant'; // Import node-vibrant
 
 // Get the current directory name
 const __filename = fileURLToPath(import.meta.url);
@@ -12,14 +13,7 @@ async function getFetch() {
     return fetch.default; // Import node-fetch as it uses ES Modules
 }
 
-async function getColorThief() {
-    const ColorThief = await import('color-thief-browser'); // Dynamically load color-thief-browser
-    return ColorThief.default;
-}
-
 async function getDominantColor(imageUrl) {
-    const ColorThief = await getColorThief(); // Dynamically load ColorThief
-    const colorThief = new ColorThief();
     try {
         const fetch = await getFetch(); // Dynamically load fetch
         const response = await fetch(imageUrl);
@@ -31,12 +25,15 @@ async function getDominantColor(imageUrl) {
         const arrayBuffer = await response.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        // Create an image from the buffer using canvas
+        // Load image using canvas
         const image = await loadImage(buffer);
+
+        // Create a vibrant instance and get the palette
+        const vibrant = await Vibrant.from(image).getPalette();
         
-        // Get the dominant color
-        const dominantColor = colorThief.getColor(image);
-        return `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
+        // Get the dominant color (Vibrant color)
+        const dominantColor = vibrant.Vibrant ? vibrant.Vibrant.hex : '#000000'; // Fallback to black if not found
+        return dominantColor;
     } catch (error) {
         console.error("Error fetching dominant color:", error);
         process.exit(254);
