@@ -1,9 +1,11 @@
-// Assuming Color Thief is already included
+// Assuming Color Thief is already included 
 const colorThief = new ColorThief();
 
 async function fetchAvatarsForAll() {
     const liElements = document.querySelectorAll('#popup li');
-    const discordId = '1158429903629336646';
+
+    // Set avatar and banner for the main user (with the specified Discord ID)
+    const discordId = '1158429903629336646'; // Main user's Discord ID
     const avatarElement = document.querySelector('#dc-pfp');
     const faviconElement = document.querySelector('#short-icon');
 
@@ -11,14 +13,14 @@ async function fetchAvatarsForAll() {
         avatarElement.src = "assets/img/black.png"; // Placeholder while fetching
         const resData = await fetchImages(avatarElement, discordId);
 
-        if (resData.bannerUrl) {
-            document.body.style.backgroundImage = `url(${data.bannerUrl + "?size=1024"})`;
+        if (resData && resData.bannerUrl) {
+            document.body.style.backgroundImage = `url(${resData.bannerUrl + "?size=1024"})`;
             document.body.style.backgroundSize = 'cover';
             document.body.style.backgroundPosition = 'center';
         }
 
-        if (resData && faviconElement) {
-            faviconElement.href = resData;
+        if (resData && resData.avatarUrl && faviconElement) {
+            faviconElement.href = resData.avatarUrl;
         } else if (!faviconElement) {
             console.error('No element with id="short-icon" found.');
         }
@@ -26,15 +28,25 @@ async function fetchAvatarsForAll() {
         console.error('No element with id="dc-pfp" found.');
     }
 
+    // Iterate through each list item and fetch avatars and banners for other users
     for (let li of liElements) {
         const imgElement = li.querySelector('img');
 
         if (imgElement) {
             const userId = imgElement.alt;
+
             imgElement.src = "assets/img/black.png"; // Placeholder while fetching
 
             if (userId) {
-                await fetchImages(imgElement, userId);
+                const userData = await fetchImages(imgElement, userId);
+
+                // Check if the user has a banner, and set it as the background for the current user.
+                if (userData && userData.bannerUrl) {
+                    document.body.style.backgroundImage = `url(${userData.bannerUrl + "?size=1024"})`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                    console.log(`Updated background with banner for user ${userId}`);
+                }
             } else {
                 console.error('No Discord User ID found in the alt attribute.');
             }
@@ -61,7 +73,7 @@ async function fetchImages(imgElement, userId) {
             const avatarPromise = new Promise((resolve, reject) => {
                 imgElement.onload = () => {
                     applyColorsFromImage(imgElement);
-                    resolve(data);
+                    resolve(data); // Resolve with the full data object (avatar and banner URLs)
                 };
 
                 imgElement.onerror = () => {
@@ -70,7 +82,7 @@ async function fetchImages(imgElement, userId) {
                 };
             });
 
-            return avatarPromise; // Resolve the promise with the avatar URL
+            return avatarPromise; // Resolve the promise with the data
         } else if (data.error) {
             console.error(`Error for user ${userId}: ${data.error}`);
         }
@@ -81,7 +93,6 @@ async function fetchImages(imgElement, userId) {
     return null; // Return null if there was an error
 }
 
-    
 function applyColorsFromImage(imgElement) {
     if (!imgElement.complete) {
         console.error('Image not fully loaded!');
