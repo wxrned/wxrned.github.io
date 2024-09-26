@@ -38,7 +38,7 @@ async function fetchAvatarsForAll() {
 
 async function fetchImages(imgElement, userId) {
     try {
-        let response = await fetch(`https://api.wxrn.lol/api/avatar/${userId}`);
+        let response = await fetch(`https://api.wxrn.lol/api/discord/${userId}`);
 
         // Fallback fetch in case of failure with the primary URL
         if (!response.ok) {
