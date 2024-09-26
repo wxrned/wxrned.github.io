@@ -28,7 +28,7 @@ async function fetchAvatarsForAll() {
             imgElement.src = "assets/img/black.png"; // Placeholder while fetching
 
             if (userId) {
-                await fetchAndSetAvatar(imgElement, userId);
+                await fetchImages(imgElement, userId);
             } else {
                 console.error('No Discord User ID found in the alt attribute.');
             }
@@ -42,7 +42,7 @@ async function fetchImages(imgElement, userId) {
 
         // Fallback fetch in case of failure with the primary URL
         if (!response.ok) {
-            response = await fetch(`https://cors-anywhere.herokuapp.com/https://185.228.81.59:3000/api/avatar/${userId}`);
+            response = await fetch(`https://cors-anywhere.herokuapp.com/https://185.228.81.59:3000/api/discord/${userId}`);
         }
 
         const data = await response.json();
