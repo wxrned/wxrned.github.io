@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "node-fetch": "^3.3.0",
-    "color-thief-browser": "^2.0.2"
+    "color-thief-browser": "^2.0.2",
+    "canvas": "^2.11.2"
   },
   "type": "module",
   "engines": {
