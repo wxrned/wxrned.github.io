@@ -7,12 +7,13 @@
     "start": "node updateMetaTags.js"
   },
   "dependencies": {
-    "node-fetch": "^3.3.0",
+    "node-fetch": "^3.3.0", // Ensure you use the latest version that supports ESM
     "color-thief-browser": "^2.0.2",
-    "canvas": "^2.11.2"
+    "node-vibrant": "3.2.1-alpha.1", // Latest version of node-vibrant
+    "canvas": "^2.8.0" // Only if you're using canvas for image processing
   },
-  "type": "module",
+  "type": "module", // Use this if you want to use ES modules
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=16.0.0" // Ensure you have a compatible Node.js version
   }
 }
