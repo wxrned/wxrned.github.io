@@ -1,5 +1,5 @@
 {
-  "name": "your-project-name",
+  "name": "meta-data-updater",
   "version": "1.0.0",
   "description": "Six, six, six. I'm so fucking sick.",
   "main": "updateMetaTags.js",
@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "node-fetch": "^3.3.0",
-    "color-thief": "^2.3.0",
-    "canvas": "^2.8.0"
+    "color-thief": "^2.2.5",  // Updated to the latest version
+    "canvas": "^2.8.0"        // Only if you're using canvas for image processing
   },
   "type": "module",
   "engines": {
