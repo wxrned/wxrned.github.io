@@ -3,13 +3,13 @@ const colorThief = new ColorThief();
 
 async function fetchAvatarsForAll() {
     const liElements = document.querySelectorAll('#popup li');
-    const myUserId = '1158429903629336646';
-    const myAvatarElement = document.querySelector('#dc-pfp');
+    const discordId = '1158429903629336646';
+    const avatarElement = document.querySelector('#dc-pfp');
     const faviconElement = document.querySelector('#short-icon');
 
-    if (myAvatarElement) {
-        myAvatarElement.src = "assets/img/black.png"; // Placeholder while fetching
-        const avatarUrl = await fetchAndSetAvatar(myAvatarElement, myUserId);
+    if (avatarElement) {
+        avatarElement.src = "assets/img/black.png"; // Placeholder while fetching
+        const avatarUrl = await fetchAndSetAvatar(avatarElement, discordId);
 
         if (avatarUrl && faviconElement) {
             faviconElement.href = avatarUrl;
