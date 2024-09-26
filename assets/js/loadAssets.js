@@ -9,10 +9,16 @@ async function fetchAvatarsForAll() {
 
     if (avatarElement) {
         avatarElement.src = "assets/img/black.png"; // Placeholder while fetching
-        const avatarUrl = await fetchImages(avatarElement, discordId);
+        const resData = await fetchImages(avatarElement, discordId);
 
-        if (avatarUrl && faviconElement) {
-            faviconElement.href = avatarUrl;
+        if (resData.bannerUrl) {
+            document.body.style.backgroundImage = `url(${data.bannerUrl + "?size=1024"})`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
+        }
+
+        if (resData && faviconElement) {
+            faviconElement.href = resData;
         } else if (!faviconElement) {
             console.error('No element with id="short-icon" found.');
         }
@@ -42,7 +48,7 @@ async function fetchImages(imgElement, userId) {
 
         // Fallback fetch in case of failure with the primary URL
         if (!response.ok) {
-            response = await fetch(`https://cors-anywhere.herokuapp.com/https://185.228.81.59:3000/api/discord/${userId}`);
+            response = await fetch(`https://cors-anywhere.herokuapp.com/https://api.wxrn.lol/api/discord/${userId}`);
         }
 
         const data = await response.json();
@@ -54,8 +60,8 @@ async function fetchImages(imgElement, userId) {
             // Return a promise to handle the image load
             const avatarPromise = new Promise((resolve, reject) => {
                 imgElement.onload = () => {
-                    applyColorsFromImage(imgElement); // Call color extraction function
-                    resolve(data.avatarUrl);
+                    applyColorsFromImage(imgElement);
+                    resolve(data);
                 };
 
                 imgElement.onerror = () => {
@@ -63,14 +69,6 @@ async function fetchImages(imgElement, userId) {
                     reject(new Error(`Avatar image failed to load for user ${userId}`));
                 };
             });
-
-            // Check if a banner URL is present, then set it as the background
-            if (data.bannerUrl) {
-                document.body.style.backgroundImage = `url(${data.bannerUrl + "?size=1024"})`;
-                document.body.style.backgroundSize = 'cover';
-                document.body.style.backgroundPosition = 'center';
-                console.log(`Banner set for user ${userId}`);
-            }
 
             return avatarPromise; // Resolve the promise with the avatar URL
         } else if (data.error) {
