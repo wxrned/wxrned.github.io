@@ -1,0 +1,33 @@
+name: Update Meta Tags
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  updateMetaTags:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18' # Adjust the Node.js version if necessary
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run meta tag update script
+        run: node updateMetaTags.js
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.name "wxrned"
+          git config --local user.email "wxrn.lol@gmail.com"
+          git add index.html
+          git commit -m "updated meta tags"
+          git push origin main
