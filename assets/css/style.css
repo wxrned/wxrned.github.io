@@ -240,6 +240,10 @@ button:hover {
   font-size: 18px;
 }
 
+button:hover, a:hover, .icon:hover, .music-player button:hover {
+    box-shadow: 0 0 15px var(--accent-color);
+}
+
 #lyrics-popup {
   display: none;
   position: fixed;
