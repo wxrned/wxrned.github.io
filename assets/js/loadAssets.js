@@ -1,4 +1,3 @@
-// Assuming ColorThief is included in your project
 const colorThief = new ColorThief();
 
 async function fetchAvatarsForAll() {
@@ -11,7 +10,6 @@ async function fetchAvatarsForAll() {
         myAvatarElement.src = "assets/img/black.png"; // Placeholder while fetching
         const avatarUrl = await fetchAndSetAvatar(myAvatarElement, myUserId);
 
-        // Set the favicon if the avatar was successfully fetched
         if (avatarUrl && faviconElement) {
             faviconElement.href = avatarUrl;
         } else if (!faviconElement) {
@@ -50,7 +48,6 @@ async function fetchAndSetAvatar(imgElement, userId) {
         if (data.avatarUrl) {
             imgElement.src = data.avatarUrl;
 
-            // Create a Promise that resolves when the image has loaded
             return new Promise((resolve, reject) => {
                 imgElement.onload = () => {
                     applyColorsFromImage(imgElement); // Call color extraction function
@@ -90,43 +87,41 @@ function applyColorsFromImage(imgElement) {
         const dominantColor = colorThief.getColor(canvas);
         const dominantColorRgb = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
 
-        // Update CSS variables
+        // Update CSS variables for accent and other colors
         document.documentElement.style.setProperty('--accent-color', dominantColorRgb);
-
-        // Generate lighter and darker shades for additional variables
-        const textColor = adjustColorBrightness(dominantColorRgb, -50); // Darker shade for text
-        const lighterTextColor = adjustColorBrightness(dominantColorRgb, 20); // Lighter shade for light text
-        const iconColor = dominantColorRgb; // Same as accent
-        const scrollBarColor = dominantColorRgb; // Same as accent
-
-        // Set the CSS variables
+        const textColor = adjustColorBrightness(dominantColorRgb, -50); // Darker text color
+        const lighterTextColor = adjustColorBrightness(dominantColorRgb, 20); // Lighter text color
+        const iconColor = dominantColorRgb; // Use accent color for icons
         document.documentElement.style.setProperty('--text-color', textColor);
         document.documentElement.style.setProperty('--text-color-light', lighterTextColor);
         document.documentElement.style.setProperty('--icon-color', iconColor);
-        document.documentElement.style.setProperty('--scroll-bar', scrollBarColor);
+        document.documentElement.style.setProperty('--scroll-bar', dominantColorRgb);
+
+        // Apply a very darkened and blurred version of the color for the background
+        const darkenedBackgroundColor = adjustColorBrightness(dominantColorRgb, -80); // Darken by 80%
+        document.documentElement.style.setProperty('--bg-color', darkenedBackgroundColor);
+
+        // Apply a blurred effect to the background
+        document.body.style.background = `${darkenedBackgroundColor}`;
+        document.body.style.filter = 'blur(10px)';
 
         console.log('Colors applied based on the image:', {
             dominantColor: dominantColorRgb,
             textColor: textColor,
             lighterTextColor: lighterTextColor,
             iconColor: iconColor,
-            scrollBarColor: scrollBarColor,
+            darkenedBackgroundColor: darkenedBackgroundColor
         });
     } catch (error) {
         console.error('Error extracting colors from the image:', error);
     }
 }
 
-// Helper function to adjust color brightness
 function adjustColorBrightness(color, percent) {
-    // Convert the rgb string to an array of RGB values
     const rgb = color.match(/\d+/g).map(Number);
     const adjust = (value, percent) => Math.min(255, Math.max(0, value + Math.floor(value * (percent / 100))));
-
-    // Adjust the brightness of each RGB component
     const adjustedColor = rgb.map(value => adjust(value, percent));
     return `rgb(${adjustedColor[0]}, ${adjustedColor[1]}, ${adjustedColor[2]})`;
 }
 
-// Call the function to fetch avatars for all users
 fetchAvatarsForAll();
