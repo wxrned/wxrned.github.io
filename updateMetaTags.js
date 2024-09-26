@@ -1,9 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const ColorThief = require('color-thief'); // Ensure you have this installed
+const { createCanvas, loadImage } = require('canvas'); // Use the canvas package
 
 async function getDominantColor(imageUrl) {
-  const colorThief = new ColorThief();
   try {
     // Fetch the image buffer
     const response = await fetch(imageUrl);
@@ -12,9 +11,26 @@ async function getDominantColor(imageUrl) {
     }
     const buffer = await response.buffer();
 
-    // Get the dominant color
-    const dominantColor = colorThief.getColor(buffer);
-    return `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
+    // Load the image into a canvas
+    const image = await loadImage(buffer);
+    const canvas = createCanvas(image.width, image.height);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(image, 0, 0);
+
+    // Get pixel data from the canvas
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+    // Simple algorithm to find the dominant color (you might want to improve this)
+    const colorCount = {};
+    for (let i = 0; i < data.length; i += 4) {
+      const rgb = `${data[i]},${data[i + 1]},${data[i + 2]}`;
+      colorCount[rgb] = (colorCount[rgb] || 0) + 1;
+    }
+
+    // Find the most common color
+    const dominantColor = Object.keys(colorCount).reduce((a, b) => colorCount[a] > colorCount[b] ? a : b);
+    return `rgb(${dominantColor})`;
   } catch (error) {
     console.error("Error fetching dominant color:", error);
     process.exit(254);
