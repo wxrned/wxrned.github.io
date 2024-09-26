@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createCanvas, loadImage } from 'canvas'; // Import canvas functions
 
 // Get the current directory name
 const __filename = fileURLToPath(import.meta.url);
@@ -28,29 +29,18 @@ async function getDominantColor(imageUrl) {
 
         // Use arrayBuffer to get the image data
         const arrayBuffer = await response.arrayBuffer();
-        const blob = new Blob([new Uint8Array(arrayBuffer)]); // Create a Blob from the array buffer
-        const imageElement = await createImageElement(blob); // Create an Image element from the Blob
+        const buffer = Buffer.from(arrayBuffer);
 
+        // Create an image from the buffer using canvas
+        const image = await loadImage(buffer);
+        
         // Get the dominant color
-        const dominantColor = colorThief.getColor(imageElement);
+        const dominantColor = colorThief.getColor(image);
         return `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
     } catch (error) {
         console.error("Error fetching dominant color:", error);
         process.exit(254);
     }
-}
-
-function createImageElement(blob) {
-    return new Promise((resolve, reject) => {
-        const url = URL.createObjectURL(blob);
-        const img = new Image();
-        img.onload = () => {
-            URL.revokeObjectURL(url); // Clean up the object URL
-            resolve(img);
-        };
-        img.onerror = reject; // Handle errors
-        img.src = url;
-    });
 }
 
 async function fetchAvatarUrl(userId) {
