@@ -3,8 +3,10 @@ const playPauseBtn = document.getElementById('play-pause');
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
 const footer = document.getElementById('footer');
-const lyricsBtn = document.getElementById('lyrics')
+const lyricsBtn = document.getElementById('lyrics');
 const seekBar = document.getElementById('seek-bar');
+const volumeSlider = document.getElementById('volume-slider');
+const volumeButton = document.getElementById('volume-button');
 
 const defaultFooterText = '〤 CutNation 〤';
 
@@ -116,10 +118,10 @@ seekBar.addEventListener('change', () => {
 });
 
 lyricsBtn.addEventListener('click', () => {
-  const currentGeniusId = tracks[currentTrack].geniusId;
-  if (currentGeniusId) {
-    const popup = window.open("", "LyricsPopup", "width=600,height=400");
-    popup.document.write(`
+    const currentGeniusId = tracks[currentTrack].geniusId;
+    if (currentGeniusId) {
+        const popup = window.open("", "LyricsPopup", "width=600,height=400");
+        popup.document.write(`
       <html>
         <head>
           <link rel="stylesheet" type="text/css" href="assets/css/variables.css">
@@ -175,15 +177,38 @@ lyricsBtn.addEventListener('click', () => {
         </body>
       </html>
     `);
-  } else {
-    alert('No lyrics available for this track.');
-  }
+    }
 });
 
-audioPlayer.addEventListener('timeupdate', updateSeekBar);
+// Event listener for slider input
+volumeSlider.addEventListener('input', function() {
+    volumeValue = this.value / 100; // Convert to a value between 0 and 1
+    document.documentElement.style.setProperty('--volume', volumeValue); // Update CSS variable
+});
 
-audioPlayer.addEventListener('ended', playNextTrack);
+// Volume control functionality
+volumeButton.addEventListener('mouseenter', () => {
+    volumeSlider.style.display = 'block'; // Show slider on hover over button
+});
 
+volumeSlider.addEventListener('mouseenter', () => {
+    volumeSlider.style.display = 'block'; // Keep slider visible when hovering over it
+});
+
+volumeSlider.addEventListener('mouseleave', () => {
+    volumeSlider.style.display = 'none'; // Hide slider when not hovering over the button or slider
+});
+
+// Update audio volume when slider value changes
+volumeSlider.addEventListener('input', (e) => {
+    audioPlayer.volume = e.target.value; // Set the audio volume
+});
+
+// Set initial volume for the slider
+volumeSlider.value = audioPlayer.volume;
+
+// Show the default footer on load
 window.addEventListener('load', () => showDefaultFooter('slide-in-right'));
 
+// Load a random track on page load
 loadRandomTrack();
