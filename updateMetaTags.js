@@ -7,8 +7,8 @@ async function getFetch() {
 }
 
 async function getColorThief() {
-    const ColorThief = await import('color-thief');
-    return ColorThief.default; // Import color-thief as it uses ES Modules
+    const ColorThief = await import('color-thief-browser'); // Dynamically load color-thief-browser
+    return ColorThief.default;
 }
 
 async function getDominantColor(imageUrl) {
@@ -23,15 +23,29 @@ async function getDominantColor(imageUrl) {
 
         // Use arrayBuffer to get the image data
         const arrayBuffer = await response.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
+        const blob = new Blob([new Uint8Array(arrayBuffer)]); // Create a Blob from the array buffer
+        const imageElement = await createImageElement(blob); // Create an Image element from the Blob
 
         // Get the dominant color
-        const dominantColor = colorThief.getColor(buffer);
+        const dominantColor = colorThief.getColor(imageElement);
         return `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
     } catch (error) {
         console.error("Error fetching dominant color:", error);
         process.exit(254);
     }
+}
+
+function createImageElement(blob) {
+    return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+        img.onload = () => {
+            URL.revokeObjectURL(url); // Clean up the object URL
+            resolve(img);
+        };
+        img.onerror = reject; // Handle errors
+        img.src = url;
+    });
 }
 
 async function fetchAvatarUrl(userId) {
