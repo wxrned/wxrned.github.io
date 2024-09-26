@@ -121,10 +121,11 @@ lyricsBtn.addEventListener('click', () => {
     popup.document.write(`
       <html>
         <head>
+          <link rel="stylesheet" type="text/css" href="assets/css/variables.css">
           <title>${tracks[currentTrack].title} | Lyrics</title>
           <style>
             body {
-              background-color: var(--bg-color);
+              background-color: var(--bg-color); /* Use variable from CSS */
               font-family: monospace;
               padding: 20px;
               color: var(--text-color);
