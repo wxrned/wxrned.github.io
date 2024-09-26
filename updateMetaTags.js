@@ -1,12 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { createCanvas, loadImage } from 'canvas';
-import Vibrant from 'node-vibrant'; // Import node-vibrant
-
-// Get the current directory name
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import Vibrant from '@vibrant/core';
+import NodeImage from '@vibrant/image-node';
 
 async function getFetch() {
     const fetch = await import('node-fetch');
@@ -21,19 +16,22 @@ async function getDominantColor(imageUrl) {
             throw new Error(`Failed to fetch image for dominant color: ${response.statusText}`);
         }
 
-        // Use arrayBuffer to get the image data
         const arrayBuffer = await response.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        // Load image using canvas
-        const image = await loadImage(buffer);
+        // Create a NodeImage instance from the buffer
+        const image = new NodeImage(buffer);
 
-        // Create a vibrant instance and get the palette
-        const vibrant = await Vibrant.from(image).getPalette();
+        // Create a Vibrant instance and get the palette
+        const vibrant = new Vibrant(image);
+        const palette = await vibrant.palette();
+        const dominantColor = palette.Vibrant; // Get the vibrant color from the palette
         
-        // Get the dominant color (Vibrant color)
-        const dominantColor = vibrant.Vibrant ? vibrant.Vibrant.hex : '#000000'; // Fallback to black if not found
-        return dominantColor;
+        if (dominantColor) {
+            return `rgb(${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b})`;
+        } else {
+            throw new Error("No dominant color found.");
+        }
     } catch (error) {
         console.error("Error fetching dominant color:", error);
         process.exit(254);
