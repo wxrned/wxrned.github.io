@@ -1,19 +1,20 @@
 {
   "name": "your-project-name",
   "version": "1.0.0",
-  "description": "Six, six, six. I'm so fucking sick.",
+  "description": "Your project description here",
   "main": "updateMetaTags.js",
+  "type": "module",
   "scripts": {
     "start": "node updateMetaTags.js"
   },
   "dependencies": {
+    "@vibrant/core": "^3.2.1-alpha.1",
+    "@vibrant/image-node": "^3.2.1-alpha.1",
     "node-fetch": "^3.3.0",
-    "color-thief-browser": "^2.0.2",
-    "node-vibrant": "3.2.1-alpha.1",
-    "canvas": "^2.8.0"
+    "color-thief-browser": "^2.0.2"
   },
-  "type": "module",
-  "engines": {
-    "node": ">=16.0.0"
-  }
+  "devDependencies": {},
+  "keywords": [],
+  "author": "Your Name",
+  "license": "ISC"
 }
