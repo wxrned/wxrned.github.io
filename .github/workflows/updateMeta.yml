@@ -9,6 +9,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write  # Allow the workflow to push changes to the repository
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -33,7 +36,7 @@ jobs:
           cat index.html || echo "index.html not found"
 
       - name: Run the dynamic avatar color extraction
-        run: node updateMetaTags.js
+        run: node updateMetaTags.js # Ensure this path is correct
 
       - name: Commit and push generated data.json
         run: |
@@ -46,16 +49,10 @@ jobs:
       - name: Update index.html meta tags
         run: node updateMetaTags.js
 
-      - name: Display Git status
-        run: |
-          git status
-          echo "Listing all modified files:"
-          git diff --name-only
-
-      - name: Commit and push updated index.html and package-lock.json
+      - name: Commit and push updated index.html
         run: |
           git config --local user.name "GitHub Action"
           git config --local user.email "action@github.com"
-          git add index.html package-lock.json  # Add both files
+          git add index.html
           git commit -m "Update meta tags based on new data.json" || echo "No changes to commit"
-          git push origin main || echo "Git push failed"
+          git push origin main
