@@ -66,7 +66,7 @@ async function fetchImages(imgElement, userId) {
 
             // Check if a banner URL is present, then set it as the background
             if (data.bannerUrl) {
-                document.body.style.backgroundImage = `url(`${data.bannerUrl}?size=2048`)`;
+                document.body.style.backgroundImage = `url(${data.bannerUrl + "?size=1024"})`;
                 document.body.style.backgroundSize = 'cover';
                 document.body.style.backgroundPosition = 'center';
                 console.log(`Banner set for user ${userId}`);
