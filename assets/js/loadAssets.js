@@ -9,7 +9,7 @@ async function fetchAvatarsForAll() {
 
     if (avatarElement) {
         avatarElement.src = "assets/img/black.png"; // Placeholder while fetching
-        const avatarUrl = await fetchAndSetAvatar(avatarElement, discordId);
+        const avatarUrl = await fetchImages(avatarElement, discordId);
 
         if (avatarUrl && faviconElement) {
             faviconElement.href = avatarUrl;
@@ -36,10 +36,11 @@ async function fetchAvatarsForAll() {
     }
 }
 
-async function fetchAndSetAvatar(imgElement, userId) {
+async function fetchImages(imgElement, userId) {
     try {
         let response = await fetch(`https://api.wxrn.lol/api/avatar/${userId}`);
 
+        // Fallback fetch in case of failure with the primary URL
         if (!response.ok) {
             response = await fetch(`https://cors-anywhere.herokuapp.com/https://185.228.81.59:3000/api/avatar/${userId}`);
         }
@@ -47,29 +48,42 @@ async function fetchAndSetAvatar(imgElement, userId) {
         const data = await response.json();
 
         if (data.avatarUrl) {
+            // Set the avatar URL for the img element
             imgElement.src = data.avatarUrl;
 
-            return new Promise((resolve, reject) => {
+            // Return a promise to handle the image load
+            const avatarPromise = new Promise((resolve, reject) => {
                 imgElement.onload = () => {
                     applyColorsFromImage(imgElement); // Call color extraction function
-                    resolve(data.avatarUrl); // Resolve the promise with the URL
+                    resolve(data.avatarUrl);
                 };
 
                 imgElement.onerror = () => {
-                    console.error(`Failed to load image for user ${userId}`);
-                    reject(new Error(`Image failed to load for user ${userId}`));
+                    console.error(`Failed to load avatar image for user ${userId}`);
+                    reject(new Error(`Avatar image failed to load for user ${userId}`));
                 };
             });
+
+            // Check if a banner URL is present, then set it as the background
+            if (data.bannerUrl) {
+                document.body.style.backgroundImage = `url(${data.bannerUrl})`;
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+                console.log(`Banner set for user ${userId}`);
+            }
+
+            return avatarPromise; // Resolve the promise with the avatar URL
         } else if (data.error) {
             console.error(`Error for user ${userId}: ${data.error}`);
         }
     } catch (error) {
-        console.error(`Failed to fetch avatar for user ${userId}:`, error);
+        console.error(`Failed to fetch avatar and banner for user ${userId}:`, error);
     }
 
     return null; // Return null if there was an error
 }
 
+    
 function applyColorsFromImage(imgElement) {
     if (!imgElement.complete) {
         console.error('Image not fully loaded!');
