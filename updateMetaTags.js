@@ -1,27 +1,39 @@
 const fs = require('fs');
 const path = require('path');
-const fetch = require('node-fetch'); // Make sure to install node-fetch
-const ColorThief = require('color-thief-node'); // Make sure to install color-thief-node
+const fetch = require('node-fetch'); // Ensure you have this installed
+const ColorThief = require('color-thief-node'); // Ensure you have this installed
 
 async function getDominantColor(imageUrl) {
   const colorThief = new ColorThief();
+  try {
+    // Fetch the image buffer
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image for dominant color: ${response.statusText}`);
+    }
+    const buffer = await response.buffer();
 
-  // Fetch the image buffer
-  const response = await fetch(imageUrl);
-  const buffer = await response.buffer();
-
-  // Get the dominant color
-  const dominantColor = colorThief.getColor(buffer);
-  return `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
+    // Get the dominant color
+    const dominantColor = colorThief.getColor(buffer);
+    return `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
+  } catch (error) {
+    console.error("Error fetching dominant color:", error);
+    process.exit(254);
+  }
 }
 
 async function fetchAvatarUrl(userId) {
-  const response = await fetch(`https://api.wxrn.lol/api/avatar/${userId}`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch avatar URL: ${response.statusText}`);
+  try {
+    const response = await fetch(`https://api.wxrn.lol/api/avatar/${userId}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch avatar URL: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data.avatarUrl; // Extract the avatar URL
+  } catch (error) {
+    console.error("Error fetching avatar URL:", error);
+    process.exit(254);
   }
-  const data = await response.json();
-  return data.avatarUrl; // Extract the avatar URL
 }
 
 async function main() {
