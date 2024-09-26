@@ -9,7 +9,7 @@
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {
-    "colorthief": "^2.3.2",
+    "canvas": "^2.9.0",
     "fs": "0.0.1-security",
     "node-fetch": "^3.2.0" 
   }
