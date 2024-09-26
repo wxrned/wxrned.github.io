@@ -81,7 +81,7 @@ async function main() {
     htmlContent = htmlContent
       .replace(/<meta property="og:title" content="[^"]*"/, `<meta property="og:title" content="${dynamicData.title}"`)
       .replace(/<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${dynamicData.description}"`)
-      .replace(/<meta property="og:image" content="[^"]*"/, `<meta property="og:image" content="${dynamicData.image}"`)
+      .replace(/<meta property="og:image" content="[^"]*"/, `<meta property="og:image" content="${discordPfpUrl}"`) // Update to use avatar URL
       .replace(/<meta name="theme-color" content="[^"]*"/, `<meta name="theme-color" content="${dynamicData.themeColor}"`);
 
     // Write the updated content back to the HTML file
