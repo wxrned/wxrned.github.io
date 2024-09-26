@@ -16,21 +16,21 @@ jobs:
       - name: Set up Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Explicitly use Node.js version 20
+          node-version: '20'
 
       - name: Install dependencies
         run: |
-          npm ci  # Using npm ci instead of npm install for a clean install
-          npm ls  # List installed dependencies for debugging
+          npm install  # Use npm install instead of npm ci
+          npm ls  # List installed packages for debugging
 
       - name: Display directory structure
         run: |
-          ls -R  # Show directory structure for context
-          cat data.json  # Display the contents of data.json (check if it exists)
+          ls -R
+          cat data.json || echo "data.json not found"
+          cat index.html || echo "index.html not found"
 
       - name: Run the dynamic avatar color extraction
-        run: |
-          node updateMetaTags.js
+        run: node updateMetaTags.js
 
       - name: Commit and push generated data.json
         run: |
@@ -38,10 +38,10 @@ jobs:
           git config --local user.email "action@github.com"
           git add data.json
           git commit -m "Update data.json with new avatar colors"
-          git push origin main
+          git push origin main || echo "Git push failed"
 
       - name: Update index.html meta tags
-        run: node updateMetaTags.js  # Run your update script again to apply changes to HTML
+        run: node updateMetaTags.js
 
       - name: Commit and push updated index.html
         run: |
