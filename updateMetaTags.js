@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const fetch = require('node-fetch'); // Ensure you have this installed
 const ColorThief = require('color-thief-node'); // Ensure you have this installed
 
 async function getDominantColor(imageUrl) {
@@ -23,6 +22,8 @@ async function getDominantColor(imageUrl) {
 }
 
 async function fetchAvatarUrl(userId) {
+  // Dynamically import node-fetch
+  const fetch = (await import('node-fetch')).default; // Ensure you have this installed
   try {
     const response = await fetch(`https://api.wxrn.lol/api/avatar/${userId}`);
     if (!response.ok) {
