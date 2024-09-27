@@ -240,7 +240,7 @@ button:hover {
   font-size: 18px;
 }
 
-button:hover, a:hover, .icon:hover, .music-player button:hover {
+#dc-pfp, button:hover, a:hover, .icon:hover, .music-player button:hover {
     border-radius: 8px;
     box-shadow: 0 0 15px var(--accent-color);
 }
