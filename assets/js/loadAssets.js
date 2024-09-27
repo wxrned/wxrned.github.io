@@ -102,8 +102,8 @@ function applyColorsFromImage(imgElement) {
         const dominantColorRgb = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
 
         document.documentElement.style.setProperty('--accent-color', dominantColorRgb);
-        const textColor = adjustColorBrightness(dominantColorRgb, -50);
-        const lighterTextColor = adjustColorBrightness(dominantColorRgb, 20);
+        const textColor = adjustColorBrightness(dominantColorRgb, 35);
+        const lighterTextColor = adjustColorBrightness(dominantColorRgb, 75);
         const iconColor = dominantColorRgb;
         document.documentElement.style.setProperty('--text-color', textColor);
         document.documentElement.style.setProperty('--text-color-light', lighterTextColor);
