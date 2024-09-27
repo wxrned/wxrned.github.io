@@ -1,0 +1,42 @@
+name: Update HTML Meta Tags
+
+# Set permissions for the workflow to have read and write access
+permissions:
+  contents: write  # This allows the workflow to push changes back to the repository
+
+on:
+  push:
+    branches:
+      - main  # Change this to your default branch if needed (e.g., "master")
+
+  workflow_dispatch:
+
+jobs:
+  update-html:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Run updateHTML.js script
+      run: |
+        npm install
+        node updateHTML.js
+
+    - name: Commit changes
+      run: |
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git add index.html
+        git commit -m "Update HTML with new meta tag values" || echo "No changes to commit"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
