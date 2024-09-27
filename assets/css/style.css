@@ -245,7 +245,7 @@ button:hover {
     box-shadow: 0 0 15px var(--accent-color);
 }
 
-#lyrics-popup {
+#platforms-popup {
   display: none;
   position: fixed;
   top: 50%;
@@ -263,12 +263,12 @@ button:hover {
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
-#lyrics-popup.show {
+#platforms-popup.show {
   display: block;
   opacity: 1;
 }
 
-#lyrics-content {
+#platforms-content {
   color: var(--text-color);
   font-family: monospace;
   font-size: 16px;
@@ -276,7 +276,7 @@ button:hover {
 }
 
 /* Close Button */
-#lyrics-popup button {
+#platforms-popup button {
   background-color: var(--btn-bg);
   border: var(--btn-border);
   padding: 10px;
@@ -291,7 +291,7 @@ button:hover {
   font-family: monospace;
 }
 
-#lyrics-popup button:hover {
+#platforms-popup button:hover {
   background-color: var(--btn-hover-bg);
   padding: 12px;
 }
@@ -722,7 +722,7 @@ button:hover {
     background-attachment: scroll;
   }
 
-  button#lyrics {
+  button#platforms {
     display: none;
   }
 
