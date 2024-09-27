@@ -270,35 +270,46 @@ button:hover {
 }
 
 #pf-links {
-  display: none; /* Hide links initially */
+  display: none;
   position: absolute;
-  bottom: 120%; /* Position above the button */
+  bottom: 120%;
   left: 0;
   padding: 10px;
   background-color: var(--btn-border-color);
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
-  transform: translateY(-20px); /* Slide-in effect above the button */
+  transform: translateY(-20px);
   opacity: 0;
   visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .platforms-popup:hover #pf-links {
-  display: block;
+  display: flex;
   transform: translateY(0);
   opacity: 1;
   visibility: visible;
 }
 
 #pf-links a {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 5px 10px;
   color: var(--btn-color);
   text-decoration: none;
   font-size: 22px;
   cursor: url("../cursors/16px_pointer.png"), pointer;
   transition: color 0.3s ease-in-out;
+}
+
+#pf-links a i {
+  margin-right: 5px;
+  vertical-align: middle;
 }
 
 #pf-links a:hover {
