@@ -3,7 +3,7 @@ const playPauseBtn = document.getElementById("play-pause");
 const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
 const footer = document.getElementById("footer");
-const lyricsBtn = document.getElementById("lyrics");
+const platformsBtn = document.getElementById("platforms");
 const seekBar = document.getElementById("seek-bar");
 const volumeSlider = document.getElementById("volume-slider");
 const volumeButton = document.getElementById("volume-button");
@@ -14,112 +14,112 @@ const tracks = [
   {
     title: "Destroy Lonely - if looks could kill",
     path: "assets/music/iflookscouldkill.mp3",
-    geniusId: "8482044",
+    spotifyId: "7cFLFmj3fLV5wxhcFfol7u",
   },
   {
     title: "Ken Carson - Succubus",
     path: "assets/music/Succubus.mp3",
-    geniusId: "9615170",
+    spotifyId: "2pcv4nUQqaZnJk1kYvCfXV",
   },
   {
     title: "Don Toliver - Bandit",
     path: "assets/music/Bandit.mp3",
-    geniusId: "9610573",
+    spotifyId: "7sTyAjxDXq9afwfSQy6D0s",
   },
   {
     title: "Yeat - Shade",
     path: "assets/music/Shade.mp3",
-    geniusId: "10059086",
+    spotifyId: "3vpocwyn0RvKzeXo1tzSrW",
   },
   {
     title: "che x SEMATARY - 666",
     path: "assets/music/666.mp3",
-    geniusId: "9606134",
+    spotifyId: "24NLox01SY6fAwwGS3qr0g",
   },
   {
     title: "SGGKobe - thrax",
     path: "assets/music/thrax.mp3",
-    geniusId: "6498022",
+    spotifyId: "1P6ZWbU95Y5issu4KXTpwz",
   },
   {
     title: "Ndotz - Embrace It",
     path: "assets/music/EmbraceIt.mp3",
-    geniusId: "10824990",
+    spotifyId: "0io16MKpbeDIdYzmGpQaES",
   },
   {
     title: "DJ Scheme - Blue Bills",
     path: "assets/music/BlueBills.mp3",
-    geniusId: "6145526",
+    spotifyId: "2ODUTBkiOWoYSUjKpGJxQE",
   },
   {
     title: "Ken Carson - Green Room",
     path: "assets/music/GreenRoom.mp3",
-    geniusId: "9615211",
+    spotifyId: "3MtB4aOzFkXJvAREmsy1Dj",
   },
   {
     title: "Ken Carson - RICK OWENS",
     path: "assets/music/RickOwens.mp3",
-    geniusId: "9861465",
+    spotifyId: "6VASMtJitNcGLlsWhPb9BC",
   },
   {
     title: "Ken Carson - Lose It",
     path: "assets/music/LoseIt.mp3",
-    geniusId: "9615202",
+    spotifyId: "5ZY2fIqxuKDr5pdz0ucpRz",
   },
   {
     title: "Anuel AA - LHNA",
     path: "assets/music/LHNA.mp3",
-    geniusId: "4598848",
+    spotifyId: "0pLZ7PPAId3OLfVIPTVAz5",
   },
   {
     title: "Anuel AA - Diamantes en Mis Dientes",
     path: "assets/music/DiamantesEnMisDientes.mp3",
-    geniusId: "8032687",
+    spotifyId: "5c3idBIe2HEX04QkMyfmTY",
   },
   {
     title: "$uicideboy$ - Bizarro",
     path: "assets/music/Bizarro.mp3",
-    geniusId: "5254573",
+    spotifyId: "3wYnfIWrBYOHx9MR3EcJzu",
   },
   {
-    title: "King Von - 2AM",
+    title: "King Von - 2 A.M.",
     path: "assets/music/2AM.mp3",
-    geniusId: "5029774",
+    spotifyId: "3PjSkZGM7rpNPymaesfZte",
   },
   {
     title: "$uicideboy$ - 1000 Blunts",
     path: "assets/music/1000Blunts.mp3",
-    geniusId: "8238968",
+    spotifyId: "09riz9pAPJyYYDVynE5xxY",
   },
   {
     title: "Yeat - Mountain Climbërs",
     path: "assets/music/MountainClimbers.mp3",
-    geniusId: "6879161",
+    spotifyId: "3Mq0oy9rLoyu6OEN10nbBt",
   },
   {
     title: "Khea x Duki - Loca",
     path: "assets/music/Loca.mp3",
-    geniusId: "3328979",
+    spotifyId: "0vnrhysrKKRdNYFKLAGzRc",
   },
   {
     title: "Destroy Lonely - NEVEREVER",
     path: "assets/music/NEVEREVER.mp3",
-    geniusId: "8565075",
+    spotifyId: "610gzNqwaSz89u6YIpDlyZ",
   },
   {
     title: "Duki - Goteo",
     path: "assets/music/Goteo.mp3",
-    geniusId: "4569310",
+    spotifyId: "1EoEU4HY57qaITp06TkC6B",
   },
   {
     title: "che - GET NAKED",
     path: "assets/music/GetNaked.mp3",
-    geniusId: "10809184",
+    spotifyId: "0MpX5XdebuePxim7XJBp8d",
   },
   {
     title: "Playboi Carti - Fell In Luv",
     path: "assets/music/FellInLuv.mp3",
-    geniusId: "3710605",
+    spotifyId: "1s9DTymg5UQrdorZf43JQm",
   },
 ];
 
@@ -227,15 +227,15 @@ seekBar.addEventListener("change", () => {
   isDragging = false;
 });
 
-lyricsBtn.addEventListener("click", () => {
-  const currentGeniusId = tracks[currentTrack].geniusId;
-  if (currentGeniusId) {
-    const popup = window.open("", "LyricsPopup", "width=600,height=400");
+platformsBtn.addEventListener("click", () => {
+  const currentSpotifyId = tracks[currentTrack].spotifyId;
+  if (currentSpotifyId) {
+    const popup = window.open("", "PlatformsPopup", "width=600,height=250");
     popup.document.write(`
       <html>
         <head>
           <link rel="stylesheet" type="text/css" href="assets/css/variables.css">
-          <title>${tracks[currentTrack].title} | Lyrics</title>
+          <title>${tracks[currentTrack].title} | Links</title>
           <style>
             body {
               background-color: var(--bg-color); /* Use variable from CSS */
@@ -250,7 +250,7 @@ lyricsBtn.addEventListener("click", () => {
             a:hover {
               color: var(--ahref-hover-color);
             }
-            .lyrics-container {
+            .platforms-container {
               background-color: var(--bg-color-light);
               border-radius: 10px;
               padding: 20px;
@@ -276,14 +276,8 @@ lyricsBtn.addEventListener("click", () => {
           </style>
         </head>
         <body>
-          <h2>${tracks[currentTrack].title} Lyrics</h2>
-          <div class="lyrics-container">
-            <div id='rg_embed_link_${currentGeniusId}' class='rg_embed_link' data-song-id='${currentGeniusId}'>
-              Read <a href='https://genius.com/songs/${currentGeniusId}'>Lyrics on Genius</a>
-            </div>
-          </div>
+          <iframe width="100%" height="150" src="https://odesli.co/embed/?url=https%3A%2F%2Fsong.link%2Fs%2F${currentSpotifyId}&theme=dark" frameborder="0" allowfullscreen sandbox="allow-same-origin allow-scripts allow-presentation allow-popups allow-popups-to-escape-sandbox" allow="clipboard-read; clipboard-write"></iframe>
           <button onclick="window.close()">Close</button>
-          <script crossorigin src='//genius.com/songs/${currentGeniusId}/embed.js'></script>
         </body>
       </html>
     `);
