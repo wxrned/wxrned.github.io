@@ -249,11 +249,6 @@ button:hover {
   position: relative;
 }
 
-#platform-button {
-  position: relative;
-  z-index: 2;
-}
-
 #pf-links {
   display: none;
   position: absolute;
@@ -578,11 +573,6 @@ button:hover {
   position: relative;
 }
 
-#volume-button {
-  position: relative;
-  z-index: 2;
-}
-
 #volume-slider {
   -webkit-appearance: none;
   appearance: none;
@@ -629,6 +619,26 @@ button:hover {
 
 #volume-slider:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.controls button {
+  position: relative;
+  z-index: 2;
+  background-color: var(--btn-bg);
+  border: var(--btn-border);
+  padding: 10px 15px;
+  color: var(--btn-color);
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: url("../cursors/16px_pointer.png"), pointer;
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+}
+
+.controls button:hover {
+  background-color: var(--btn-hover-bg);
+  box-shadow: 0 0 15px var(--accent-color);
 }
 
 .view-counter {
