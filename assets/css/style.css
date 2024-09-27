@@ -1,12 +1,10 @@
 @import url(fonts/icons.css);
-
 @import url(variables.css);
 
 @-webkit-keyframes fadeIn {
   0% {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
@@ -16,7 +14,6 @@
   0% {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
@@ -24,7 +21,6 @@
 
 * {
   margin: 0;
-
   cursor: url("../cursors/16px_default.png"), default;
 }
 
@@ -34,33 +30,19 @@ html {
 
 body {
   background-color: var(--bg-color);
-
   background-size: cover;
-
   background-position: center center;
-
   background-repeat: no-repeat;
-
   background-attachment: fixed;
-
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
-
   -webkit-animation-name: fadeIn;
-
   animation-name: fadeIn;
-
   animation-duration: 1s;
-
   font-family: monospace;
-
   user-select: none;
-
   -webkit-user-select: none;
-
   -moz-user-select: none;
-
   -ms-user-select: none;
-
   -o-user-select: none;
 }
 
@@ -84,45 +66,29 @@ main.fade-in {
 
 img {
   cursor: url("../cursors/16px_pointer.png"), pointer;
-
   object-fit: cover;
-
   border-radius: 50%;
-
   margin-bottom: 20px;
-
   border: var(--img-border);
-
   max-width: 150px;
 }
 
 #who {
   color: var(--text-color);
-
   font-size: clamp(25px, 8vw, 30px);
-
   margin-bottom: 10px;
 }
 
 #footer {
   color: var(--text-color-light);
-
   font-size: clamp(12px, 8vw, 20px);
-
   margin-bottom: 10px;
-
   text-align: center;
-
   padding: 10px;
-
   position: relative;
-
   display: inline-block;
-
   opacity: 0;
-
   transition: opacity 0.5s ease-in-out;
-
   will-change: opacity;
 }
 
@@ -136,99 +102,64 @@ img {
 
 button {
   background-color: var(--btn-bg);
-
   border: var(--btn-border);
-
   border-radius: 5px;
-
   padding: 15px;
-
   font-size: clamp(18px, 2vw, 20px);
-
   color: var(--btn-color);
-
   cursor: url("../cursors/16px_pointer.png"), pointer;
-
   font-family: monospace;
-
   margin: 5px;
-
   transition: all 0.2s ease-in-out;
-
   display: inline;
 }
 
 a {
   text-decoration: none;
-
   color: var(--ahref-color);
-
   font-family: monospace;
 }
 
 .flexbox {
   display: flex;
-
   flex-direction: row;
 }
 
 .flexbox .icon {
   padding: 5px;
-
   font-style: normal;
-
   border: 2px dashed;
-
   color: var(--icon-color);
-
   cursor: url("../cursors/16px_pointer.png"), pointer;
-
   transition: all 0.2s ease-in-out;
-
   border-radius: 50%;
-
   background-color: var(--icon-bg);
-
   margin-right: 10px;
 }
 
 button:hover {
   background-color: var(--btn-hover-bg);
-
   border-radius: 5px;
-
   padding: 20px;
-
   font-size: clamp(20px, 2vw, 25px);
 }
 
 .music-player {
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
   justify-content: center;
-
   margin-top: 5px;
 }
 
 .music-player button {
   background-color: var(--btn-bg);
-
   border: none;
-
   color: var(--btn-color);
-
   padding: 10px 15px;
-
   margin: 10px 2px;
-
   border-radius: 5px;
-
   cursor: url("../cursors/16px_pointer.png"), pointer;
-
   font-size: 16px;
 }
 
@@ -298,35 +229,22 @@ button:hover {
 
 #seek-bar {
   width: 200px;
-
   margin-top: 0px;
-
   margin-bottom: 15px;
-
   appearance: none;
-
   background: #333;
-
   height: 4px;
-
   border-radius: 5px;
-
   outline: none;
 }
 
 #seek-bar::-webkit-slider-thumb {
   appearance: none;
-
   width: 12px;
-
   height: 12px;
-
   background: var(--text-color-light);
-
   border-radius: 50%;
-
   cursor: url("../cursors/16px_pointer.png"), pointer;
-
   transition: background 0.3s ease-in-out;
 }
 
@@ -336,15 +254,10 @@ button:hover {
 
 #seek-bar::-moz-range-thumb {
   width: 12px;
-
   height: 12px;
-
   background: var(--text-color-light);
-
   border-radius: 50%;
-
   cursor: url("../cursors/16px_pointer.png"), pointer;
-
   transition: background 0.3s ease-in-out;
 }
 
@@ -354,179 +267,111 @@ button:hover {
 
 #popup {
   display: none;
-
   position: fixed;
-
   top: 50%;
-
   left: 50%;
-
   transform: translate(-50%, -50%);
-
   background-color: var(--bg-color);
-
   padding: 20px;
-
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
   border-radius: 10px;
-
   z-index: 1000;
-
   width: 300px;
-
-  height: 300px; /* Fixed height for the 3x3 grid */
-
-  opacity: 0; /* Initially hidden */
-
+  height: 300px;
+  opacity: 0;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 #popup.show {
-  display: block; /* Ensure the popup becomes visible */
-
+  display: block;
   opacity: 1;
 }
 
 #popup h2 {
   margin-top: 0;
-
   color: var(--text-color);
-
   font-size: 20px;
-
   font-family: monospace;
-
   text-align: center;
 }
 
 #popup ul {
   display: grid;
-
-  grid-template-columns: repeat(3, 1fr); /* Create 3 columns */
-
-  grid-gap: 10px; /* Space between blocks */
-
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
   list-style: none;
-
   padding: 0;
-
-  margin: 20px 0 0 0; /* Add some spacing from the title */
+  margin: 20px 0 0 0;
 }
 
 #popup ul li {
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
-  height: 80px; /* Make the blocks square */
-
+  height: 80px;
   background-color: var(--btn-bg);
-
   color: var(--text-color);
-
   font-family: monospace;
-
   font-size: 18px;
-
   border-radius: 8px;
-
   text-align: center;
-
   transition: background-color 0.3s ease;
-
-  overflow: hidden; /* Ensure images don't overflow out of the blocks */
-
-  position: relative; /* Make it possible to layer the text and image */
+  overflow: hidden;
+  position: relative;
 }
 
 #popup ul li img {
   position: absolute;
-
   top: 0;
-
   left: 0;
-
-  width: 100%; /* Fit the images to the block's size */
-
+  width: 100%;
   height: 100%;
-
-  object-fit: cover; /* Ensure the images maintain aspect ratio */
-
+  object-fit: cover;
   border-radius: 8px;
-
   filter: opacity(60%);
-
-  z-index: 0; /* Send the image behind the text */
+  z-index: 0;
 }
 
 #popup ul li .friend-name {
   position: relative;
-
-  z-index: 1; /* Ensure the text is on top of the image */
-
-  color: white; /* Text color */
-
+  z-index: 1;
+  color: white;
   font-weight: bold;
-
-  text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5); /* Make the text readable over the image */
+  text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 #popup ul li:hover {
-  background-color: var(--btn-hover-bg); /* Change background on hover */
+  background-color: var(--btn-hover-bg);
 }
 
 #popup button {
   background-color: var(--btn-bg);
-
   border: var(--btn-border);
-
   padding: 10px;
-
   color: var(--btn-color);
-
   font-size: 18px;
-
   cursor: url("../cursors/16px_pointer.png"), pointer;
-
   border-radius: 5px;
-
   transition: all 0.2s ease-in-out;
-
   margin-top: 20px;
-
   width: 100%;
-
   text-align: center;
-
   font-family: monospace;
 }
 
 #popup button:hover {
   background-color: var(--btn-hover-bg);
-
   padding: 12px;
 }
 
-/* Background Overlay */
-
 #overlay {
   display: none;
-
   position: fixed;
-
   top: 0;
-
   left: 0;
-
   width: 100%;
-
   height: 100%;
-
   background: rgba(0, 0, 0, 0.7);
-
   z-index: 999;
 }
 
@@ -643,33 +488,19 @@ button:hover {
 
 .view-counter {
   position: fixed;
-
   top: 10px;
-
   left: 10px;
-
   background-color: var(--btn-bg);
-
   border: var(--btn-border);
-
   color: var(--text-color-light);
-
   font-family: monospace;
-
   padding: 10px 20px;
-
   border-radius: 5px;
-
   font-size: clamp(16px, 2vw, 18px);
-
   text-align: center;
-
   z-index: 100;
-
   transition: all 0.2s ease-in-out;
-
   cursor: default;
-
   display: inline-block;
 }
 
@@ -679,7 +510,6 @@ button:hover {
 
 .view-counter:hover {
   background-color: var(--btn-hover-bg);
-
   padding: 12px 22px;
 }
 
@@ -689,9 +519,7 @@ button:hover {
 
 ::-webkit-scrollbar {
   -webkit-appearance: none;
-
   width: 4px;
-
   height: 4px;
 }
 
@@ -706,13 +534,11 @@ button:hover {
 @keyframes slideInRight {
   0% {
     transform: translateX(100%);
-
     opacity: 0;
   }
 
   100% {
     transform: translateX(0);
-
     opacity: 1;
   }
 }
@@ -720,13 +546,11 @@ button:hover {
 @keyframes slideInLeft {
   0% {
     transform: translateX(-100%);
-
     opacity: 0;
   }
 
   100% {
     transform: translateX(0);
-
     opacity: 1;
   }
 }
