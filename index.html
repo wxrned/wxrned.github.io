@@ -79,7 +79,15 @@
           <button id="prev"><i class="icon fa-solid fa-backward"></i></button>
           <button id="play-pause"><i class="icon fa-solid fa-play"></i></button>
           <button id="next"><i class="icon fa-solid fa-forward"></i></button>
-          <button id="platforms"><i class="icon fa-solid fa-link"></i></button>
+          <div class="platforms-popup">
+            <button id="platform-button"><i class="icon fa-solid fa-link"></i></button>
+            <div id="pf-links" class="hidden">
+              <a href="#" target="_blank"><i class="fa-brands fa-spotify"></i></a>
+              <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+              <a href="#" target="_blank"><i class="fa-brands fa-itunes"></i></a>
+              <a href="#" target="_blank"><i class="fa-brands fa-soundcloud"></i></a>
+            </div>
+        </div>
         </div>
       </div>
 
@@ -97,14 +105,6 @@
         >
       </div>
     </main>
-
-    <div id="lyrics-popup">
-      <h2>Lyrics</h2>
-
-      <div id="lyrics-content"></div>
-
-      <button onclick="closeLyricsPopup()">Close</button>
-    </div>
 
     <div id="overlay"></div>
 
