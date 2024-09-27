@@ -3,7 +3,8 @@ const playPauseBtn = document.getElementById("play-pause");
 const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
 const footer = document.getElementById("footer");
-const platformsBtn = document.getElementById("platforms");
+const platformsBtn = document.getElementById("platform-button");
+const linksPopup = document.getElementById("pf-links");
 const seekBar = document.getElementById("seek-bar");
 const volumeSlider = document.getElementById("volume-slider");
 const volumeButton = document.getElementById("volume-button");
@@ -149,6 +150,52 @@ function hideSlider() {
   }, 300);
 }
 
+function showPopup() {
+  linksPopup.style.display = 'block';
+  linksPopup.classList.add('show');
+}
+
+function hidePopup() {
+  setTimeout(() => {
+    if (!linksPopup.matches(':hover') && !platformsBtn.matches(':hover')) {
+      linksPopup.style.display = 'none';
+      linksPopup.classList.remove('show');
+    }
+  }, 100);
+}
+
+async function fetchLinks(currentSpotifyId) {
+  if (!currentSpotifyId) return;
+
+  try {
+    let response = await fetch(`https://api.song.link/v1-alpha.1/links?url=https://open.spotify.com/track/${currentSpotifyId}`);
+    
+    if (!response.ok) throw new Error('Network response was not ok');
+
+    const data = await response.json();
+
+    if (data.linksByPlatform) {
+      const pfLinks = data.linksByPlatform;
+
+      const itunes = pfLinks.itunes ? pfLinks.itunes.url : '#';
+      const soundcloud = pfLinks.soundcloud ? pfLinks.soundcloud.url : '#';
+      const youtube = pfLinks.youtube ? pfLinks.youtube.url : '#';
+      const spotify = pfLinks.spotify ? pfLinks.spotify.url : '#';
+
+      linksPopup.innerHTML = `
+        <a href="${spotify}" target="_blank"><i class="fa-brands fa-spotify"></i></a>
+        <a href="${youtube}" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+        <a href="${itunes}" target="_blank"><i class="fa-brands fa-itunes"></i></a>
+        <a href="${soundcloud}" target="_blank"><i class="fa-brands fa-soundcloud"></i></a>
+      `;
+    } else {
+      console.warn('No links available for this track.');
+    }
+  } catch (error) {
+    console.error('Error fetching links:', error);
+  }
+}
+
 function shuffleTracks() {
   for (let i = tracks.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -161,15 +208,17 @@ function loadTrack(index, animationClass) {
   audioPlayer.src = tracks[currentTrack].path;
   footer.textContent = `〤 ${tracks[currentTrack].title} 〤`;
 
-  // Apply animation
   footer.classList.remove("slide-in-right", "slide-in-left");
   void footer.offsetWidth;
   footer.classList.add(animationClass);
+
+  fetchLinks(tracks[currentTrack].spotifyId);
 }
 
 function loadRandomTrack() {
   shuffleTracks();
   loadTrack(0, "slide-in-right");
+  fetchLinks(tracks[0].spotifyId);
 }
 
 function showDefaultFooter(animationClass) {
@@ -227,62 +276,10 @@ seekBar.addEventListener("change", () => {
   isDragging = false;
 });
 
-platformsBtn.addEventListener("click", () => {
-  const currentSpotifyId = tracks[currentTrack].spotifyId;
-  if (currentSpotifyId) {
-    const popup = window.open("", "PlatformsPopup", "width=600,height=250");
-    popup.document.write(`
-      <html>
-        <head>
-          <link rel="stylesheet" type="text/css" href="assets/css/variables.css">
-          <title>${tracks[currentTrack].title} | Links</title>
-          <style>
-            body {
-              background-color: var(--bg-color); /* Use variable from CSS */
-              font-family: monospace;
-              padding: 20px;
-              color: var(--text-color);
-            }
-            a {
-              color: var(--ahref-color);
-              text-decoration: none;
-            }
-            a:hover {
-              color: var(--ahref-hover-color);
-            }
-            .platforms-container {
-              background-color: var(--bg-color-light);
-              border-radius: 10px;
-              padding: 20px;
-              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-              overflow-y: auto;
-              max-height: 80%;
-              margin-top: 20px;
-            }
-            button {
-              background-color: var(--btn-bg);
-              border: var(--btn-border);
-              border-radius: 5px;
-              padding: 10px;
-              color: var(--btn-color);
-              cursor: pointer;
-              width: 100%;
-              margin-top: 10px;
-              font-family: monospace;
-            }
-            button:hover {
-              background-color: var(--btn-hover-bg);
-            }
-          </style>
-        </head>
-        <body>
-          <iframe width="100%" height="150" src="https://odesli.co/embed/?url=https%3A%2F%2Fsong.link%2Fs%2F${currentSpotifyId}&theme=dark" frameborder="0" allowfullscreen sandbox="allow-same-origin allow-scripts allow-presentation allow-popups allow-popups-to-escape-sandbox" allow="clipboard-read; clipboard-write"></iframe>
-          <button onclick="window.close()">Close</button>
-        </body>
-      </html>
-    `);
-  }
-});
+platformsBtn.addEventListener("mouseenter", showPopup);
+platformsBtn.addEventListener("mouseleave", hidePopup);
+linksPopup.addEventListener("mouseenter", showPopup);
+linksPopup.addEventListener("mouseleave", hidePopup);
 
 audioPlayer.addEventListener("timeupdate", updateSeekBar);
 
@@ -320,6 +317,7 @@ volumeSlider.addEventListener("input", (e) => {
 
 volumeSlider.value = audioPlayer.volume;
 
-window.addEventListener("load", () => showDefaultFooter("slide-in-right"));
-
-loadRandomTrack();
+window.addEventListener("load", () => {
+  showDefaultFooter("slide-in-right");
+  loadRandomTrack();
+});
