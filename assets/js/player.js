@@ -168,7 +168,7 @@ async function fetchLinks(currentSpotifyId) {
   if (!currentSpotifyId) return;
 
   try {
-    let response = await fetch(`https://api.song.link/v1-alpha.1/links?url=https://open.spotify.com/track/${currentSpotifyId}`);
+    let response = await fetch(`https://api.wxrn.lol/api/song_links/${currentSpotifyId}`);
     
     if (!response.ok) throw new Error('Network response was not ok');
 
