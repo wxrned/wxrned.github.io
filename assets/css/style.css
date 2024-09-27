@@ -245,55 +245,64 @@ button:hover {
     box-shadow: 0 0 15px var(--accent-color);
 }
 
-#platforms-popup {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: var(--bg-color);
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  z-index: 1000;
-  width: 300px;
-  max-height: 80%;
-  overflow-y: auto;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+.platforms-popup {
+  position: relative;
 }
 
-#platforms-popup.show {
-  display: block;
-  opacity: 1;
-}
-
-#platforms-content {
-  color: var(--text-color);
-  font-family: monospace;
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-/* Close Button */
-#platforms-popup button {
+#platform-button {
+  position: relative;
+  z-index: 2;
   background-color: var(--btn-bg);
   border: var(--btn-border);
-  padding: 10px;
+  padding: 10px 15px;
   color: var(--btn-color);
+  border-radius: 8px;
   font-size: 18px;
   cursor: url("../cursors/16px_pointer.png"), pointer;
-  border-radius: 5px;
-  transition: all 0.2s ease-in-out;
-  margin-top: 20px;
-  width: 100%;
-  text-align: center;
-  font-family: monospace;
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
 }
 
-#platforms-popup button:hover {
+#platform-button:hover {
   background-color: var(--btn-hover-bg);
-  padding: 12px;
+  box-shadow: 0 0 15px var(--accent-color);
+}
+
+#pf-links {
+  display: none; /* Hide links initially */
+  position: absolute;
+  bottom: 120%; /* Position above the button */
+  left: 0;
+  padding: 10px;
+  background-color: var(--btn-border-color);
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
+  transform: translateY(-20px); /* Slide-in effect above the button */
+  opacity: 0;
+  visibility: hidden;
+}
+
+.platforms-popup:hover #pf-links {
+  display: block;
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+#pf-links a {
+  display: inline-block;
+  margin: 5px 10px;
+  color: var(--btn-color);
+  text-decoration: none;
+  font-size: 22px;
+  cursor: url("../cursors/16px_pointer.png"), pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+#pf-links a:hover {
+  color: var(--accent-color);
 }
 
 #seek-bar {
