@@ -1,16 +1,13 @@
-// Assuming Color Thief is already included 
 const colorThief = new ColorThief();
 
 async function fetchAvatarsForAll() {
     const liElements = document.querySelectorAll('#popup li');
-
-    // Set avatar and banner for the main user (with the specified Discord ID)
-    const discordId = '1158429903629336646'; // Main user's Discord ID
+    const discordId = '1158429903629336646';
     const avatarElement = document.querySelector('#dc-pfp');
     const faviconElement = document.querySelector('#short-icon');
 
     if (avatarElement) {
-        avatarElement.src = "assets/img/black.png"; // Placeholder while fetching
+        avatarElement.src = "assets/img/black.png";
         const resData = await fetchImages(avatarElement, discordId);
 
         if (resData && resData.bannerUrl) {
@@ -33,7 +30,7 @@ async function fetchAvatarsForAll() {
 
         if (imgElement) {
             const userId = imgElement.alt;
-            imgElement.src = "assets/img/black.png"; // Placeholder while fetching
+            imgElement.src = "assets/img/black.png";
 
             if (userId) {
                 await fetchImages(imgElement, userId);
@@ -48,7 +45,6 @@ async function fetchImages(imgElement, userId) {
     try {
         let response = await fetch(`https://api.wxrn.lol/api/discord/${userId}`);
 
-        // Fallback fetch in case of failure with the primary URL
         if (!response.ok) {
             response = await fetch(`https://cors-anywhere.herokuapp.com/https://api.wxrn.lol/api/discord/${userId}`);
         }
@@ -56,14 +52,12 @@ async function fetchImages(imgElement, userId) {
         const data = await response.json();
 
         if (data.avatarUrl) {
-            // Set the avatar URL for the img element
             imgElement.src = data.avatarUrl;
 
-            // Return a promise to handle the image load
             const avatarPromise = new Promise((resolve, reject) => {
                 imgElement.onload = () => {
                     applyColorsFromImage(imgElement);
-                    resolve(data); // Resolve with the full data object (avatar and banner URLs)
+                    resolve(data);
                 };
 
                 imgElement.onerror = () => {
@@ -72,7 +66,7 @@ async function fetchImages(imgElement, userId) {
                 };
             });
 
-            return avatarPromise; // Resolve the promise with the data
+            return avatarPromise;
         } else if (data.error) {
             console.error(`Error for user ${userId}: ${data.error}`);
         }
@@ -80,7 +74,7 @@ async function fetchImages(imgElement, userId) {
         console.error(`Failed to fetch avatar and banner for user ${userId}:`, error);
     }
 
-    return null; // Return null if there was an error
+    return null;
 }
 
 function applyColorsFromImage(imgElement) {
@@ -97,25 +91,21 @@ function applyColorsFromImage(imgElement) {
     ctx.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
 
     try {
-        // Get the dominant color from the image
         const dominantColor = colorThief.getColor(canvas);
         const dominantColorRgb = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
 
-        // Update CSS variables for accent and other colors
         document.documentElement.style.setProperty('--accent-color', dominantColorRgb);
-        const textColor = adjustColorBrightness(dominantColorRgb, -50); // Darker text color
-        const lighterTextColor = adjustColorBrightness(dominantColorRgb, 20); // Lighter text color
-        const iconColor = dominantColorRgb; // Use accent color for icons
+        const textColor = adjustColorBrightness(dominantColorRgb, -50);
+        const lighterTextColor = adjustColorBrightness(dominantColorRgb, 20);
+        const iconColor = dominantColorRgb;
         document.documentElement.style.setProperty('--text-color', textColor);
         document.documentElement.style.setProperty('--text-color-light', lighterTextColor);
         document.documentElement.style.setProperty('--icon-color', iconColor);
         document.documentElement.style.setProperty('--scroll-bar', dominantColorRgb);
 
-        // Apply a very darkened version of the color for the background
-        const darkenedBackgroundColor = adjustColorBrightness(dominantColorRgb, -80); // Darken by 80%
+        const darkenedBackgroundColor = adjustColorBrightness(dominantColorRgb, -80);
         document.documentElement.style.setProperty('--bg-color', darkenedBackgroundColor);
 
-        // Directly set the background color without any blur
         document.body.style.backgroundColor = darkenedBackgroundColor;
 
         console.log('Colors applied based on the image:', {
@@ -130,7 +120,6 @@ function applyColorsFromImage(imgElement) {
     }
 }
 
-// Helper function to adjust color brightness
 function adjustColorBrightness(color, percent) {
     const rgb = color.match(/\d+/g).map(Number);
     const adjust = (value, percent) => Math.min(255, Math.max(0, value + Math.floor(value * (percent / 100))));
@@ -138,5 +127,4 @@ function adjustColorBrightness(color, percent) {
     return `rgb(${adjustedColor[0]}, ${adjustedColor[1]}, ${adjustedColor[2]})`;
 }
 
-// Call the function to fetch avatars for all users
 fetchAvatarsForAll();
