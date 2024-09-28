@@ -117,10 +117,9 @@ function applyColorsFromImage(imgElement) {
 
         const cursorFilter = rgbToFilter(lighterTextColor);
 
-        document.documentElement.style.setProperty('--cursor-filter', cursorFilter);
-
-        document.documentElement.style.setProperty('cursor', `url('https://img.icons8.com/?size=16&id=71212&format=png') 0 0, auto`);
-        document.documentElement.style.setProperty('--pointer-cursor', `url('https://img.icons8.com/?size=16&id=83171&format=png') 0 0, pointer`);
+        // document.documentElement.style.setProperty('--cursor-filter', cursorFilter);
+        // document.documentElement.style.setProperty('cursor', `url('https://img.icons8.com/?size=16&id=71212&format=png') 0 0, auto`);
+        // document.documentElement.style.setProperty('--pointer-cursor', `url('https://img.icons8.com/?size=16&id=83171&format=png') 0 0, pointer`);
 
         console.log('Colors and cursors applied based on the image:', {
             dominantColor: dominantColorRgb,
