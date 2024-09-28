@@ -323,6 +323,6 @@ volumeSlider.addEventListener("input", (e) => {
 volumeSlider.value = audioPlayer.volume;
 
 window.addEventListener("load", () => {
-  showDefaultFooter("slide-in-right");
   loadRandomTrack();
+  showDefaultFooter("slide-in-right");
 });
