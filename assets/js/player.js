@@ -127,6 +127,11 @@ const tracks = [
     path: "assets/music/WhosBack.mp3",
     spotifyId: "5pvJTtwDTjiXJLHcH9putR",
   },
+  {
+    title: "Yeat - No morë talk",
+    path: "assets/music/NoMoreTalk.mp3",
+    spotifyId: "7qPiAhk71D2RqLRtnjDL76",
+  },
 ];
 
 let currentTrack = 0;
