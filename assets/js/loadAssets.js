@@ -10,11 +10,11 @@ async function fetchAvatarsForAll() {
         avatarElement.src = "assets/img/black.png";
         const resData = await fetchImages(avatarElement, discordId);
 
-        /*if (resData && resData.bannerUrl) {
+        if (resData && resData.bannerUrl) {
             document.body.style.backgroundImage = `url(${resData.bannerUrl + "?size=1024"})`;
             document.body.style.backgroundSize = 'cover';
             document.body.style.backgroundPosition = 'center';
-        }*/
+        }
 
         if (resData && resData.avatarUrl && faviconElement) {
             faviconElement.href = resData.avatarUrl;
