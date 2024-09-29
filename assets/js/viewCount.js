@@ -36,17 +36,17 @@ function enterSite() {
 }
 
 function countViews(ip) {
-  fetch('http://api.wxrn.lol/api/views', {
-    method: 'POST',
+  fetch("https://api.wxrn.lol/api/views", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': 'kJ3ytkb85tnltEGmZ7dHE62IjGbWgYhTeUNEe18xJZandErLhHxj7EkQX1r4ocxc',
+      "Content-Type": "application/json",
+      "x-api-key": "kJ3ytkb85tnltEGmZ7dHE62IjGbWgYhTeUNEe18xJZandErLhHxj7EkQX1r4ocxc",
     },
     body: JSON.stringify({ ip }),
   })
   .then(response => {
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error("Network response was not ok");
     }
     return response.json();
   })
