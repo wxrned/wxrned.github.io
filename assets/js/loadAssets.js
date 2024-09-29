@@ -1,8 +1,22 @@
 const colorThief = new ColorThief();
+const discordId = '1158429903629336646';
+
+async function syncDisplayName() {
+    const nameElement = document.querySelector('#who');
+
+    let response = await fetch(`https://api.wxrn.lol/api/discord/${userId}`);
+    const data = await response.json();
+
+    if (data.global_name) {
+        nameElement.innerHTML = data.global_name;
+    }
+    else if (data.username) {
+        nameElement.innerHTML = data.username;
+    }
+}
 
 async function fetchAvatarsForAll() {
     const liElements = document.querySelectorAll('#popup li');
-    const discordId = '1158429903629336646';
     const avatarElement = document.querySelector('#dc-pfp');
     const faviconElement = document.querySelector('#short-icon');
 
@@ -142,4 +156,5 @@ function adjustColorBrightness(rgbColor, amount) {
     return `rgb(${r}, ${g}, ${b})`;
 }
 
+syncDisplayName();
 fetchAvatarsForAll();
