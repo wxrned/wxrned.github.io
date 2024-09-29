@@ -313,10 +313,6 @@ function loadTrack(index, animationClass) {
   footer.classList.remove("slide-in-right", "slide-in-left");
   void footer.offsetWidth;
   footer.classList.add(animationClass);
-
-  fetchLyrics(tracks[currentTrack].title).then(lyrics => {
-    displayLyrics(lyrics); // Display the fetched lyrics
-  });
 }
 
 function displayLyrics(lyrics) {
@@ -339,9 +335,6 @@ function playNextTrack() {
 function loadRandomTrack() {
   const randomIndex = Math.floor(Math.random() * tracks.length);
   loadTrack(randomIndex, "slide-in-right");
-  fetchLyrics(tracks[randomIndex].title).then(lyrics => {
-    displayLyrics(lyrics); // Display lyrics for the randomly loaded track
-  });
 }
 
 function showDefaultFooter(animationClass) {
@@ -384,8 +377,10 @@ volumeSlider.addEventListener("mousemove", (e) => {
 volumeSlider.addEventListener("mouseup", hideSlider);
 volumeSlider.addEventListener("mouseleave", hideSlider);
 
-lyricsButton.addEventListener('click', () => {
-  displayLyrics(lyricsDisplay.innerHTML); // Show lyrics overlay when button is clicked
+// Modified event listener for lyrics button
+lyricsButton.addEventListener('click', async () => {
+  const lyrics = await fetchLyrics(tracks[currentTrack].title); // Fetch lyrics for the current track
+  displayLyrics(lyrics); // Show lyrics overlay when button is clicked
 });
 
 // Close button for lyrics overlay
