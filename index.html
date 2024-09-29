@@ -1,171 +1,343 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
   <head>
+
     <meta charset="UTF-8" />
+
+
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+
+
     <meta property="og:title" content="@.wxrn" />
+
     <meta
+
       property="og:description"
+
       content="Six, six, six. I'm so fucking sick."
+
     />
+
     <meta
+
       property="og:image"
+
       id="embed-icon"
+
       content="https://wxrn.lol/assets/img/black.png"
+
     />
+
     <meta name="theme-color" content="#808080" />
+
+
 
     <link rel="stylesheet" href="assets/css/style.css" />
 
+
+
     <link
+
       rel="shortcut icon"
+
       id="short-icon"
+
       href="assets/img/black.png"
+
       type="image/x-icon"
+
     />
 
+
+
     <script
+
       src="https://kit.fontawesome.com/b756c00e57.js"
+
       crossorigin="anonymous"
+
     ></script>
+
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
 
+
+
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
+
+
     <title></title>
+
   </head>
 
+
+
   <body>
+
     <div id="entry-overlay" class="entry-overlay">
+
       <div class="overlay-content">
+
         <p id="check-p">Checking your connection!</p>
+
       </div>
+
     </div>
 
+
+
     <main>
+
       <div id="view-counter" class="view-counter">
+
         <span><i class="fa-regular fa-eye"></i> </span
+
         ><span id="page_views">0</span>
+
       </div>
+
+
 
       <img id="dc-pfp" crossorigin="anonymous" src="assets/img/black.png" />
 
+
+
       <span id="who">warn</span>
+
+
 
       <span id="footer"></span>
 
+
+
       <div class="music-player">
+
         <input
+
           type="range"
+
           id="seek-bar"
+
           value="0"
+
           min="0"
+
           max="100"
+
           step="1"
+
         />
 
+
+
         <div class="controls">
+
           <div class="volume-control">
+
               <button id="volume-button">
+
                   <i class="icon fa-solid fa-volume-up"></i>
+
               </button>
+
               <input type="range" id="volume-slider" min="0" max="1" step="0.01" style="display:none;"/>
+
           </div>
+
           <button id="prev"><i class="icon fa-solid fa-backward"></i></button>
+
           <button id="play-pause"><i class="icon fa-solid fa-play"></i></button>
+
           <button id="next"><i class="icon fa-solid fa-forward"></i></button>
-          <button id="lyrics-button"><i class="icon fa-solid fa-music"></i></button>
+
+          <div class="platforms-popup">
+
+            <button id="platform-button"><i class="icon fa-solid fa-link"></i></button>
+
+            <div id="pf-links" class="hidden">
+
+              <a href="#" target="_blank"><i class="fa-brands fa-spotify"></i></a>
+
+              <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+
+              <a href="#" target="_blank"><i class="fa-brands fa-itunes"></i></a>
+
+              <a href="#" target="_blank"><i class="fa-brands fa-soundcloud"></i></a>
+
+            </div>
+
         </div>
+
         </div>
+
       </div>
+
+
 
       <div class="flexbox">
+
         <a href="https://t.me/wxrned" target="_blank"
+
           ><button><i class="icon fa-brands telegram"></i>@wxrned</button></a
+
         >
+
+
 
         <a href="https://www.tiktok.com/@wxrned_" target="_blank"
+
           ><button><i class="icon fa-brands tiktok"></i>@wxrned_</button></a
+
         >
+
+
 
         <a href="discord" target="_blank"
+
           ><button><i class="icon fa-brands discord"></i>/mag</button></a
+
         >
+
       </div>
+
     </main>
 
-    <div id="lyrics-overlay" class="popup">
-      <h2>Lyrics</h2>
-      <div id="lyricsDisplay"></div>
-      <button id="close-lyrics" onclick="closeLyrics()">Close</button>
-    </div>
+
 
     <div id="overlay"></div>
 
+
+
     <div id="popup">
+
       <h2>ʚ ♡ ɞ</h2>
+
+
 
       <ul>
 
+
+
         <li>
+
           <img src="" id="shiku" alt="1128162075336769567" /><span
+
             class="friend-name"
+
             >shiku</span
+
           >
+
         </li>
 
+
+
         <li>
+
           <img src="" id="1pm" alt="1241137218119012523" /><span
+
             class="friend-name"
+
             >1pm</span
+
           >
+
         </li>
 
+
+
         <li>
+
           <img src="" id="cautious" alt="1041516743409008640" /><span
+
             class="friend-name"
+
             >cautious</span
+
           >
+
         </li>
 
+
+
         <li>
+
           <img src="" id="custom" alt="869687741955309578" /><span
+
             class="friend-name"
+
             >custom</span
+
           >
+
         </li>
 
+
+
         <li>
+
           <img src="" id="vinxy" alt="596716265263857665" /><span
+
             class="friend-name"
+
             >vinxy</span
+
           >
+
         </li>
 
+
+
         <li>
+
           <img src="" id="kira" alt="1285590060837765190" /><span
+
             class="friend-name"
+
             >kira</span
+
           >
+
         </li>
+
       </ul>
 
+
+
       <button onclick="closePopup()">close</button>
+
     </div>
+
+
 
     <audio id="audio" src=""></audio>
 
+
+
     <!-- Scripts -->
+
     <script src="assets/js/inspect.js"></script>
+
     <script src="assets/js/title.js"></script>
+
     <script src="assets/js/viewCount.js"></script>
+
     <script src="assets/js/popup.js"></script>
+
     <script src="assets/js/loadAssets.js"></script>
+
     <script src="assets/js/player.js"></script>
+
   </body>
+
 </html>
