@@ -21,6 +21,7 @@ const volumeButton = document.getElementById("volume-button");
 const API_URL = 'https://api.wxrn.lol/api/lyrics';
 const audioPlayer = document.getElementById('audio');
 const lyricsDisplay = document.getElementById('lyricsDisplay');
+const lyricsBtn = document.getElementById('lyrics-button');
 
 const defaultFooterText = "〤 CutNation 〤";
 
@@ -660,6 +661,7 @@ volumeSlider.addEventListener("input", function () {
 });
 
 
+lyricsBtn.addEventListener("click", openLyricsPopup);
 
 volumeButton.addEventListener('mouseenter', showSlider);
 
