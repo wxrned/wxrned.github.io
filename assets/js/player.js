@@ -3,11 +3,11 @@ const playPauseBtn = document.getElementById("play-pause");
 const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
 const footer = document.getElementById("footer");
-const platformsBtn = document.getElementById("platform-button");
-const linksPopup = document.getElementById("pf-links");
 const seekBar = document.getElementById("seek-bar");
 const volumeSlider = document.getElementById("volume-slider");
 const volumeButton = document.getElementById("volume-button");
+const lyricsButton = document.getElementById('lyrics-button');
+const lyricsOverlay = document.getElementById('lyrics-overlay');
 
 const defaultFooterText = "〤 CutNation 〤";
 
@@ -324,6 +324,16 @@ volumeSlider.addEventListener('mouseleave', () => {
 volumeSlider.addEventListener("input", (e) => {
   audioPlayer.volume = e.target.value;
 });
+
+lyricsButton.addEventListener('click', async () => {
+    lyricsOverlay.classList.add('visible');
+    await displayLyrics();
+});
+
+function closeLyrics() {
+    lyricsOverlay.classList.remove('visible'); // Hide overlay
+    lyricsDisplay.innerHTML = ''; // Clear previous lyrics
+}
 
 volumeSlider.value = audioPlayer.volume;
 
