@@ -517,62 +517,33 @@ button:hover {
   padding: 12px 22px;
 }
 
-#lyrics-overlay {
+.popup {
   display: none; /* Initially hidden */
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
-  z-index: 9999; /* Ensure it's on top of other content */
-  justify-content: center; /* Center content */
-  align-items: center; /* Center content */
-}
-
-#lyrics-overlay.show {
-  display: flex; /* Use flexbox to center */
-}
-
-.lyrics-content {
-  background-color: var(--bg-color); /* Match the popup's background color */
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.9); /* White background with some transparency */
   border-radius: 10px;
-  width: 300px; /* Width of the lyrics popup */
-.overlay {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 999; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.8); /* Black with opacity */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  z-index: 1000; /* Make sure it appears above other content */
+  max-width: 90%;
+  overflow: auto; /* Allow scrolling if content is too long */
 }
 
-.overlay-content {
-    position: relative;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-    color: white; /* Text color */
+.popup h2 {
+  margin-top: 0;
 }
 
-.close {
-    color: #aaa; /* Close button color */
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+.popup button {
+  margin-top: 10px;
 }
 
-.close:hover,
-.close:focus {
-    color: white;
-    text-decoration: none;
-    cursor: pointer;
+#lyricsDisplay {
+  white-space: pre-wrap; /* Preserve line breaks in lyrics */
+  max-height: 300px; /* Limit the height */
+  overflow-y: auto; /* Scroll if it overflows */
 }
 
 ::selection {
