@@ -14,247 +14,30 @@ const closeLyricsBtn = document.getElementById('close-lyrics');
 const defaultFooterText = "〤 CutNation 〤";
 
 const tracks = [
-
-  {
-
-    title: "Destroy Lonely - if looks could kill",
-
-    path: "assets/music/iflookscouldkill.mp3",
-
-    spotifyId: "7cFLFmj3fLV5wxhcFfol7u",
-
-  },
-
-  {
-
-    title: "Ken Carson - Succubus",
-
-    path: "assets/music/Succubus.mp3",
-
-    spotifyId: "2pcv4nUQqaZnJk1kYvCfXV",
-
-  },
-
-  {
-
-    title: "Don Toliver - Bandit",
-
-    path: "assets/music/Bandit.mp3",
-
-    spotifyId: "7sTyAjxDXq9afwfSQy6D0s",
-
-  },
-
-  {
-
-    title: "Yeat - Shade",
-
-    path: "assets/music/Shade.mp3",
-
-    spotifyId: "3vpocwyn0RvKzeXo1tzSrW",
-
-  },
-
-  {
-
-    title: "che x SEMATARY - 666",
-
-    path: "assets/music/666.mp3",
-
-    spotifyId: "24NLox01SY6fAwwGS3qr0g",
-
-  },
-
-  {
-
-    title: "SGGKobe - thrax",
-
-    path: "assets/music/thrax.mp3",
-
-    spotifyId: "1P6ZWbU95Y5issu4KXTpwz",
-
-  },
-
-  {
-
-    title: "Ndotz - Embrace It",
-
-    path: "assets/music/EmbraceIt.mp3",
-
-    spotifyId: "0io16MKpbeDIdYzmGpQaES",
-
-  },
-
-  {
-
-    title: "DJ Scheme - Blue Bills",
-
-    path: "assets/music/BlueBills.mp3",
-
-    spotifyId: "2ODUTBkiOWoYSUjKpGJxQE",
-
-  },
-
-  {
-
-    title: "Ken Carson - Green Room",
-
-    path: "assets/music/GreenRoom.mp3",
-
-    spotifyId: "3MtB4aOzFkXJvAREmsy1Dj",
-
-  },
-
-  {
-
-    title: "Ken Carson - RICK OWENS",
-
-    path: "assets/music/RickOwens.mp3",
-
-    spotifyId: "6VASMtJitNcGLlsWhPb9BC",
-
-  },
-
-  {
-
-    title: "Ken Carson - Lose It",
-
-    path: "assets/music/LoseIt.mp3",
-
-    spotifyId: "5ZY2fIqxuKDr5pdz0ucpRz",
-
-  },
-
-  {
-
-    title: "Anuel AA - LHNA",
-
-    path: "assets/music/LHNA.mp3",
-
-    spotifyId: "0pLZ7PPAId3OLfVIPTVAz5",
-
-  },
-
-  {
-
-    title: "Anuel AA - Diamantes en Mis Dientes",
-
-    path: "assets/music/DiamantesEnMisDientes.mp3",
-
-    spotifyId: "5c3idBIe2HEX04QkMyfmTY",
-
-  },
-
-  {
-
-    title: "$uicideboy$ - Bizarro",
-
-    path: "assets/music/Bizarro.mp3",
-
-    spotifyId: "3wYnfIWrBYOHx9MR3EcJzu",
-
-  },
-
-  {
-
-    title: "King Von - 2 A.M.",
-
-    path: "assets/music/2AM.mp3",
-
-    spotifyId: "3PjSkZGM7rpNPymaesfZte",
-
-  },
-
-  {
-
-    title: "$uicideboy$ - 1000 Blunts",
-
-    path: "assets/music/1000Blunts.mp3",
-
-    spotifyId: "09riz9pAPJyYYDVynE5xxY",
-
-  },
-
-  {
-
-    title: "Yeat - Mountain Climbërs",
-
-    path: "assets/music/MountainClimbers.mp3",
-
-    spotifyId: "3Mq0oy9rLoyu6OEN10nbBt",
-
-  },
-
-  {
-
-    title: "Khea x Duki - Loca",
-
-    path: "assets/music/Loca.mp3",
-
-    spotifyId: "0vnrhysrKKRdNYFKLAGzRc",
-
-  },
-
-  {
-
-    title: "Destroy Lonely - NEVEREVER",
-
-    path: "assets/music/NEVEREVER.mp3",
-
-    spotifyId: "610gzNqwaSz89u6YIpDlyZ",
-
-  },
-
-  {
-
-    title: "Duki - Goteo",
-
-    path: "assets/music/Goteo.mp3",
-
-    spotifyId: "1EoEU4HY57qaITp06TkC6B",
-
-  },
-
-  {
-
-    title: "che - GET NAKED",
-
-    path: "assets/music/GetNaked.mp3",
-
-    spotifyId: "0MpX5XdebuePxim7XJBp8d",
-
-  },
-
-  {
-
-    title: "Playboi Carti - Fell In Luv",
-
-    path: "assets/music/FellInLuv.mp3",
-
-    spotifyId: "1s9DTymg5UQrdorZf43JQm",
-
-  },
-
-  {
-
-    title: "Probleemkind - Who's back",
-
-    path: "assets/music/WhosBack.mp3",
-
-    spotifyId: "5pvJTtwDTjiXJLHcH9putR",
-
-  },
-
-  {
-
-    title: "Yeat - No morë talk",
-
-    path: "assets/music/NoMoreTalk.mp3",
-
-    spotifyId: "7qPiAhk71D2RqLRtnjDL76",
-
-  },
-
+  { title: "Destroy Lonely - if looks could kill", path: "assets/music/iflookscouldkill.mp3", spotifyId: "7cFLFmj3fLV5wxhcFfol7u" },
+  { title: "Ken Carson - Succubus", path: "assets/music/Succubus.mp3", spotifyId: "2pcv4nUQqaZnJk1kYvCfXV" },
+  { title: "Don Toliver - Bandit", path: "assets/music/Bandit.mp3", spotifyId: "7sTyAjxDXq9afwfSQy6D0s" },
+  { title: "Yeat - Shade", path: "assets/music/Shade.mp3", spotifyId: "3vpocwyn0RvKzeXo1tzSrW" },
+  { title: "che x SEMATARY - 666", path: "assets/music/666.mp3", spotifyId: "24NLox01SY6fAwwGS3qr0g" },
+  { title: "SGGKobe - thrax", path: "assets/music/thrax.mp3", spotifyId: "1P6ZWbU95Y5issu4KXTpwz" },
+  { title: "Ndotz - Embrace It", path: "assets/music/EmbraceIt.mp3", spotifyId: "0io16MKpbeDIdYzmGpQaES" },
+  { title: "DJ Scheme - Blue Bills", path: "assets/music/BlueBills.mp3", spotifyId: "2ODUTBkiOWoYSUjKpGJxQE" },
+  { title: "Ken Carson - Green Room", path: "assets/music/GreenRoom.mp3", spotifyId: "3MtB4aOzFkXJvAREmsy1Dj" },
+  { title: "Ken Carson - RICK OWENS", path: "assets/music/RickOwens.mp3", spotifyId: "6VASMtJitNcGLlsWhPb9BC" },
+  { title: "Ken Carson - Lose It", path: "assets/music/LoseIt.mp3", spotifyId: "5ZY2fIqxuKDr5pdz0ucpRz" },
+  { title: "Anuel AA - LHNA", path: "assets/music/LHNA.mp3", spotifyId: "0pLZ7PPAId3OLfVIPTVAz5" },
+  { title: "Anuel AA - Diamantes en Mis Dientes", path: "assets/music/DiamantesEnMisDientes.mp3", spotifyId: "5c3idBIe2HEX04QkMyfmTY" },
+  { title: "$uicideboy$ - Bizarro", path: "assets/music/Bizarro.mp3", spotifyId: "3wYnfIWrBYOHx9MR3EcJzu" },
+  { title: "King Von - 2 A.M.", path: "assets/music/2AM.mp3", spotifyId: "3PjSkZGM7rpNPymaesfZte" },
+  { title: "$uicideboy$ - 1000 Blunts", path: "assets/music/1000Blunts.mp3", spotifyId: "09riz9pAPJyYYDVynE5xxY" },
+  { title: "Yeat - Mountain Climbërs", path: "assets/music/MountainClimbers.mp3", spotifyId: "3Mq0oy9rLoyu6OEN10nbBt" },
+  { title: "Khea x Duki - Loca", path: "assets/music/Loca.mp3", spotifyId: "0vnrhysrKKRdNYFKLAGzRc" },
+  { title: "Destroy Lonely - NEVEREVER", path: "assets/music/NEVEREVER.mp3", spotifyId: "610gzNqwaSz89u6YIpDlyZ" },
+  { title: "Duki - Goteo", path: "assets/music/Goteo.mp3", spotifyId: "1EoEU4HY57qaITp06TkC6B" },
+  { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3", spotifyId: "0MpX5XdebuePxim7XJBp8d" },
+  { title: "Playboi Carti - Fell In Luv", path: "assets/music/FellInLuv.mp3", spotifyId: "1s9DTymg5UQrdorZf43JQm" },
+  { title: "Probleemkind - Who's back", path: "assets/music/WhosBack.mp3", spotifyId: "5pvJTtwDTjiXJLHcH9putR" },
+  { title: "Yeat - No morë talk", path: "assets/music/NoMoreTalk.mp3", spotifyId: "7qPiAhk71D2RqLRtnjDL76" },
 ];
 
 let currentTrack = 0;
@@ -263,6 +46,7 @@ let isDragging = false;
 let sliderVisible = false;
 let isHovering = false;
 
+// Show volume slider
 function showSlider() {
   isHovering = true;
   volumeSlider.style.display = 'block';
@@ -273,6 +57,7 @@ function showSlider() {
   }, 10);
 }
 
+// Hide volume slider
 function hideSlider() {
   isHovering = false;
   volumeSlider.classList.remove('show');
@@ -283,16 +68,15 @@ function hideSlider() {
   }, 300);
 }
 
+// Fetch lyrics from API
 async function fetchLyrics(currentSongName) {
   if (!currentSongName) return;
 
   try {
     let response = await fetch(`https://api.wxrn.lol/api/lyrics?query=${currentSongName}`);
-
     if (!response.ok) throw new Error('Network response was not ok');
 
     const data = await response.json();
-
     if (data.lyrics) {
       return data.lyrics; // Return the fetched lyrics
     } else {
@@ -305,26 +89,30 @@ async function fetchLyrics(currentSongName) {
   }
 }
 
+// Load track
 function loadTrack(index, animationClass) {
   currentTrack = index;
   audioPlayer.src = tracks[currentTrack].path;
   footer.textContent = `〤 ${tracks[currentTrack].title} 〤`;
 
   footer.classList.remove("slide-in-right", "slide-in-left");
-  void footer.offsetWidth;
+  void footer.offsetWidth; // Trigger reflow for animation
   footer.classList.add(animationClass);
 }
 
+// Display lyrics in overlay
 function displayLyrics(lyrics) {
   lyricsDisplay.innerHTML = lyrics; // Set the fetched lyrics in the display
   lyricsOverlay.style.display = 'flex'; // Show the overlay
 }
 
+// Close lyrics overlay
 function closeLyrics() {
   lyricsOverlay.style.display = 'none'; // Hide overlay
   lyricsDisplay.innerHTML = ''; // Clear previous lyrics
 }
 
+// Play next track
 function playNextTrack() {
   const nextTrack = (currentTrack + 1) % tracks.length;
   loadTrack(nextTrack, "slide-in-right");
@@ -332,21 +120,25 @@ function playNextTrack() {
   playPauseBtn.innerHTML = '<i class="icon fa-solid fa-pause"></i>';
 }
 
+// Load random track
 function loadRandomTrack() {
   const randomIndex = Math.floor(Math.random() * tracks.length);
   loadTrack(randomIndex, "slide-in-right");
 }
 
+// Show default footer text
 function showDefaultFooter(animationClass) {
   footer.textContent = defaultFooterText;
 
   // Apply animation
   footer.classList.remove("slide-in-right", "slide-in-left");
-  void footer.offsetWidth;
+  void footer.offsetWidth; // Trigger reflow for animation
   footer.classList.add(animationClass);
 }
 
 // Event listeners
+
+// Play/Pause button
 playPauseBtn.addEventListener("click", () => {
   if (audioPlayer.paused) {
     audioPlayer.play();
@@ -357,6 +149,7 @@ playPauseBtn.addEventListener("click", () => {
   }
 });
 
+// Previous track button
 prevBtn.addEventListener("click", () => {
   const prevTrack = (currentTrack - 1 + tracks.length) % tracks.length;
   loadTrack(prevTrack, "slide-in-left");
@@ -364,16 +157,16 @@ prevBtn.addEventListener("click", () => {
   playPauseBtn.innerHTML = '<i class="icon fa-solid fa-pause"></i>';
 });
 
+// Next track button
 nextBtn.addEventListener("click", playNextTrack);
 
+// Volume button interactions
 volumeButton.addEventListener("mouseover", showSlider);
 volumeButton.addEventListener("mouseout", hideSlider);
-
 volumeSlider.addEventListener("mousemove", (e) => {
   const volume = e.clientX / volumeSlider.clientWidth;
   audioPlayer.volume = Math.min(Math.max(volume, 0), 1); // Clamp between 0 and 1
 });
-
 volumeSlider.addEventListener("mouseup", hideSlider);
 volumeSlider.addEventListener("mouseleave", hideSlider);
 
@@ -386,11 +179,11 @@ lyricsButton.addEventListener('click', async () => {
 // Close button for lyrics overlay
 closeLyricsBtn.addEventListener('click', closeLyrics);
 
-// Event listener to load random track
+// Load random track on window load
 window.addEventListener("load", () => {
   loadRandomTrack();
   showDefaultFooter("slide-in-right");
-  
+
   // Ensure the lyrics overlay is hidden initially
   lyricsOverlay.style.display = 'none'; // Ensure overlay is hidden on load
 });
