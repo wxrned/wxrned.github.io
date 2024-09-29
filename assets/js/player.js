@@ -18,6 +18,9 @@ const volumeSlider = document.getElementById("volume-slider");
 
 const volumeButton = document.getElementById("volume-button");
 
+const API_URL = 'https://api.wxrn.lol/api/lyrics'; // Adjust this to your Express API URL
+const audioPlayer = document.getElementById('audio');
+const lyricsDisplay = document.getElementById('lyricsDisplay');
 
 
 const defaultFooterText = "〤 CutNation 〤";
@@ -429,27 +432,18 @@ function shuffleTracks() {
 
 
 function loadTrack(index, animationClass) {
+    currentTrack = index;
+    audioPlayer.src = tracks[currentTrack].path;
+    footer.textContent = `〤 ${tracks[currentTrack].title} 〤`;
 
-  currentTrack = index;
+    footer.classList.remove("slide-in-right", "slide-in-left");
+    void footer.offsetWidth;
+    footer.classList.add(animationClass);
 
-  audioPlayer.src = tracks[currentTrack].path;
-
-  footer.textContent = `〤 ${tracks[currentTrack].title} 〤`;
-
-
-
-  footer.classList.remove("slide-in-right", "slide-in-left");
-
-  void footer.offsetWidth;
-
-  footer.classList.add(animationClass);
-
-
-
-  fetchLinks(tracks[currentTrack].spotifyId);
-
+    fetchLinks(tracks[currentTrack].spotifyId);
+    
+    displayLyrics();
 }
-
 
 
 function loadRandomTrack() {
@@ -462,7 +456,63 @@ function loadRandomTrack() {
 
 }
 
+// Function to fetch lyrics for a specific track
+async function fetchLyrics(track) {
+    try {
+        const response = await fetch(`${API_URL}?query=${encodeURIComponent(track.title)}`);
+        const data = await response.json();
+        return data; // Return the parsed data (an array of { seconds, lyrics })
+    } catch (error) {
+        console.error("Error fetching lyrics:", error);
+        return null;
+    }
+}
 
+// Function to display lyrics and sync with audio
+async function displayLyrics() {
+    const track = tracks[currentTrack]; // Get the current track based on the global currentTrack variable
+    const lyricsArray = await fetchLyrics(track);
+
+    if (!lyricsArray) {
+        lyricsDisplay.textContent = "No lyrics available.";
+        return;
+    }
+
+    lyricsDisplay.innerHTML = ''; // Clear previous lyrics
+    lyricsArray.forEach((line, index) => {
+        const div = document.createElement('div');
+        div.id = `line-${index}`;
+        div.className = 'lyric-line';
+        div.innerHTML = line.lyrics; // Use innerHTML for line breaks if needed
+        lyricsDisplay.appendChild(div);
+    });
+
+    // Sync lyrics with audio playback
+    audioPlayer.addEventListener('timeupdate', () => {
+        const currentTime = audioPlayer.currentTime;
+        let currentIndex = 0;
+
+        // Find the current line based on time
+        for (let i = 0; i < lyricsArray.length; i++) {
+            if (currentTime >= lyricsArray[i].seconds) {
+                currentIndex = i; // Update to the current line
+            } else {
+                break;
+            }
+        }
+
+        // Highlight the current line
+        document.querySelectorAll('.lyric-line').forEach((el, index) => {
+            if (index === currentIndex) {
+                el.classList.add('highlight');
+                // Scroll to the current line smoothly
+                el.scrollIntoView({ behavior: "smooth", block: "center" });
+            } else {
+                el.classList.remove('highlight');
+            }
+        });
+    });
+}
 
 function showDefaultFooter(animationClass) {
 
