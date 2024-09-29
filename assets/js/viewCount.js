@@ -92,18 +92,18 @@ fetch("https://api.ipify.org/?format=json")
 function animateCountUp(targetNumber) {
   const pageViewsElement = document.getElementById("page_views");
   const currentNumber = parseInt(pageViewsElement.innerHTML);
-  const increment = Math.ceil((targetNumber - currentNumber) / 100); // Increment step
-  const duration = 1000; // Duration of the animation in milliseconds
-  const steps = Math.ceil(duration / 50); // Number of steps for the animation
+  const increment = Math.ceil((targetNumber - currentNumber) / 100);
+  const duration = 1000;
+  const steps = Math.ceil(duration / 50);
   let count = currentNumber;
 
   const interval = setInterval(() => {
     count += increment;
     if (increment > 0 && count >= targetNumber) {
-      count = targetNumber; // Stop at target number
+      count = targetNumber;
       clearInterval(interval);
     } else if (increment < 0 && count <= targetNumber) {
-      count = targetNumber; // Stop at target number
+      count = targetNumber;
       clearInterval(interval);
     }
     pageViewsElement.innerHTML = count;
