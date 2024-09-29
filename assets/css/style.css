@@ -54,7 +54,9 @@ html {
 
 }
 
-
+button#lyrics-button {
+  display: none;
+}
 
 body {
 
