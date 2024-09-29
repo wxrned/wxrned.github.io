@@ -540,47 +540,39 @@ button:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   width: 300px; /* Width of the lyrics popup */
-  height: auto; /* Allow height to adjust based on content */
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out; /* Fade in effect */
-}
-
-.lyrics-content.show {
-  opacity: 1; /* Make it visible when show class is added */
-/* Styles for the lyrics overlay */
-#lyrics-overlay {
-    display: none; /* Start hidden */
-    position: fixed; /* Cover the entire viewport */
-    top: 0;
+.overlay {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 999; /* Sit on top */
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Dark semi-transparent background */
-    z-index: 1000; /* High z-index to ensure it appears above other elements */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.8); /* Black with opacity */
 }
 
-/* Styles for the lyrics content */
-.lyrics-content {
-    background-color: white; /* White background for lyrics content */
-    border-radius: 8px; /* Rounded corners */
-    padding: 20px; /* Padding around the lyrics */
-    max-width: 80%; /* Maximum width of the lyrics box */
-    max-height: 80%; /* Maximum height of the lyrics box */
-    overflow-y: auto; /* Scroll if content exceeds height */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
+.overlay-content {
+    position: relative;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    color: white; /* Text color */
 }
 
-#close-lyrics {
-    cursor: pointer; /* Change cursor to pointer for close button */
-    margin-bottom: 15px; /* Margin below close button */
+.close {
+    color: #aaa; /* Close button color */
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-/* Optional: Style for lyrics display */
-.lyrics-display {
-    white-space: pre-wrap; /* Preserve whitespace */
-    color: black; /* Text color */
+.close:hover,
+.close:focus {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 ::selection {
