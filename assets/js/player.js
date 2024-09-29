@@ -309,7 +309,7 @@ function loadTrack(index, animationClass) {
   currentTrack = index;
   audioPlayer.src = tracks[currentTrack].path;
   footer.textContent = `〤 ${tracks[currentTrack].title} 〤`;
-  
+
   footer.classList.remove("slide-in-right", "slide-in-left");
   void footer.offsetWidth;
   footer.classList.add(animationClass);
@@ -390,4 +390,7 @@ closeLyricsBtn.addEventListener('click', closeLyrics);
 window.addEventListener("load", () => {
   loadRandomTrack();
   showDefaultFooter("slide-in-right");
+  
+  // Ensure the lyrics overlay is hidden initially
+  lyricsOverlay.style.display = 'none'; // Ensure overlay is hidden on load
 });
