@@ -51,25 +51,27 @@ function enterSite() {
 }
 
 function countViews(ip) {
-  var views;
-  var ip_to_string = ip.toString().replace(/\./g, "-");
-
-  firebase
-    .database()
-    .ref()
-    .child("page_views/" + ip_to_string)
-    .set({
-      viewers_ip: ip,
-    });
-
-  firebase
-    .database()
-    .ref()
-    .child("page_views")
-    .on("value", function (snapshot) {
-      views = snapshot.numChildren();
-      animateCountUp(views);
-    });
+  fetch('http://api.wxrn.lol/api/views', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': 'kJ3ytkb85tnltEGmZ7dHE62IjGbWgYhTeUNEe18xJZandErLhHxj7EkQX1r4ocxc',
+    },
+    body: JSON.stringify({ ip }),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    const views = data.views;
+    animateCountUp(views);
+  })
+  .catch(error => {
+    console.error("Error recording view:", error);
+  });
 }
 
 fetch("https://api.ipify.org/?format=json")
