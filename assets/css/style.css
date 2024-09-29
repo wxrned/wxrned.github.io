@@ -547,30 +547,40 @@ button:hover {
 
 .lyrics-content.show {
   opacity: 1; /* Make it visible when show class is added */
+/* Styles for the lyrics overlay */
+#lyrics-overlay {
+    display: none; /* Start hidden */
+    position: fixed; /* Cover the entire viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Dark semi-transparent background */
+    z-index: 1000; /* High z-index to ensure it appears above other elements */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
 }
 
-.lyrics-display {
-  color: var(--text-color); /* Match text color */
-  font-family: monospace; /* Match font family */
-  font-size: 18px; /* Font size for lyrics */
-  margin: 20px 0; /* Margin for spacing */
-  overflow-y: auto; /* Allow scrolling if lyrics are long */
-  max-height: 200px; /* Max height for the display area */
+/* Styles for the lyrics content */
+.lyrics-content {
+    background-color: white; /* White background for lyrics content */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding around the lyrics */
+    max-width: 80%; /* Maximum width of the lyrics box */
+    max-height: 80%; /* Maximum height of the lyrics box */
+    overflow-y: auto; /* Scroll if content exceeds height */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
 }
 
 #close-lyrics {
-  background-color: var(--btn-bg);
-  border: var(--btn-border);
-  color: var(--btn-color);
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+    cursor: pointer; /* Change cursor to pointer for close button */
+    margin-bottom: 15px; /* Margin below close button */
 }
 
-#close-lyrics:hover {
-  background-color: var(--btn-hover-bg); /* Change background on hover */
+/* Optional: Style for lyrics display */
+.lyrics-display {
+    white-space: pre-wrap; /* Preserve whitespace */
+    color: black; /* Text color */
 }
 
 ::selection {
