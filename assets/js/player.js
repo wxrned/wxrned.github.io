@@ -9,130 +9,252 @@ const volumeButton = document.getElementById("volume-button");
 const lyricsButton = document.getElementById('lyrics-button');
 const lyricsOverlay = document.getElementById('lyrics-overlay');
 const lyricsDisplay = document.getElementById('lyricsDisplay');
+const closeLyricsBtn = document.getElementById('close-lyrics');
 
 const defaultFooterText = "〤 CutNation 〤";
 
 const tracks = [
+
   {
+
     title: "Destroy Lonely - if looks could kill",
+
     path: "assets/music/iflookscouldkill.mp3",
+
     spotifyId: "7cFLFmj3fLV5wxhcFfol7u",
+
   },
+
   {
+
     title: "Ken Carson - Succubus",
+
     path: "assets/music/Succubus.mp3",
+
     spotifyId: "2pcv4nUQqaZnJk1kYvCfXV",
+
   },
+
   {
+
     title: "Don Toliver - Bandit",
+
     path: "assets/music/Bandit.mp3",
+
     spotifyId: "7sTyAjxDXq9afwfSQy6D0s",
+
   },
+
   {
+
     title: "Yeat - Shade",
+
     path: "assets/music/Shade.mp3",
+
     spotifyId: "3vpocwyn0RvKzeXo1tzSrW",
+
   },
+
   {
+
     title: "che x SEMATARY - 666",
+
     path: "assets/music/666.mp3",
+
     spotifyId: "24NLox01SY6fAwwGS3qr0g",
+
   },
+
   {
+
     title: "SGGKobe - thrax",
+
     path: "assets/music/thrax.mp3",
+
     spotifyId: "1P6ZWbU95Y5issu4KXTpwz",
+
   },
+
   {
+
     title: "Ndotz - Embrace It",
+
     path: "assets/music/EmbraceIt.mp3",
+
     spotifyId: "0io16MKpbeDIdYzmGpQaES",
+
   },
+
   {
+
     title: "DJ Scheme - Blue Bills",
+
     path: "assets/music/BlueBills.mp3",
+
     spotifyId: "2ODUTBkiOWoYSUjKpGJxQE",
+
   },
+
   {
+
     title: "Ken Carson - Green Room",
+
     path: "assets/music/GreenRoom.mp3",
+
     spotifyId: "3MtB4aOzFkXJvAREmsy1Dj",
+
   },
+
   {
+
     title: "Ken Carson - RICK OWENS",
+
     path: "assets/music/RickOwens.mp3",
+
     spotifyId: "6VASMtJitNcGLlsWhPb9BC",
+
   },
+
   {
+
     title: "Ken Carson - Lose It",
+
     path: "assets/music/LoseIt.mp3",
+
     spotifyId: "5ZY2fIqxuKDr5pdz0ucpRz",
+
   },
+
   {
+
     title: "Anuel AA - LHNA",
+
     path: "assets/music/LHNA.mp3",
+
     spotifyId: "0pLZ7PPAId3OLfVIPTVAz5",
+
   },
+
   {
+
     title: "Anuel AA - Diamantes en Mis Dientes",
+
     path: "assets/music/DiamantesEnMisDientes.mp3",
+
     spotifyId: "5c3idBIe2HEX04QkMyfmTY",
+
   },
+
   {
+
     title: "$uicideboy$ - Bizarro",
+
     path: "assets/music/Bizarro.mp3",
+
     spotifyId: "3wYnfIWrBYOHx9MR3EcJzu",
+
   },
+
   {
+
     title: "King Von - 2 A.M.",
+
     path: "assets/music/2AM.mp3",
+
     spotifyId: "3PjSkZGM7rpNPymaesfZte",
+
   },
+
   {
+
     title: "$uicideboy$ - 1000 Blunts",
+
     path: "assets/music/1000Blunts.mp3",
+
     spotifyId: "09riz9pAPJyYYDVynE5xxY",
+
   },
+
   {
+
     title: "Yeat - Mountain Climbërs",
+
     path: "assets/music/MountainClimbers.mp3",
+
     spotifyId: "3Mq0oy9rLoyu6OEN10nbBt",
+
   },
+
   {
+
     title: "Khea x Duki - Loca",
+
     path: "assets/music/Loca.mp3",
+
     spotifyId: "0vnrhysrKKRdNYFKLAGzRc",
+
   },
+
   {
+
     title: "Destroy Lonely - NEVEREVER",
+
     path: "assets/music/NEVEREVER.mp3",
+
     spotifyId: "610gzNqwaSz89u6YIpDlyZ",
+
   },
+
   {
+
     title: "Duki - Goteo",
+
     path: "assets/music/Goteo.mp3",
+
     spotifyId: "1EoEU4HY57qaITp06TkC6B",
+
   },
+
   {
+
     title: "che - GET NAKED",
+
     path: "assets/music/GetNaked.mp3",
+
     spotifyId: "0MpX5XdebuePxim7XJBp8d",
+
   },
+
   {
+
     title: "Playboi Carti - Fell In Luv",
+
     path: "assets/music/FellInLuv.mp3",
+
     spotifyId: "1s9DTymg5UQrdorZf43JQm",
+
   },
+
   {
+
     title: "Probleemkind - Who's back",
+
     path: "assets/music/WhosBack.mp3",
+
     spotifyId: "5pvJTtwDTjiXJLHcH9putR",
+
   },
+
   {
+
     title: "Yeat - No morë talk",
+
     path: "assets/music/NoMoreTalk.mp3",
+
     spotifyId: "7qPiAhk71D2RqLRtnjDL76",
+
   },
+
 ];
 
 let currentTrack = 0;
@@ -265,6 +387,9 @@ volumeSlider.addEventListener("mouseleave", hideSlider);
 lyricsButton.addEventListener('click', () => {
   displayLyrics(lyricsDisplay.innerHTML); // Show lyrics overlay when button is clicked
 });
+
+// Close button for lyrics overlay
+closeLyricsBtn.addEventListener('click', closeLyrics);
 
 // Event listener to load random track
 window.addEventListener("load", () => {
