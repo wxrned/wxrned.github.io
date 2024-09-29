@@ -360,6 +360,31 @@ button:hover {
 
 }
 
+/* Assuming the ID for the lyrics popup is #lyrics-popup */
+#lyrics-popup {
+  display: none; /* Initially hidden */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--bg-color);
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  z-index: 1000;
+  width: 300px; /* Adjust width as needed */
+  height: auto; /* Set height to auto to fit content */
+  max-height: 80%; /* Prevent it from being too tall */
+  overflow-y: auto; /* Enable scrolling if content is too long */
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+#lyrics-popup.show {
+  display: block; /* Show the popup */
+  opacity: 1; /* Make it visible */
+}
+
 
 
 .platforms-popup {
