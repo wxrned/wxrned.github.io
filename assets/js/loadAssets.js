@@ -7,7 +7,7 @@ async function syncDisplayName() {
     let response = await fetch(`https://api.wxrn.lol/api/discord/${discordId}`);
     const data = await response.json();
 
-    if data.displayName {
+    if (data.displayName) {
         nameElement.innerHTML = data.displayName;
     }
 }
