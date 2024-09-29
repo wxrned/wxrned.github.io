@@ -18,10 +18,9 @@ const volumeSlider = document.getElementById("volume-slider");
 
 const volumeButton = document.getElementById("volume-button");
 
-const API_URL = 'https://api.wxrn.lol/api/lyrics'; // Adjust this to your Express API URL
+const API_URL = 'https://api.wxrn.lol/api/lyrics';
 const audioPlayer = document.getElementById('audio');
 const lyricsDisplay = document.getElementById('lyricsDisplay');
-
 
 const defaultFooterText = "〤 CutNation 〤";
 
@@ -454,6 +453,16 @@ function loadRandomTrack() {
 
   fetchLinks(tracks[0].spotifyId);
 
+}
+
+function openLyricsPopup() {
+    const lyricsPopup = document.getElementById('lyrics-popup');
+    lyricsPopup.classList.add('show');
+}
+
+function closeLyricsPopup() {
+    const lyricsPopup = document.getElementById('lyrics-popup');
+    lyricsPopup.classList.remove('show');
 }
 
 // Function to fetch lyrics for a specific track
