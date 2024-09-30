@@ -64,6 +64,12 @@
 
     <div id="overlay"></div>
 
+    <div id="lyrics-popup">
+        <h2>〤 lyrics 〤</h2>
+        <div id="lyricsDisplay"></div>
+        <button id="lyrics-close">close</button>
+    </div>
+
     <div id="popup">
         <h2>ʚ ♡ ɞ</h2>
         <ul>
@@ -89,17 +95,11 @@
         <button onclick="closePopup()">close</button>
     </div>
 
-    <audio id="audio" src=""></audio>
-
-    <!-- New Lyrics Sync Section -->
-    <div id="lyrics-popup" style="display: none;">
-      <button id="lyrics-close-button">Close</button>
-      <div id="lyricsDisplay"></div>
-    </div>
+    <audio id="audio"></audio>
 
 
     <!-- Scripts -->
-    <script src="assets/js/inspect.js"></script>
+    <!-- <script src="assets/js/inspect.js"></script> -->
     <script src="assets/js/title.js"></script>
     <script src="assets/js/viewCount.js"></script>
     <script src="assets/js/popup.js"></script>
