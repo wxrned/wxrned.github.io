@@ -526,7 +526,6 @@ a:hover,
 
 #lyricsDisplay {
   text-align: center;
-  font-size: larger;
   background-color: rgba(0, 0, 0, 0.8);
   padding: 15px;
   border-radius: 8px;
@@ -600,6 +599,23 @@ a:hover,
   padding: 12px;
 }
 
+#lyricsDisplay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.9);
+  height: 190px;
+  overflow: hidden;
+}
+
+.lyrics-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+}
+
 .lyrics-wrapper {
   position: relative;
   transition: transform 0.5s ease-in-out;
@@ -615,19 +631,16 @@ a:hover,
 }
 
 .highlight {
+  font-size: 18px;
   color: var(--text-color-light);
   font-weight: bold;
   opacity: 1;
 }
 
-.previous {
-  opacity: 0.7;
+.previous, .next {
+  font-size: 14px;
+  opacity: 0.5;
   color: #888;
-}
-
-.next {
-  opacity: 0.7;
-  color: #555;
 }
 
 @keyframes slideIn {
