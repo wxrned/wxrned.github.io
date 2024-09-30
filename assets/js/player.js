@@ -401,7 +401,11 @@ function showDefaultFooter(animationClass) {
 nextBtn.addEventListener("click", playNextTrack);
 prevBtn.addEventListener("click", playPrevTrack);
 
-audioPlayer.addEventListener("ended", playNextTrack);
+audioPlayer.addEventListener("ended", () => {
+  playNextTrack;
+  displayLyrics;
+});
+
 audioPlayer.addEventListener("timeupdate", updateSeekBar);
 
 volumeSlider.addEventListener("input", function () {
