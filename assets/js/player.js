@@ -368,6 +368,11 @@ lyricsButton.addEventListener("click", () => {
   lyricsPopup.classList.add("show");
 });
 
+footer.addEventListener("click", () => {
+  lyricsPopup.style.display = "block";
+  lyricsPopup.classList.add("show");
+});
+
 function showDefaultFooter(animationClass) {
   footer.textContent = defaultFooterText;
   footer.classList.remove("slide-in-right", "slide-in-left");
