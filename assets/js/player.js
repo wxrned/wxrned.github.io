@@ -318,11 +318,11 @@ async function fetchLyrics(track) {
 
 async function displayLyrics() {
   const lyricsArray = await fetchLyrics(tracks[currentTrack].title);
-  if (lyricsArray.error) {
+  if (lyricsArray.error || !lyricsArray) {
     lyricsDisplay.innerHTML = "No lyrics available.";
     return;
   }
-  else lyricsDisplay.innerHTML = "";
+  else lyricsDisplay.textContent = "";
 
   const lyricsWrapper = document.createElement("div");
   lyricsWrapper.className = "lyrics-wrapper";
