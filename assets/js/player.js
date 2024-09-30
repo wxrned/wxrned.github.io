@@ -134,7 +134,7 @@ playPauseBtn.addEventListener("click", () => {
 
 function playNextTrack() {
   currentTrack = (currentTrack + 1) % tracks.length;
-  loadTrack(currentTrack, "slide-in-left");
+  loadTrack(currentTrack, "slide-in-right");
   audioPlayer.play();
 }
 
