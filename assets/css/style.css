@@ -64,6 +64,14 @@ body {
   -o-user-select: none;
 }
 
+.no-click {
+  pointer-events: none;
+}
+
+.no-click-except-target {
+  pointer-events: auto;
+}
+
 main {
   opacity: 0;
 
