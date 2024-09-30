@@ -539,6 +539,16 @@ a:hover,
 
 .loading {
   display: flex;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--accent-color);
+}
+
+.error-display {
+  display: flex;
+  color: white;
   align-items: center;
   justify-content: center;
   height: 100%;

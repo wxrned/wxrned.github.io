@@ -5,16 +5,15 @@ const nextBtn = document.getElementById("next");
 const footer = document.getElementById("footer");
 const platformsBtn = document.getElementById("platform-button");
 const linksPopup = document.getElementById("pf-links");
-const seekBar = document.getElementById("seek-bar"); // Seek bar reference
+const seekBar = document.getElementById("seek-bar");
 const volumeSlider = document.getElementById("volume-slider");
 const volumeButton = document.getElementById("volume-button");
-const lyricsButton = document.getElementById("lyrics-button");
 const lyricsPopup = document.getElementById("lyrics-popup");
 const lyricsDisplay = document.getElementById("lyricsDisplay");
 const lyricsCloseBtn = document.getElementById("lyrics-close");
+const lyricsButton = document.getElementById("lyrics-button");
 
 const API_URL = "https://api.wxrn.lol/api/lyrics";
-let lastRenderedIndex = -1;
 
 const defaultFooterText = "〤 CutNation 〤";
 
@@ -212,11 +211,13 @@ const tracks = [
   },
 ];
 
-let currentTrack = 0;
 audioPlayer.volume = 0.1;
+let currentTrack = 0;
 let isDragging = false;
-let isHovering = false;
-let isLoading = false;
+let lastTrackPlayed = null;
+let lastRenderedIndex = -1;
+let cachedLyrics = null;
+let abortController;
 
 function showSlider() {
   volumeSlider.style.display = "block";
@@ -244,10 +245,21 @@ function playPrevTrack() {
 
 function updateSeekBar() {
   if (!isDragging) {
-    const seekPercentage =
-      (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    const seekPercentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
     seekBar.value = seekPercentage || 0;
   }
+}
+
+function shuffleTracks() {
+  for (let i = tracks.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
+  }
+}
+
+function loadRandomTrack() {
+  shuffleTracks();
+  loadTrack(0, "slide-in-right");
 }
 
 seekBar.addEventListener("input", (e) => {
@@ -279,167 +291,160 @@ function loadTrack(index, animationClass) {
   footer.classList.remove("slide-in-right", "slide-in-left");
   void footer.offsetWidth;
   footer.classList.add(animationClass);
+  displayLyrics(currentTrack);
 }
 
-lyricsButton.addEventListener("click", () => {
-  lyricsPopup.style.display = "block";
-  setTimeout(() => lyricsPopup.classList.add("show"), 10);
-  displayLyrics();
-});
+async function fetchLyrics(track, options = {}) {
+  const response = await fetch(`${API_URL}?query=${encodeURIComponent(track)}`, options);
+  if (!response.ok) throw new Error("Network response was not ok");
+  const data = await response.json();
+  return data;
+}
+
+async function displayLyrics() {
+  let playingTrack = tracks[currentTrack].lyricsQuery;
+
+  lyricsDisplay.innerHTML = "<div class='loading'></div>";
+  lyricsDisplay.style.color = "white";
+  isLoading = true;
+
+  if (abortController) {
+      abortController.abort();
+  }
+
+  abortController = new AbortController();
+
+  try {
+      const lyricsArray = await fetchLyrics(playingTrack, { signal: abortController.signal });
+
+      if (!lyricsArray || lyricsArray.error) {
+          lyricsDisplay.innerHTML = "No lyrics available.";
+          return;
+      }
+
+      lyricsDisplay.innerHTML = "";
+
+      const lyricsWrapper = document.createElement("div");
+      lyricsWrapper.className = "lyrics-wrapper";
+      lyricsDisplay.appendChild(lyricsWrapper);
+
+      const updateDisplayedLyrics = () => {
+          const currentTime = audioPlayer.currentTime;
+          let currentIndex = 0;
+
+          for (let i = 0; i < lyricsArray.length; i++) {
+              if (currentTime >= lyricsArray[i].seconds) {
+                  currentIndex = i;
+              } else {
+                  break;
+              }
+          }
+
+          lyricsWrapper.innerHTML = "";
+
+          if (currentIndex > 0) {
+              const prevLine = document.createElement("div");
+              prevLine.className = "lyric-line previous";
+              prevLine.textContent = lyricsArray[currentIndex - 1].lyrics;
+              lyricsWrapper.appendChild(prevLine);
+          }
+
+          const currentLine = document.createElement("div");
+          currentLine.className = "lyric-line highlight slide-in";
+          currentLine.textContent = lyricsArray[currentIndex].lyrics;
+          lyricsWrapper.appendChild(currentLine);
+
+          if (currentIndex < lyricsArray.length - 1) {
+              const nextLine = document.createElement("div");
+              nextLine.className = "lyric-line next slide-in";
+              nextLine.textContent = lyricsArray[currentIndex + 1].lyrics;
+              lyricsWrapper.appendChild(nextLine);
+          }
+
+          lyricsWrapper.style.display = "block";
+          currentLine.scrollIntoView({ behavior: "smooth", block: "center" });
+      };
+
+      updateDisplayedLyrics();
+
+      audioPlayer.removeEventListener("timeupdate", updateDisplayedLyrics);
+      audioPlayer.addEventListener("timeupdate", updateDisplayedLyrics);
+  } catch (error) {
+      if (error.name === 'AbortError') {
+          console.warn("Fetch aborted for lyrics.");
+      } else {
+          lyricsDisplay.innerHTML = "<div class='loading'>Error fetching lyrics.</div>";
+          console.error("Error fetching lyrics:", error);
+          setTimeout(() => {
+              lyricsDisplay.innerHTML = "<div class='error-display'>Error fetching lyrics.</div>";
+          }, 1000);
+      }
+  } finally {
+      isLoading = false;
+  }
+}
 
 lyricsCloseBtn.addEventListener("click", () => {
   lyricsPopup.classList.remove("show");
   setTimeout(() => (lyricsPopup.style.display = "none"), 300);
 });
 
-function shuffleTracks() {
-  for (let i = tracks.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
-  }
-}
-
-function loadRandomTrack() {
-  shuffleTracks();
-  loadTrack(0, "slide-in-right");
-}
-
-async function fetchLyrics(track) {
-  try {
-    const response = await fetch(
-      `${API_URL}?query=${encodeURIComponent(track)}`
-    );
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return null;
-  }
-}
-
-async function displayLyrics() {
-  let playingTrack = tracks[currentTrack].lyricsQuery;
-
-  // Show loading animation
-  lyricsDisplay.innerHTML = "<div class='loading'></div>";
-  lyricsDisplay.style.color = "white";
-
-  isLoading = true;
-  const lyricsArray = await fetchLyrics(playingTrack);
-  
-  if (lyricsArray && lyricsArray.error) {
-    lyricsDisplay.innerHTML = "No lyrics available.";
-    isLoading = false;
-    return;
-  } else if (!lyricsArray) {
-    lyricsDisplay.innerHTML = "No lyrics available.";
-    isLoading = false;
-    return;
-  } else {
-    lyricsDisplay.textContent = "";
-  }
-
-  const lyricsWrapper = document.createElement("div");
-  lyricsWrapper.className = "lyrics-wrapper";
-  lyricsDisplay.appendChild(lyricsWrapper);
-
-  const handleTimeUpdate = () => {
-    const currentTime = audioPlayer.currentTime;
-    let currentIndex = 0;
-
-    for (let i = 0; i < lyricsArray.length; i++) {
-      if (currentTime >= lyricsArray[i].seconds) {
-        currentIndex = i;
-      } else {
-        break;
-      }
-    }
-
-    if (currentIndex !== lastRenderedIndex) {
-      lastRenderedIndex = currentIndex;
-
-      lyricsWrapper.innerHTML = "";
-
-      if (currentIndex > 0) {
-        const prevLine = document.createElement("div");
-        prevLine.className = "lyric-line previous";
-        prevLine.textContent = lyricsArray[currentIndex - 1].lyrics;
-        lyricsWrapper.appendChild(prevLine);
-      }
-
-      const currentLine = document.createElement("div");
-      currentLine.className = "lyric-line highlight slide-in";
-      currentLine.textContent = lyricsArray[currentIndex].lyrics;
-      lyricsWrapper.appendChild(currentLine);
-
-      if (currentIndex < lyricsArray.length - 1) {
-        const nextLine = document.createElement("div");
-        nextLine.className = "lyric-line next slide-in";
-        nextLine.textContent = lyricsArray[currentIndex + 1].lyrics;
-        lyricsWrapper.appendChild(nextLine);
-      }
-
-      lyricsWrapper.style.display = "block";
-
-      currentLine.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  };
-
-  audioPlayer.removeEventListener("timeupdate", handleTimeUpdate);
-  audioPlayer.addEventListener("timeupdate", handleTimeUpdate);
-  isLoading = false;
-}
+lyricsButton.addEventListener("click", () => {
+  lyricsPopup.style.display = "block";
+  lyricsPopup.classList.add("show");
+});
 
 function showDefaultFooter(animationClass) {
   footer.textContent = defaultFooterText;
-
   footer.classList.remove("slide-in-right", "slide-in-left");
   void footer.offsetWidth;
   footer.classList.add(animationClass);
 }
 
-nextBtn.addEventListener("click", playNextTrack);
-prevBtn.addEventListener("click", playPrevTrack);
-
-audioPlayer.addEventListener("ended", () => {
-  playNextTrack();
-  displayLyrics();
-});
-
-audioPlayer.addEventListener("timeupdate", updateSeekBar);
-
-volumeSlider.addEventListener("input", function () {
-  volumeValue = this.value / 100;
-  document.documentElement.style.setProperty("--volume", volumeValue);
-});
-
-volumeButton.addEventListener("mouseenter", showSlider);
-volumeButton.addEventListener("mouseleave", () => {
-  setTimeout(() => {
-    if (!volumeSlider.matches(":hover")) {
-      hideSlider();
-    }
-  }, 100);
-});
-
-volumeSlider.addEventListener("mouseenter", () => {
-  isHovering = true;
-});
-
-volumeSlider.addEventListener("mouseleave", () => {
-  setTimeout(() => {
-    if (!volumeButton.matches(":hover")) {
-      hideSlider();
-    }
-  }, 100);
-});
-
-volumeSlider.addEventListener("input", (e) => {
-  audioPlayer.volume = e.target.value;
-});
-
-volumeSlider.value = audioPlayer.volume;
-
-window.addEventListener("load", () => {
+window.onload = function () {
   loadRandomTrack();
-  showDefaultFooter("slide-in-right");
-});
+  displayLyrics(currentTrack);
+
+  nextBtn.addEventListener("click", playNextTrack);
+  prevBtn.addEventListener("click", playPrevTrack);
+
+  audioPlayer.addEventListener("ended", () => {
+    playNextTrack();
+  });
+
+  audioPlayer.addEventListener("timeupdate", updateSeekBar);
+
+  volumeSlider.addEventListener("input", function () {
+    volumeValue = this.value / 100;
+    document.documentElement.style.setProperty("--volume", volumeValue);
+  });
+  
+  volumeButton.addEventListener("mouseenter", showSlider);
+  volumeButton.addEventListener("mouseleave", () => {
+    setTimeout(() => {
+      if (!volumeSlider.matches(":hover")) {
+        hideSlider();
+      }
+    }, 100);
+  });
+  
+  volumeSlider.addEventListener("mouseenter", () => {
+    isHovering = true;
+  });
+  
+  volumeSlider.addEventListener("mouseleave", () => {
+    setTimeout(() => {
+      if (!volumeButton.matches(":hover")) {
+        hideSlider();
+      }
+    }, 100);
+  });
+  
+  volumeSlider.addEventListener("input", (e) => {
+    audioPlayer.volume = e.target.value;
+  });
+  
+  volumeSlider.value = audioPlayer.volume;
+
+  showDefaultFooter('slide-in-right');
+};
