@@ -20,201 +20,142 @@ const defaultFooterText = "〤 CutNation 〤";
 const tracks = [
   {
     title: "Destroy Lonely - if looks could kill",
-
     path: "assets/music/iflookscouldkill.mp3",
-
     lyricsQuery: "destroy lonely if looks could kill",
   },
-
   {
     title: "Yeat - bigger thën everything",
-
     path: "assets/music/BiggerThenEverything.mp3",
-
     lyricsQuery: "yeat bigger then everything",
   },
-
+  {
+    title: "Rich Amiri - One Call",
+    path: "assets/music/OneCall.mp3",
+    lyricsQuery: "rich amiri one call",
+  },
+  {
+    title: "SoFaygo - Hell Yeah",
+    path: "assets/music/HellYeah.mp3",
+    lyricsQuery: "sofaygo hell yeah",
+  },
+  {
+    title: "Polo G - Pop Out",
+    path: "assets/music/PopOut.mp3",
+    lyricsQuery: "polo g pop out",
+  },
+  {
+    title: "YNW Melly - Virtual",
+    path: "assets/music/Virtual.mp3",
+    lyricsQuery: "ynw melly virtual",
+  },
+  {
+    title: "Yeat - Heavy stunts",
+    path: "assets/music/HeavyStunts.mp3",
+    lyricsQuery: "yeat heavy stunts",
+  },
+  {
+    title: "Yeat - Tell më",
+    path: "assets/music/TellMe.mp3",
+    lyricsQuery: "yeat tell me",
+  },
+  {
+    title: "Destroy Lonely - how u feel?",
+    path: "assets/music/HowUFeel.mp3",
+    lyricsQuery: "destroy lonely how u feel",
+  },
+  {
+    title: "Yeat - Luv monëy",
+    path: "assets/music/LuvMoney.mp3",
+    lyricsQuery: "yeat luv money",
+  },
+  {
+    title: " Internet Money - His & Hers",
+    path: "assets/music/HisAndHers.mp3",
+    lyricsQuery: "internet money his & hers",
+  },
+  {
+    title: " Lil Tjay - Zoo York",
+    path: "assets/music/ZooYork.mp3",
+    lyricsQuery: "lil tjay zoo york",
+  },
   {
     title: "Ken Carson - Succubus",
-
     path: "assets/music/Succubus.mp3",
-
     lyricsQuery: "ken carson succubus",
   },
-
   {
     title: "Don Toliver - Bandit",
-
     path: "assets/music/Bandit.mp3",
-
     lyricsQuery: "don toliver bandit",
   },
-
   {
     title: "Yeat - Shade",
-
     path: "assets/music/Shade.mp3",
-
     lyricsQuery: "yeat shade",
   },
-
-  {
-    title: "che x SEMATARY - 666",
-
-    path: "assets/music/666.mp3",
-
-    lyricsQuery: "che x sematary 666",
-  },
-
-  {
-    title: "SGGKobe - thrax",
-
-    path: "assets/music/thrax.mp3",
-
-    lyricsQuery: "ssgkobe thrax",
-  },
-
   {
     title: "Ndotz - Embrace It",
-
     path: "assets/music/EmbraceIt.mp3",
-
     lyricsQuery: "ndotz embrace it",
   },
-
   {
     title: "DJ Scheme - Blue Bills",
-
     path: "assets/music/BlueBills.mp3",
-
     lyricsQuery: "dj scheme blue bills",
   },
-
   {
     title: "Ken Carson - Green Room",
-
     path: "assets/music/GreenRoom.mp3",
-
     lyricsQuery: "ken carson green room",
   },
-
-  {
-    title: "Ken Carson - RICK OWENS",
-
-    path: "assets/music/RickOwens.mp3",
-
-    lyricsQuery: "ken carson rick owens",
-  },
-
   {
     title: "Ken Carson - Lose It",
-
     path: "assets/music/LoseIt.mp3",
-
     lyricsQuery: "ken carson lose it",
   },
-
   {
     title: "Anuel AA - LHNA",
-
     path: "assets/music/LHNA.mp3",
-
     lyricsQuery: "anuel aa lhna",
   },
-
   {
     title: "Anuel AA - Diamantes en Mis Dientes",
-
     path: "assets/music/DiamantesEnMisDientes.mp3",
-
     lyricsQuery: "anuel aa diamantes en mis dientes",
   },
-
   {
     title: "$uicideboy$ - Bizarro",
-
     path: "assets/music/Bizarro.mp3",
-
     lyricsQuery: "$uicideboy$ bizarro",
   },
-
   {
     title: "King Von - 2 A.M.",
-
     path: "assets/music/2AM.mp3",
-
     lyricsQuery: "king von 2am",
   },
-
   {
     title: "$uicideboy$ - 1000 Blunts",
-
     path: "assets/music/1000Blunts.mp3",
-
     lyricsQuery: "$uicideboy$ 1000 blunts",
   },
-
-  {
-    title: "Yeat - Mountain Climbërs",
-
-    path: "assets/music/MountainClimbers.mp3",
-
-    lyricsQuery: "yeat mountain climbers",
-  },
-
   {
     title: "Khea x Duki - Loca",
-
     path: "assets/music/Loca.mp3",
-
     lyricsQuery: "khea duki loca",
   },
-
-  {
-    title: "Destroy Lonely - NEVEREVER",
-
-    path: "assets/music/NEVEREVER.mp3",
-
-    lyricsQuery: "destroy lonely neverever",
-  },
-
-  {
-    title: "Duki - Goteo",
-
-    path: "assets/music/Goteo.mp3",
-
-    lyricsQuery: "duki goteo",
-  },
-
   {
     title: "che - GET NAKED",
-
     path: "assets/music/GetNaked.mp3",
-
     lyricsQuery: "che get naked",
   },
-
   {
     title: "Playboi Carti - Fell In Luv",
-
     path: "assets/music/FellInLuv.mp3",
-
     lyricsQuery: "playboi carti fell in luv",
   },
-
-  {
-    title: "Probleemkind - Who's back",
-
-    path: "assets/music/WhosBack.mp3",
-
-    lyricsQuery: "probleemkind whos back",
-  },
-
   {
     title: "Yeat - No morë talk",
-
     path: "assets/music/NoMoreTalk.mp3",
-
     lyricsQuery: "yeat no more talk",
   },
 ];
