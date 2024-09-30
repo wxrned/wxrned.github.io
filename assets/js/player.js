@@ -12,7 +12,6 @@ const lyricsPopup = document.getElementById("lyrics-popup");
 const lyricsDisplay = document.getElementById("lyricsDisplay");
 const lyricsCloseBtn = document.getElementById("lyrics-close");
 const lyricsButton = document.getElementById("lyrics-button");
-const footer = document.getElementById("footer");
 
 const API_URL = "https://api.wxrn.lol/api/lyrics";
 
