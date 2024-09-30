@@ -24,7 +24,7 @@ const tracks = [
 
     path: "assets/music/iflookscouldkill.mp3",
 
-    spotifyId: "7cFLFmj3fLV5wxhcFfol7u",
+    lyricsQuery: "destroy lonely if looks could kill",
   },
 
   {
@@ -32,7 +32,7 @@ const tracks = [
 
     path: "assets/music/Succubus.mp3",
 
-    spotifyId: "2pcv4nUQqaZnJk1kYvCfXV",
+    lyricsQuery: "ken carson succubus",
   },
 
   {
@@ -40,7 +40,7 @@ const tracks = [
 
     path: "assets/music/Bandit.mp3",
 
-    spotifyId: "7sTyAjxDXq9afwfSQy6D0s",
+    lyricsQuery: "don toliver bandit",
   },
 
   {
@@ -48,7 +48,7 @@ const tracks = [
 
     path: "assets/music/Shade.mp3",
 
-    spotifyId: "3vpocwyn0RvKzeXo1tzSrW",
+    lyricsQuery: "yeat shade",
   },
 
   {
@@ -56,7 +56,7 @@ const tracks = [
 
     path: "assets/music/666.mp3",
 
-    spotifyId: "24NLox01SY6fAwwGS3qr0g",
+    lyricsQuery: "che x sematary 666",
   },
 
   {
@@ -64,7 +64,7 @@ const tracks = [
 
     path: "assets/music/thrax.mp3",
 
-    spotifyId: "1P6ZWbU95Y5issu4KXTpwz",
+    lyricsQuery: "ssgkobe thrax",
   },
 
   {
@@ -72,7 +72,7 @@ const tracks = [
 
     path: "assets/music/EmbraceIt.mp3",
 
-    spotifyId: "0io16MKpbeDIdYzmGpQaES",
+    lyricsQuery: "ndotz embrace it",
   },
 
   {
@@ -80,7 +80,7 @@ const tracks = [
 
     path: "assets/music/BlueBills.mp3",
 
-    spotifyId: "2ODUTBkiOWoYSUjKpGJxQE",
+    lyricsQuery: "dj scheme blue bills",
   },
 
   {
@@ -88,7 +88,7 @@ const tracks = [
 
     path: "assets/music/GreenRoom.mp3",
 
-    spotifyId: "3MtB4aOzFkXJvAREmsy1Dj",
+    lyricsQuery: "ken carson green room",
   },
 
   {
@@ -96,7 +96,7 @@ const tracks = [
 
     path: "assets/music/RickOwens.mp3",
 
-    spotifyId: "6VASMtJitNcGLlsWhPb9BC",
+    lyricsQuery: "ken carson rick owens",
   },
 
   {
@@ -104,7 +104,7 @@ const tracks = [
 
     path: "assets/music/LoseIt.mp3",
 
-    spotifyId: "5ZY2fIqxuKDr5pdz0ucpRz",
+    lyricsQuery: "ken carson lose it",
   },
 
   {
@@ -112,7 +112,7 @@ const tracks = [
 
     path: "assets/music/LHNA.mp3",
 
-    spotifyId: "0pLZ7PPAId3OLfVIPTVAz5",
+    lyricsQuery: "anuel aa lhna",
   },
 
   {
@@ -120,7 +120,7 @@ const tracks = [
 
     path: "assets/music/DiamantesEnMisDientes.mp3",
 
-    spotifyId: "5c3idBIe2HEX04QkMyfmTY",
+    lyricsQuery: "anuel aa diamantes en mis dientes",
   },
 
   {
@@ -128,7 +128,7 @@ const tracks = [
 
     path: "assets/music/Bizarro.mp3",
 
-    spotifyId: "3wYnfIWrBYOHx9MR3EcJzu",
+    lyricsQuery: "$uicideboy$ bizarro",
   },
 
   {
@@ -136,7 +136,7 @@ const tracks = [
 
     path: "assets/music/2AM.mp3",
 
-    spotifyId: "3PjSkZGM7rpNPymaesfZte",
+    lyricsQuery: "king von 2am",
   },
 
   {
@@ -144,7 +144,7 @@ const tracks = [
 
     path: "assets/music/1000Blunts.mp3",
 
-    spotifyId: "09riz9pAPJyYYDVynE5xxY",
+    lyricsQuery: "$uicideboy$ 1000 blunts",
   },
 
   {
@@ -152,7 +152,7 @@ const tracks = [
 
     path: "assets/music/MountainClimbers.mp3",
 
-    spotifyId: "3Mq0oy9rLoyu6OEN10nbBt",
+    lyricsQuery: "yeat mountain climbers",
   },
 
   {
@@ -160,7 +160,7 @@ const tracks = [
 
     path: "assets/music/Loca.mp3",
 
-    spotifyId: "0vnrhysrKKRdNYFKLAGzRc",
+    lyricsQuery: "khea duki loca",
   },
 
   {
@@ -168,7 +168,7 @@ const tracks = [
 
     path: "assets/music/NEVEREVER.mp3",
 
-    spotifyId: "610gzNqwaSz89u6YIpDlyZ",
+    lyricsQuery: "destroy lonely neverever",
   },
 
   {
@@ -176,7 +176,7 @@ const tracks = [
 
     path: "assets/music/Goteo.mp3",
 
-    spotifyId: "1EoEU4HY57qaITp06TkC6B",
+    lyricsQuery: "duki goteo",
   },
 
   {
@@ -184,7 +184,7 @@ const tracks = [
 
     path: "assets/music/GetNaked.mp3",
 
-    spotifyId: "0MpX5XdebuePxim7XJBp8d",
+    lyricsQuery: "che get naked",
   },
 
   {
@@ -192,7 +192,7 @@ const tracks = [
 
     path: "assets/music/FellInLuv.mp3",
 
-    spotifyId: "1s9DTymg5UQrdorZf43JQm",
+    lyricsQuery: "playboi carti fell in luv",
   },
 
   {
@@ -200,7 +200,7 @@ const tracks = [
 
     path: "assets/music/WhosBack.mp3",
 
-    spotifyId: "5pvJTtwDTjiXJLHcH9putR",
+    lyricsQuery: "probleemkind whos back",
   },
 
   {
@@ -208,7 +208,7 @@ const tracks = [
 
     path: "assets/music/NoMoreTalk.mp3",
 
-    spotifyId: "7qPiAhk71D2RqLRtnjDL76",
+    lyricsQuery: "yeat no more talk",
   },
 ];
 
@@ -317,12 +317,20 @@ async function fetchLyrics(track) {
 }
 
 async function displayLyrics() {
-  const lyricsArray = await fetchLyrics(tracks[currentTrack].title);
-  if (lyricsArray.error || !lyricsArray) {
+  lyricsDisplay.innerHTML = "<div class='loading'></div>";
+  lyricsDisplay.style.color = "white";
+
+  const lyricsArray = await fetchLyrics(tracks[currentTrack].lyricsQuery);
+  
+  if (lyricsArray && lyricsArray.error) {
     lyricsDisplay.innerHTML = "No lyrics available.";
     return;
+  } else if (!lyricsArray) {
+    lyricsDisplay.innerHTML = "No lyrics available.";
+    return;
+  } else {
+    lyricsDisplay.textContent = "";
   }
-  else lyricsDisplay.textContent = "";
 
   const lyricsWrapper = document.createElement("div");
   lyricsWrapper.className = "lyrics-wrapper";
