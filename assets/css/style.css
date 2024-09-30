@@ -638,6 +638,14 @@ a:hover,
   opacity: 1;
 }
 
+.lyric-line.title {
+  color: var(--accent-color);
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  padding: 20px;
+}
+
 .highlight {
   font-size: 18px;
   color: var(--text-color-light);
