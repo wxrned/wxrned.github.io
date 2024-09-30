@@ -359,11 +359,6 @@ async function displayLyrics() {
   }
 }
 
-footer.addEventListener("click", () => {
-  lyricsPopup.style.display = "block";
-  lyricsPopup.classList.add("show");
-});
-
 lyricsCloseBtn.addEventListener("click", () => {
   lyricsPopup.classList.remove("show");
   setTimeout(() => (lyricsPopup.style.display = "none"), 300);
