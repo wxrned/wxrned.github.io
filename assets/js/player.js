@@ -425,6 +425,9 @@ async function displayLyrics() {
   });
 }
 
+nextBtn.addEventListener('click', playNextTrack);
+prevBtn.addEventListener('click', playPrevTrack);
+
 // Load random track on startup
 window.addEventListener("load", () => {
   loadTrack(0, "slide-in-right");
