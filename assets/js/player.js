@@ -1,28 +1,19 @@
 const audioPlayer = document.getElementById("audio");
-
 const playPauseBtn = document.getElementById("play-pause");
-
 const prevBtn = document.getElementById("prev");
-
 const nextBtn = document.getElementById("next");
-
 const footer = document.getElementById("footer");
-
 const platformsBtn = document.getElementById("platform-button");
-
 const linksPopup = document.getElementById("pf-links");
-
-const seekBar = document.getElementById("seek-bar");
-
+const seekBar = document.getElementById("seek-bar"); // Seek bar reference
 const volumeSlider = document.getElementById("volume-slider");
-
 const volumeButton = document.getElementById("volume-button");
-
-
+const lyricsButton = document.getElementById("lyrics-button");
+const lyricsPopup = document.getElementById("lyrics-popup");
+const lyricsDisplay = document.getElementById("lyricsDisplay");
+const lyricsCloseBtn = document.getElementById("lyrics-close-button");
 
 const defaultFooterText = "〤 CutNation 〤";
-
-
 
 const tracks = [
 
@@ -248,7 +239,7 @@ const tracks = [
 
   {
 
-    title: "Probleemkind - Who\'s back",
+    title: "Probleemkind - Who's back",
 
     path: "assets/music/WhosBack.mp3",
 
@@ -268,398 +259,174 @@ const tracks = [
 
 ];
 
-
-
 let currentTrack = 0;
-
 audioPlayer.volume = 0.1;
-
 let isDragging = false;
 
-let sliderVisible = false;
-
-let isHovering = false;
-
-
-
+// Show and hide volume slider
 function showSlider() {
-
-  isHovering = true;
-
   volumeSlider.style.display = 'block';
-
-  setTimeout(() => {
-
-    if (isHovering) {
-
-      volumeSlider.classList.add('show');
-
-    }
-
-  }, 10);
-
+  setTimeout(() => volumeSlider.classList.add('show'), 10);
 }
-
-
 
 function hideSlider() {
-
-  isHovering = false;
-
   volumeSlider.classList.remove('show');
-
-  setTimeout(() => {
-
-    if (!isHovering) {
-
-      volumeSlider.style.display = 'none';
-
-    }
-
-  }, 300);
-
+  setTimeout(() => (volumeSlider.style.display = 'none'), 300);
 }
 
-
-
-function showPopup() {
-
-  linksPopup.style.display = 'block';
-
-  linksPopup.classList.add('show');
-
-}
-
-
-
-function hidePopup() {
-
-  setTimeout(() => {
-
-    if (!linksPopup.matches(':hover') && !platformsBtn.matches(':hover')) {
-
-      linksPopup.style.display = 'none';
-
-      linksPopup.classList.remove('show');
-
-    }
-
-  }, 100);
-
-}
-
-
-
-async function fetchLinks(currentSpotifyId) {
-
-  if (!currentSpotifyId) return;
-
-
-
-  try {
-
-    let response = await fetch(`https://api.wxrn.lol/api/song_links/${currentSpotifyId}`);
-
-    
-
-    if (!response.ok) throw new Error('Network response was not ok');
-
-
-
-    const data = await response.json();
-
-
-
-    if (data.linksByPlatform) {
-
-      const pfLinks = data.linksByPlatform;
-
-
-
-      const itunes = pfLinks.itunes ? pfLinks.itunes.url : '#';
-
-      const soundcloud = pfLinks.soundcloud ? pfLinks.soundcloud.url : '#';
-
-      const youtube = pfLinks.youtube ? pfLinks.youtube.url : '#';
-
-      const spotify = pfLinks.spotify ? pfLinks.spotify.url : '#';
-
-
-
-      linksPopup.innerHTML = `
-
-        <a href="${spotify}" target="_blank"><i class="fa-brands fa-spotify"></i></a>
-
-        <a href="${youtube}" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-
-        <a href="${itunes}" target="_blank"><i class="fa-brands fa-itunes"></i></a>
-
-        <a href="${soundcloud}" target="_blank"><i class="fa-brands fa-soundcloud"></i></a>
-
-      `;
-
-    } else {
-
-      console.warn('No links available for this track.');
-
-    }
-
-  } catch (error) {
-
-    console.error('Error fetching links:', error);
-
-  }
-
-}
-
-
-
-function shuffleTracks() {
-
-  for (let i = tracks.length - 1; i > 0; i--) {
-
-    const j = Math.floor(Math.random() * (i + 1));
-
-    [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
-
-  }
-
-}
-
-
-
-function loadTrack(index, animationClass) {
-
-  currentTrack = index;
-
-  audioPlayer.src = tracks[currentTrack].path;
-
-  footer.textContent = `〤 ${tracks[currentTrack].title} 〤`;
-
-
-
-  footer.classList.remove("slide-in-right", "slide-in-left");
-
-  void footer.offsetWidth;
-
-  footer.classList.add(animationClass);
-
-
-
-  fetchLinks(tracks[currentTrack].spotifyId);
-
-}
-
-
-
-function loadRandomTrack() {
-
-  shuffleTracks();
-
-  loadTrack(0, "slide-in-right");
-
-  fetchLinks(tracks[0].spotifyId);
-
-}
-
-
-
-function showDefaultFooter(animationClass) {
-
-  footer.textContent = defaultFooterText;
-
-
-
-  // Apply animation
-
-  footer.classList.remove("slide-in-right", "slide-in-left");
-
-  void footer.offsetWidth;
-
-  footer.classList.add(animationClass);
-
-}
-
-
-
-playPauseBtn.addEventListener("click", () => {
-
-  if (audioPlayer.paused) {
-
-    audioPlayer.play();
-
-    playPauseBtn.innerHTML = '<i class="icon fa-solid fa-pause"></i>';
-
-    footer.textContent = `ʚ ${tracks[currentTrack].title} ɞ`;
-
-    footer.classList.remove("slide-in-right", "slide-in-left");
-
-    void footer.offsetWidth;
-
-    footer.classList.add("slide-in-right");
-
-  } else {
-
-    audioPlayer.pause();
-
-    playPauseBtn.innerHTML = '<i class="icon fa-solid fa-play"></i>';
-
-    showDefaultFooter("slide-in-right");
-
-  }
-
-});
-
-
-
+// Load and play the next track automatically
 function playNextTrack() {
-
-  const nextTrack = (currentTrack + 1) % tracks.length;
-
-  loadTrack(nextTrack, "slide-in-right");
-
+  currentTrack = (currentTrack + 1) % tracks.length;
+  loadTrack(currentTrack, "slide-in-right");
   audioPlayer.play();
-
-  playPauseBtn.innerHTML = '<i class="icon fa-solid fa-pause"></i>';
-
 }
 
-
-
-nextBtn.addEventListener("click", playNextTrack);
-
-
-
-prevBtn.addEventListener("click", () => {
-
-  const prevTrack = (currentTrack - 1 + tracks.length) % tracks.length;
-
-  loadTrack(prevTrack, "slide-in-left");
-
+// Load and play the previous track
+function playPrevTrack() {
+  currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+  loadTrack(currentTrack, "slide-in-left");
   audioPlayer.play();
+}
 
-  playPauseBtn.innerHTML = '<i class="icon fa-solid fa-pause"></i>';
-
-});
-
-
-
+// Sync the seek bar with the current playing time
 function updateSeekBar() {
-
   if (!isDragging) {
-
-    seekBar.value = (audioPlayer.currentTime / audioPlayer.duration) * 100 || 0;
-
+    const seekPercentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    seekBar.value = seekPercentage || 0; // Handle NaN when duration is zero
   }
-
 }
 
-
-
-seekBar.addEventListener("input", () => {
-
+// Handle seek bar changes
+seekBar.addEventListener("input", (e) => {
   isDragging = true;
-
-  audioPlayer.currentTime = (seekBar.value / 100) * audioPlayer.duration;
-
-});
-
-
-
-seekBar.addEventListener("change", () => {
-
+  const seekTo = (e.target.value / 100) * audioPlayer.duration;
+  audioPlayer.currentTime = seekTo;
   isDragging = false;
-
 });
 
+// Toggle play/pause and update the button
+playPauseBtn.addEventListener("click", () => {
+  if (audioPlayer.paused) {
+    audioPlayer.play();
+    playPauseBtn.innerHTML = '<i class="icon fa-solid fa-pause"></i>';
+    footer.textContent = `ʚ ${tracks[currentTrack].title} ɞ`;
+    footer.classList.remove("slide-in-right", "slide-in-left");
+    void footer.offsetWidth;
+    footer.classList.add("slide-in-right");
+  } else {
+    audioPlayer.pause();
+    playPauseBtn.innerHTML = '<i class="icon fa-solid fa-play"></i>';
+    showDefaultFooter("slide-in-right");
+  }
+});
 
-
-platformsBtn.addEventListener("mouseenter", showPopup);
-
-platformsBtn.addEventListener("mouseleave", hidePopup);
-
-linksPopup.addEventListener("mouseenter", showPopup);
-
-linksPopup.addEventListener("mouseleave", hidePopup);
-
-
-
-audioPlayer.addEventListener("timeupdate", updateSeekBar);
-
-
-
+// Detect when the track ends and play the next one
 audioPlayer.addEventListener("ended", playNextTrack);
 
+// Update seek bar as the track plays
+audioPlayer.addEventListener("timeupdate", updateSeekBar);
 
+// Load track details and update UI
+function loadTrack(index, animationClass) {
+  currentTrack = index;
+  audioPlayer.src = tracks[currentTrack].path;
+  footer.textContent = `〤 ${tracks[currentTrack].title} 〤`;
+  footer.classList.remove("slide-in-right", "slide-in-left");
+  void footer.offsetWidth;
+  footer.classList.add(animationClass);
+  fetchLinks(tracks[currentTrack].spotifyId);
+}
 
-volumeSlider.addEventListener("input", function () {
+// Fetch platform links for the current track
+async function fetchLinks(currentSpotifyId) {
+  if (!currentSpotifyId) return;
+  try {
+    let response = await fetch(`https://api.wxrn.lol/api/song_links/${currentSpotifyId}`);
+    if (!response.ok) throw new Error('Network response was not ok');
+    const data = await response.json();
+    if (data.linksByPlatform) {
+      const pfLinks = data.linksByPlatform;
+      const itunes = pfLinks.itunes ? pfLinks.itunes.url : '#';
+      const soundcloud = pfLinks.soundcloud ? pfLinks.soundcloud.url : '#';
+      const youtube = pfLinks.youtube ? pfLinks.youtube.url : '#';
+      const spotify = pfLinks.spotify ? pfLinks.spotify.url : '#';
+      linksPopup.innerHTML = `
+        <a href="${spotify}" target="_blank"><i class="fa-brands fa-spotify"></i></a>
+        <a href="${youtube}" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+        <a href="${itunes}" target="_blank"><i class="fa-brands fa-itunes"></i></a>
+        <a href="${soundcloud}" target="_blank"><i class="fa-brands fa-soundcloud"></i></a>
+      `;
+    }
+  } catch (error) {
+    console.error('Error fetching links:', error);
+  }
+}
 
-  volumeValue = this.value / 100;
-
-  document.documentElement.style.setProperty("--volume", volumeValue);
-
+// Display lyrics popup
+lyricsButton.addEventListener("click", () => {
+  lyricsPopup.style.display = "block";
+  displayLyrics();
 });
 
+// Close lyrics popup
+lyricsCloseBtn.addEventListener("click", () => {
+  lyricsPopup.style.display = "none";
+});
 
+// Fetch and display lyrics
+async function fetchLyrics(trackTitle) {
+  const API_URL = 'https://api.wxrn.lol/api/lyrics';
+  try {
+    const response = await fetch(`${API_URL}?query=${encodeURIComponent(trackTitle)}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching lyrics:", error);
+    return null;
+  }
+}
 
-volumeButton.addEventListener('mouseenter', showSlider);
+// Display and sync lyrics with the track
+async function displayLyrics() {
+  const lyricsArray = await fetchLyrics(tracks[currentTrack].title);
+  if (!lyricsArray) {
+    lyricsDisplay.textContent = "No lyrics available.";
+    return;
+  }
 
-volumeButton.addEventListener('mouseleave', () => {
+  lyricsDisplay.innerHTML = ''; // Clear previous lyrics
+  lyricsArray.forEach((line, index) => {
+    const div = document.createElement('div');
+    div.id = `line-${index}`;
+    div.className = 'lyric-line';
+    div.innerHTML = line.lyrics;
+    lyricsDisplay.appendChild(div);
+  });
 
-  setTimeout(() => {
-
-    if (!volumeSlider.matches(':hover')) {
-
-      hideSlider();
-
+  audioPlayer.addEventListener('timeupdate', () => {
+    const currentTime = audioPlayer.currentTime;
+    let currentIndex = 0;
+    for (let i = 0; i < lyricsArray.length; i++) {
+      if (currentTime >= lyricsArray[i].seconds) {
+        currentIndex = i;
+      } else {
+        break;
+      }
     }
 
-  }, 100);
+    document.querySelectorAll('.lyric-line').forEach((el, index) => {
+      if (index === currentIndex) {
+        el.classList.add('highlight');
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+      } else {
+        el.classList.remove('highlight');
+      }
+    });
+  });
+}
 
-});
-
-
-
-volumeSlider.addEventListener('mouseenter', () => {
-
-  isHovering = true;
-
-});
-
-
-
-volumeSlider.addEventListener('mouseleave', () => {
-
-  setTimeout(() => {
-
-    if (!volumeButton.matches(':hover')) {
-
-      hideSlider();
-
-    }
-
-  }, 100);
-
-});
-
-
-
-volumeSlider.addEventListener("input", (e) => {
-
-  audioPlayer.volume = e.target.value;
-
-});
-
-
-
-volumeSlider.value = audioPlayer.volume;
-
-
-
+// Load random track on startup
 window.addEventListener("load", () => {
-
-  loadRandomTrack();
-
-  showDefaultFooter("slide-in-right");
-
+  loadTrack(0, "slide-in-right");
+  setTimeout(() => showDefaultFooter("slide-in-right"), 100);
 });
