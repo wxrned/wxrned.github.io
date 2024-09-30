@@ -27,6 +27,14 @@ const tracks = [
   },
 
   {
+    title: "Yeat - bigger thën everything",
+
+    path: "assets/music/BiggerThenEverything.mp3",
+
+    lyricsQuery: "yeat bigger then everything",
+  },
+
+  {
     title: "Ken Carson - Succubus",
 
     path: "assets/music/Succubus.mp3",
