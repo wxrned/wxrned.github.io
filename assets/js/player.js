@@ -304,80 +304,105 @@ async function fetchLyrics(track, options = {}) {
 async function displayLyrics() {
   let playingTrack = tracks[currentTrack].lyricsQuery;
 
-  lyricsDisplay.innerHTML = "<div class='loading'></div>";
-  lyricsDisplay.style.color = "white";
+  // Show loading animation while fetching lyrics
+  lyricsDisplay.innerHTML = "<div class='loading'>Loading...</div>"; // Show loading
+  lyricsDisplay.style.color = "white"; // Ensure text is white
   isLoading = true;
 
+  // Clear previous abortController if it exists
   if (abortController) {
-      abortController.abort();
+      abortController.abort(); // Abort the previous fetch if it exists
   }
 
+  // Create a new AbortController for the current fetch
   abortController = new AbortController();
 
   try {
       const lyricsArray = await fetchLyrics(playingTrack, { signal: abortController.signal });
 
+      // Check for errors or empty lyrics
       if (!lyricsArray || lyricsArray.error) {
-          lyricsDisplay.innerHTML = "No lyrics available.";
-          return;
+          lyricsDisplay.innerHTML = "No lyrics available."; // Display no lyrics message
+          return; // Exit early if no lyrics found
       }
 
-      lyricsDisplay.innerHTML = "";
+      // Clear loading animation and display area just before showing lyrics
+      lyricsDisplay.innerHTML = ""; // Clear loading message
 
       const lyricsWrapper = document.createElement("div");
       lyricsWrapper.className = "lyrics-wrapper";
-      lyricsDisplay.appendChild(lyricsWrapper);
+      lyricsDisplay.appendChild(lyricsWrapper); // Append lyrics wrapper to display
 
+      // Display all fetched lyrics immediately
+      lyricsArray.forEach((line) => {
+          const lyricLine = document.createElement("div");
+          lyricLine.className = "lyric-line";
+          lyricLine.textContent = line.lyrics; // Show the lyrics line
+          lyricsWrapper.appendChild(lyricLine);
+      });
+
+      // Find the start time of the first lyric entry
+      const firstLyricTime = lyricsArray[0].seconds;
+
+      // Function to update displayed lyrics based on the current time
       const updateDisplayedLyrics = () => {
           const currentTime = audioPlayer.currentTime;
           let currentIndex = 0;
 
-          for (let i = 0; i < lyricsArray.length; i++) {
-              if (currentTime >= lyricsArray[i].seconds) {
-                  currentIndex = i;
-              } else {
-                  break;
+          // Start syncing only if the current time is greater than or equal to the first lyric's timestamp
+          if (currentTime >= firstLyricTime) {
+              for (let i = 0; i < lyricsArray.length; i++) {
+                  if (currentTime >= lyricsArray[i].seconds) {
+                      currentIndex = i;
+                  } else {
+                      break;
+                  }
               }
+
+              lyricsWrapper.innerHTML = ""; // Clear previous lyrics
+
+              // Display previous line if available
+              if (currentIndex > 0) {
+                  const prevLine = document.createElement("div");
+                  prevLine.className = "lyric-line previous";
+                  prevLine.textContent = lyricsArray[currentIndex - 1].lyrics;
+                  lyricsWrapper.appendChild(prevLine);
+              }
+
+              // Display current line
+              const currentLine = document.createElement("div");
+              currentLine.className = "lyric-line highlight slide-in";
+              currentLine.textContent = lyricsArray[currentIndex].lyrics;
+              lyricsWrapper.appendChild(currentLine);
+
+              // Display next line if available
+              if (currentIndex < lyricsArray.length - 1) {
+                  const nextLine = document.createElement("div");
+                  nextLine.className = "lyric-line next slide-in";
+                  nextLine.textContent = lyricsArray[currentIndex + 1].lyrics;
+                  lyricsWrapper.appendChild(nextLine);
+              }
+
+              lyricsWrapper.style.display = "block"; // Ensure it's visible
+              currentLine.scrollIntoView({ behavior: "smooth", block: "center" });
           }
-
-          lyricsWrapper.innerHTML = "";
-
-          if (currentIndex > 0) {
-              const prevLine = document.createElement("div");
-              prevLine.className = "lyric-line previous";
-              prevLine.textContent = lyricsArray[currentIndex - 1].lyrics;
-              lyricsWrapper.appendChild(prevLine);
-          }
-
-          const currentLine = document.createElement("div");
-          currentLine.className = "lyric-line highlight slide-in";
-          currentLine.textContent = lyricsArray[currentIndex].lyrics;
-          lyricsWrapper.appendChild(currentLine);
-
-          if (currentIndex < lyricsArray.length - 1) {
-              const nextLine = document.createElement("div");
-              nextLine.className = "lyric-line next slide-in";
-              nextLine.textContent = lyricsArray[currentIndex + 1].lyrics;
-              lyricsWrapper.appendChild(nextLine);
-          }
-
-          lyricsWrapper.style.display = "block";
-          currentLine.scrollIntoView({ behavior: "smooth", block: "center" });
       };
 
+      // Call the function once to display lyrics immediately
       updateDisplayedLyrics();
 
+      // Clean up previous event listener before adding a new one
       audioPlayer.removeEventListener("timeupdate", updateDisplayedLyrics);
       audioPlayer.addEventListener("timeupdate", updateDisplayedLyrics);
   } catch (error) {
       if (error.name === 'AbortError') {
           console.warn("Fetch aborted for lyrics.");
       } else {
-          lyricsDisplay.innerHTML = "<div class='loading'>Error fetching lyrics.</div>";
-          console.error("Error fetching lyrics:", error);
+          lyricsDisplay.innerHTML = "<div class='loading'>Error fetching lyrics.</div>"; // Show error message
+          console.error("Error fetching lyrics:", error); // Log the error
           setTimeout(() => {
-              lyricsDisplay.innerHTML = "<div class='error-display'>Error fetching lyrics.</div>";
-          }, 1000);
+              lyricsDisplay.innerHTML = "<div class='error-display'>Error fetching lyrics.</div>"; // Final message after timeout
+          }, 1000); // Adjust the timeout as necessary
       }
   } finally {
       isLoading = false;
