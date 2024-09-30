@@ -312,7 +312,6 @@ async function fetchLyrics(track) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching lyrics:", error);
     return null;
   }
 }
@@ -402,8 +401,8 @@ nextBtn.addEventListener("click", playNextTrack);
 prevBtn.addEventListener("click", playPrevTrack);
 
 audioPlayer.addEventListener("ended", () => {
-  playNextTrack;
-  displayLyrics;
+  playNextTrack();
+  displayLyrics();
 });
 
 audioPlayer.addEventListener("timeupdate", updateSeekBar);
