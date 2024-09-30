@@ -317,10 +317,12 @@ async function fetchLyrics(track) {
 }
 
 async function displayLyrics() {
+  let playingTrack = tracks[currentTrack].lyricsQuery;
+
   lyricsDisplay.innerHTML = "<div class='loading'></div>";
   lyricsDisplay.style.color = "white";
 
-  const lyricsArray = await fetchLyrics(tracks[currentTrack].lyricsQuery);
+  const lyricsArray = await fetchLyrics(playingTrack);
   
   if (lyricsArray && lyricsArray.error) {
     lyricsDisplay.innerHTML = "No lyrics available.";
