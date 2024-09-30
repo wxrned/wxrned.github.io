@@ -277,6 +277,7 @@ function hideSlider() {
 // Load and play the next track automatically
 function playNextTrack() {
   currentTrack = (currentTrack + 1) % tracks.length;
+  playPauseBtn.innerHTML = '<i class="icon fa-solid fa-play"></i>';
   loadTrack(currentTrack, "slide-in-right");
   audioPlayer.play();
 }
@@ -284,6 +285,7 @@ function playNextTrack() {
 // Load and play the previous track
 function playPrevTrack() {
   currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+  playPauseBtn.innerHTML = '<i class="icon fa-solid fa-play"></i>';
   loadTrack(currentTrack, "slide-in-left");
   audioPlayer.play();
 }
