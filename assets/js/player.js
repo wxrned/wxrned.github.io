@@ -216,6 +216,7 @@ let currentTrack = 0;
 audioPlayer.volume = 0.1;
 let isDragging = false;
 let isHovering = false;
+let isLoading = false;
 
 function showSlider() {
   volumeSlider.style.display = "block";
@@ -319,16 +320,20 @@ async function fetchLyrics(track) {
 async function displayLyrics() {
   let playingTrack = tracks[currentTrack].lyricsQuery;
 
+  // Show loading animation
   lyricsDisplay.innerHTML = "<div class='loading'></div>";
   lyricsDisplay.style.color = "white";
 
+  isLoading = true;
   const lyricsArray = await fetchLyrics(playingTrack);
   
   if (lyricsArray && lyricsArray.error) {
     lyricsDisplay.innerHTML = "No lyrics available.";
+    isLoading = false;
     return;
   } else if (!lyricsArray) {
     lyricsDisplay.innerHTML = "No lyrics available.";
+    isLoading = false;
     return;
   } else {
     lyricsDisplay.textContent = "";
@@ -338,7 +343,7 @@ async function displayLyrics() {
   lyricsWrapper.className = "lyrics-wrapper";
   lyricsDisplay.appendChild(lyricsWrapper);
 
-  audioPlayer.addEventListener("timeupdate", () => {
+  const handleTimeUpdate = () => {
     const currentTime = audioPlayer.currentTime;
     let currentIndex = 0;
 
@@ -378,7 +383,11 @@ async function displayLyrics() {
 
       currentLine.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-  });
+  };
+
+  audioPlayer.removeEventListener("timeupdate", handleTimeUpdate);
+  audioPlayer.addEventListener("timeupdate", handleTimeUpdate);
+  isLoading = false;
 }
 
 function showDefaultFooter(animationClass) {
