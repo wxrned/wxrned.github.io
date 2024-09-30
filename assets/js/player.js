@@ -24,6 +24,11 @@ const tracks = [
     lyricsQuery: "destroy lonely if looks could kill",
   },
   {
+    title: "1nonly x Jasiah - GHOSTKILLA",
+    path: "assets/music/GHOSTKILLA.mp3",
+    lyricsQuery: "1nonly ghostkilla",
+  },
+  {
     title: "Yeat - bigger thën everything",
     path: "assets/music/BiggerThenEverything.mp3",
     lyricsQuery: "yeat bigger then everything",
