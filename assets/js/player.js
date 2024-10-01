@@ -20,176 +20,43 @@ const API_URL = "https://api.wxrn.lol/api/lyrics";
 const defaultFooterText = "〤 CutNation 〤";
 
 const tracks = [
-  {
-    title: "Destroy Lonely - if looks could kill",
-    path: "assets/music/iflookscouldkill.mp3",
-    lyricsQuery: "destroy lonely if looks could kill",
-  },
-  {
-    title: "1nonly x Jasiah - GHOSTKILLA",
-    path: "assets/music/GHOSTKILLA.mp3",
-    lyricsQuery: "1nonly ghostkilla",
-  },
-  {
-    title: "$NOT - Beretta",
-    path: "assets/music/Beretta.mp3",
-    lyricsQuery: "$not beretta",
-  },
-  {
-    title: "Yeat - bigger thën everything",
-    path: "assets/music/BiggerThenEverything.mp3",
-    lyricsQuery: "yeat bigger then everything",
-  },
-  {
-    title: "Rich Amiri - One Call",
-    path: "assets/music/OneCall.mp3",
-    lyricsQuery: "rich amiri one call",
-  },
-  {
-    title: "SoFaygo - Hell Yeah",
-    path: "assets/music/HellYeah.mp3",
-    lyricsQuery: "sofaygo hell yeah",
-  },
-  {
-    title: "Yeat - Power Trip",
-    path: "assets/music/PowerTrip.mp3",
-    lyricsQuery: "yeat power trip",
-  },
-  {
-    title: "Polo G - Neva Cared",
-    path: "assets/music/NevaCared.mp3",
-    lyricsQuery: "polo g neva cared",
-  },
-  {
-    title: "Polo G - Pop Out",
-    path: "assets/music/PopOut.mp3",
-    lyricsQuery: "polo g pop out",
-  },
-  {
-    title: "YNW Melly - Virtual",
-    path: "assets/music/Virtual.mp3",
-    lyricsQuery: "ynw melly virtual",
-  },
-  {
-    title: "Trippie Redd - Weeeeee",
-    path: "assets/music/Weeeeee.mp3",
-    lyricsQuery: "trippie redd weeeeee",
-  },
-  {
-    title: "SSGKobe - MIA",
-    path: "assets/music/MIA.mp3",
-    lyricsQuery: "ssgkobe mia",
-  },
-  {
-    title: "Yeat - Heavy stunts",
-    path: "assets/music/HeavyStunts.mp3",
-    lyricsQuery: "yeat heavy stunts",
-  },
-  {
-    title: "Yeat - Tell më",
-    path: "assets/music/TellMe.mp3",
-    lyricsQuery: "yeat tell me",
-  },
-  {
-    title: "Destroy Lonely - how u feel?",
-    path: "assets/music/HowUFeel.mp3",
-    lyricsQuery: "destroy lonely how u feel",
-  },
-  {
-    title: "Yeat - Luv monëy",
-    path: "assets/music/LuvMoney.mp3",
-    lyricsQuery: "yeat luv money",
-  },
-  {
-    title: " Internet Money - His & Hers",
-    path: "assets/music/HisAndHers.mp3",
-    lyricsQuery: "internet money his & hers",
-  },
-  {
-    title: " Lil Tjay - Zoo York",
-    path: "assets/music/ZooYork.mp3",
-    lyricsQuery: "lil tjay zoo york",
-  },
-  {
-    title: "Ken Carson - Succubus",
-    path: "assets/music/Succubus.mp3",
-    lyricsQuery: "ken carson succubus",
-  },
-  {
-    title: "Don Toliver - Bandit",
-    path: "assets/music/Bandit.mp3",
-    lyricsQuery: "don toliver bandit",
-  },
-  {
-    title: "Yeat - Shade",
-    path: "assets/music/Shade.mp3",
-    lyricsQuery: "yeat shade",
-  },
-  {
-    title: "Ndotz - Embrace It",
-    path: "assets/music/EmbraceIt.mp3",
-    lyricsQuery: "ndotz embrace it",
-  },
-  {
-    title: "DJ Scheme - Blue Bills",
-    path: "assets/music/BlueBills.mp3",
-    lyricsQuery: "dj scheme blue bills",
-  },
-  {
-    title: "Ken Carson - Green Room",
-    path: "assets/music/GreenRoom.mp3",
-    lyricsQuery: "ken carson green room",
-  },
-  {
-    title: "Ken Carson - Lose It",
-    path: "assets/music/LoseIt.mp3",
-    lyricsQuery: "ken carson lose it",
-  },
-  {
-    title: "Anuel AA - LHNA",
-    path: "assets/music/LHNA.mp3",
-    lyricsQuery: "anuel aa lhna",
-  },
-  {
-    title: "Anuel AA - Diamantes en Mis Dientes",
-    path: "assets/music/DiamantesEnMisDientes.mp3",
-    lyricsQuery: "anuel aa diamantes en mis dientes",
-  },
-  {
-    title: "$uicideboy$ - Bizarro",
-    path: "assets/music/Bizarro.mp3",
-    lyricsQuery: "$uicideboy$ bizarro",
-  },
-  {
-    title: "King Von - 2 A.M.",
-    path: "assets/music/2AM.mp3",
-    lyricsQuery: "king von 2am",
-  },
-  {
-    title: "$uicideboy$ - 1000 Blunts",
-    path: "assets/music/1000Blunts.mp3",
-    lyricsQuery: "$uicideboy$ 1000 blunts",
-  },
-  {
-    title: "Khea x Duki - Loca",
-    path: "assets/music/Loca.mp3",
-    lyricsQuery: "khea duki loca",
-  },
-  {
-    title: "che - GET NAKED",
-    path: "assets/music/GetNaked.mp3",
-    lyricsQuery: "che get naked",
-  },
-  {
-    title: "Playboi Carti - Fell In Luv",
-    path: "assets/music/FellInLuv.mp3",
-    lyricsQuery: "playboi carti fell in luv",
-  },
-  {
-    title: "Yeat - No morë talk",
-    path: "assets/music/NoMoreTalk.mp3",
-    lyricsQuery: "yeat no more talk",
-  },
+  { title: "Destroy Lonely - if looks could kill", path: "assets/music/iflookscouldkill.mp3", lyricsQuery: "destroy lonely if looks could kill" },
+  { title: "Internet Money - Lemonade", path: "assets/music/Lemonade.mp3", lyricsQuery: "internet money lemonade" },
+  { title: "1nonly x Jasiah - GHOSTKILLA", path: "assets/music/GHOSTKILLA.mp3", lyricsQuery: "1nonly ghostkilla" },
+  { title: "$NOT - Beretta", path: "assets/music/Beretta.mp3", lyricsQuery: "$not beretta" },
+  { title: "Yeat - bigger thën everything", path: "assets/music/BiggerThenEverything.mp3", lyricsQuery: "yeat bigger then everything" },
+  { title: "Rich Amiri - One Call", path: "assets/music/OneCall.mp3", lyricsQuery: "rich amiri one call" },
+  { title: "SoFaygo - Hell Yeah", path: "assets/music/HellYeah.mp3", lyricsQuery: "sofaygo hell yeah" },
+  { title: "Yeat - Power Trip", path: "assets/music/PowerTrip.mp3", lyricsQuery: "yeat power trip" },
+  { title: "Polo G - Neva Cared", path: "assets/music/NevaCared.mp3", lyricsQuery: "polo g neva cared" },
+  { title: "Polo G - Pop Out", path: "assets/music/PopOut.mp3", lyricsQuery: "polo g pop out" },
+  { title: "YNW Melly - Virtual", path: "assets/music/Virtual.mp3", lyricsQuery: "ynw melly virtual" },
+  { title: "Trippie Redd - Weeeeee", path: "assets/music/Weeeeee.mp3", lyricsQuery: "trippie redd weeeeee" },
+  { title: "SSGKobe - MIA", path: "assets/music/MIA.mp3", lyricsQuery: "ssgkobe mia" },
+  { title: "Yeat - Heavy stunts", path: "assets/music/HeavyStunts.mp3", lyricsQuery: "yeat heavy stunts" },
+  { title: "Yeat - Tell më", path: "assets/music/TellMe.mp3", lyricsQuery: "yeat tell me" },
+  { title: "Destroy Lonely - how u feel?", path: "assets/music/HowUFeel.mp3", lyricsQuery: "destroy lonely how u feel" },
+  { title: "Yeat - Luv monëy", path: "assets/music/LuvMoney.mp3", lyricsQuery: "yeat luv money" },
+  { title: "Internet Money - His & Hers", path: "assets/music/HisAndHers.mp3", lyricsQuery: "internet money his & hers" },
+  { title: "Lil Tjay - Zoo York", path: "assets/music/ZooYork.mp3", lyricsQuery: "lil tjay zoo york" },
+  { title: "Ken Carson - Succubus", path: "assets/music/Succubus.mp3", lyricsQuery: "ken carson succubus" },
+  { title: "Don Toliver - Bandit", path: "assets/music/Bandit.mp3", lyricsQuery: "don toliver bandit" },
+  { title: "Yeat - Shade", path: "assets/music/Shade.mp3", lyricsQuery: "yeat shade" },
+  { title: "Ndotz - Embrace It", path: "assets/music/EmbraceIt.mp3", lyricsQuery: "ndotz embrace it" },
+  { title: "DJ Scheme - Blue Bills", path: "assets/music/BlueBills.mp3", lyricsQuery: "dj scheme blue bills" },
+  { title: "Ken Carson - Green Room", path: "assets/music/GreenRoom.mp3", lyricsQuery: "ken carson green room" },
+  { title: "Ken Carson - Lose It", path: "assets/music/LoseIt.mp3", lyricsQuery: "ken carson lose it" },
+  { title: "Anuel AA - LHNA", path: "assets/music/LHNA.mp3", lyricsQuery: "anuel aa lhna" },
+  { title: "Anuel AA - Diamantes en Mis Dientes", path: "assets/music/DiamantesEnMisDientes.mp3", lyricsQuery: "anuel aa diamantes en mis dientes" },
+  { title: "$uicideboy$ - Bizarro", path: "assets/music/Bizarro.mp3", lyricsQuery: "$uicideboy$ bizarro" },
+  { title: "King Von - 2 A.M.", path: "assets/music/2AM.mp3", lyricsQuery: "king von 2am" },
+  { title: "$uicideboy$ - 1000 Blunts", path: "assets/music/1000Blunts.mp3", lyricsQuery: "$uicideboy$ 1000 blunts" },
+  { title: "Khea x Duki - Loca", path: "assets/music/Loca.mp3", lyricsQuery: "khea duki loca" },
+  { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3", lyricsQuery: "che get naked" },
+  { title: "Playboi Carti - Fell In Luv", path: "assets/music/FellInLuv.mp3", lyricsQuery: "playboi carti fell in luv" },
+  { title: "Trippie Redd x Summrs - BIGGEST BIRD", path: "assets/music/BiggestBird.mp3", lyricsQuery: "trippie redd biggest bird" },
+  { title: "Juice WRLD - Feline", path: "assets/music/Feline.mp3", lyricsQuery: "juice wrld feline" },
+  { title: "Yeat - No morë talk", path: "assets/music/NoMoreTalk.mp3", lyricsQuery: "yeat no more talk" }
 ];
 
 audioPlayer.volume = 0.1;
