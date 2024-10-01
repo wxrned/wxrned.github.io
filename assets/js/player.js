@@ -12,6 +12,7 @@ const lyricsPopup = document.getElementById("lyrics-popup");
 const lyricsDisplay = document.getElementById("lyricsDisplay");
 const lyricsCloseBtn = document.getElementById("lyrics-close");
 const lyricsButton = document.getElementById("lyrics-button");
+const mainContent = document.querySelector("main");
 
 const API_URL = "https://api.wxrn.lol/api/lyrics";
 
@@ -352,16 +353,19 @@ async function displayLyrics() {
 
 lyricsCloseBtn.addEventListener("click", () => {
   lyricsPopup.classList.remove("show");
+  mainContent.classList.remove('no-click');
   setTimeout(() => (lyricsPopup.style.display = "none"), 300);
 });
 
 lyricsButton.addEventListener("click", () => {
   lyricsPopup.style.display = "block";
+  mainContent.classList.add('no-click');
   lyricsPopup.classList.add("show");
 });
 
 footer.addEventListener("click", () => {
   lyricsPopup.style.display = "block";
+  mainContent.classList.add('no-click');
   lyricsPopup.classList.add("show");
 });
 
