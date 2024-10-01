@@ -101,9 +101,6 @@ main.fade-in {
 }
 
 img {
-  cursor: /*url('https://img.icons8.com/?size=16&id=83171&format=png'),*/
-    pointer;
-
   object-fit: cover;
 
   border-radius: 50%;
@@ -265,6 +262,11 @@ button:hover {
 
 .music-player i {
   font-size: 18px;
+}
+
+#dc-pfp {
+  cursor: /*url('https://img.icons8.com/?size=16&id=83171&format=png'),*/
+    pointer;
 }
 
 #dc-pfp,
