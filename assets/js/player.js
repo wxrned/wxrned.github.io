@@ -56,7 +56,9 @@ const tracks = [
   { title: "Playboi Carti - Fell In Luv", path: "assets/music/FellInLuv.mp3", lyricsQuery: "playboi carti fell in luv" },
   { title: "Trippie Redd x Summrs - BIGGEST BIRD", path: "assets/music/BiggestBird.mp3", lyricsQuery: "trippie redd biggest bird" },
   { title: "Juice WRLD - Feline", path: "assets/music/Feline.mp3", lyricsQuery: "juice wrld feline" },
-  { title: "Yeat - No morë talk", path: "assets/music/NoMoreTalk.mp3", lyricsQuery: "yeat no more talk" }
+  { title: "Yeat - No morë talk", path: "assets/music/NoMoreTalk.mp3", lyricsQuery: "yeat no more talk" },
+  { title: "Yeat - Talk", path: "assets/music/Talk.mp3", lyricsQuery: "yeat talk" },
+  { title: "Yeat - Already Rich", path: "assets/music/AlreadyRich.mp3", lyricsQuery: "yeat already rich" }
 ];
 
 audioPlayer.volume = 0.1;
