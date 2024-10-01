@@ -549,10 +549,6 @@ a:hover,
   }
 }
 
-.lyric-line:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
 #overlay {
   display: none;
 
