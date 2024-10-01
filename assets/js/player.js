@@ -1,3 +1,5 @@
+const mainContent = document.querySelector("main");
+const overlay = document.getElementById('overlay');
 const audioPlayer = document.getElementById("audio");
 const playPauseBtn = document.getElementById("play-pause");
 const prevBtn = document.getElementById("prev");
@@ -12,7 +14,6 @@ const lyricsPopup = document.getElementById("lyrics-popup");
 const lyricsDisplay = document.getElementById("lyricsDisplay");
 const lyricsCloseBtn = document.getElementById("lyrics-close");
 const lyricsButton = document.getElementById("lyrics-button");
-const mainContent = document.querySelector("main");
 
 const API_URL = "https://api.wxrn.lol/api/lyrics";
 
@@ -369,19 +370,28 @@ async function displayLyrics() {
 lyricsCloseBtn.addEventListener("click", () => {
   lyricsPopup.classList.remove("show");
   mainContent.classList.remove('no-click');
-  setTimeout(() => (lyricsPopup.style.display = "none"), 300);
+  overlay.style.display = 'block';
+  overlay.classList.remove('show');
+  setTimeout(() => {
+    lyricsPopup.style.display = "none"
+    overlay.style.display = 'none';
+  }, 250);
 });
 
 lyricsButton.addEventListener("click", () => {
   lyricsPopup.style.display = "block";
+  overlay.style.display = 'block';
   mainContent.classList.add('no-click');
   lyricsPopup.classList.add("show");
+  overlay.classList.add('show');
 });
 
 footer.addEventListener("click", () => {
   lyricsPopup.style.display = "block";
+  overlay.style.display = 'block';
   mainContent.classList.add('no-click');
   lyricsPopup.classList.add("show");
+  overlay.classList.add('show');
 });
 
 function showDefaultFooter(animationClass) {
