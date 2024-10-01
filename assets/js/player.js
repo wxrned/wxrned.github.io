@@ -30,6 +30,11 @@ const tracks = [
     lyricsQuery: "1nonly ghostkilla",
   },
   {
+    title: "$NOT - Beretta",
+    path: "assets/music/Beretta.mp3",
+    lyricsQuery: "$not beretta",
+  },
+  {
     title: "Yeat - bigger thën everything",
     path: "assets/music/BiggerThenEverything.mp3",
     lyricsQuery: "yeat bigger then everything",
