@@ -172,10 +172,11 @@ async function displayLyrics() {
 
     // Extract only the song title without the artist name (assuming "artist - songName" format)
     const fullTitle = tracks[currentTrack].title;
+    const songArtist = fullTitle.includes(" - ") ? fullTitle.split(" - ")[0] : fullTitle;
     const songTitle = fullTitle.includes(" - ") ? fullTitle.split(" - ")[1] : fullTitle;
 
     // Display the song title until the first lyrics appear
-    lyricsWrapper.innerHTML = `<div class="lyric-line title">${songTitle}</div>`;
+    lyricsWrapper.innerHTML = `<div class="lyric-line title">${songArtist}<br><br>${songTitle}</div>`;
 
     const firstLyricTimestamp = lyricsArray.length > 0 ? lyricsArray[0].seconds : 0;
     let lastRenderedIndex = -1;
@@ -184,7 +185,7 @@ async function displayLyrics() {
       const currentTime = audioPlayer.currentTime;
 
       if (currentTime < firstLyricTimestamp) {
-        lyricsWrapper.innerHTML = `<div class="lyric-line title">${songTitle}</div>`;
+        lyricsWrapper.innerHTML = `<div class="lyric-line title">${songArtist}<br><br>${songTitle}</div>`;
         return;
       }
 
