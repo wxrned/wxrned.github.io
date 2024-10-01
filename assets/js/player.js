@@ -51,6 +51,16 @@ const tracks = [
     lyricsQuery: "sofaygo hell yeah",
   },
   {
+    title: "Yeat - Power Trip",
+    path: "assets/music/PowerTrip.mp3",
+    lyricsQuery: "yeat power trip",
+  },
+  {
+    title: "Polo G - Neva Cared",
+    path: "assets/music/NevaCared.mp3",
+    lyricsQuery: "polo g neva cared",
+  },
+  {
     title: "Polo G - Pop Out",
     path: "assets/music/PopOut.mp3",
     lyricsQuery: "polo g pop out",
