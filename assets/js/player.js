@@ -55,6 +55,16 @@ const tracks = [
     lyricsQuery: "ynw melly virtual",
   },
   {
+    title: "Trippie Redd - Weeeeee",
+    path: "assets/music/Weeeeee.mp3",
+    lyricsQuery: "trippie redd weeeeee",
+  },
+  {
+    title: "SSGKobe - MIA",
+    path: "assets/music/MIA.mp3",
+    lyricsQuery: "ssgkobe mia",
+  },
+  {
     title: "Yeat - Heavy stunts",
     path: "assets/music/HeavyStunts.mp3",
     lyricsQuery: "yeat heavy stunts",
