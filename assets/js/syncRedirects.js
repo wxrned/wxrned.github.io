@@ -19,11 +19,11 @@ function applyColorsFromImage(imgElement) {
         const dominantColor = colorThief.getColor(canvas);
         const dominantColorRgb = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
 
-        document.documentElement.style.setProperty('--accent-color', dominantColorRgb);
+        document.documentElement.style.setProperty('--accent-color', lighterTextColor);
         const textColor = adjustColorBrightness(dominantColorRgb, -50);
         const lighterTextColor = adjustColorBrightness(dominantColorRgb, 20);
         const iconColor = dominantColorRgb;
-        document.documentElement.style.setProperty('--text-color', textColor);
+        document.documentElement.style.setProperty('--text-color', iconColor);
         document.documentElement.style.setProperty('--text-color-light', lighterTextColor);
         document.documentElement.style.setProperty('--icon-color', iconColor);
         document.documentElement.style.setProperty('--scroll-bar', dominantColorRgb);
