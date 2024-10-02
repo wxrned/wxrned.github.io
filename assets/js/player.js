@@ -14,15 +14,16 @@ const lyricsPopup = document.getElementById("lyrics-popup");
 const lyricsDisplay = document.getElementById("lyricsDisplay");
 const lyricsCloseBtn = document.getElementById("lyrics-close");
 const lyricsButton = document.getElementById("lyrics-button");
+
 const API_URL = "https://api.wxrn.lol/api/lyrics";
 const defaultFooterText = "〤 CutNation 〤";
 
 const tracks = [
-  { title: "Destroy Lonely - if looks could kill", path: "assets/music/iflookscouldkill.mp3", },
+  { title: "Destroy Lonely - if looks could kill", path: "assets/music/iflookscouldkill.mp3" },
   { title: "Internet Money - Lemonade", path: "assets/music/Lemonade.mp3" },
-  { title: "1nonly x Jasiah - GHOSTKILLA", path: "assets/music/GHOSTKILLA.mp3", },
+  { title: "1nonly x Jasiah - GHOSTKILLA", path: "assets/music/GHOSTKILLA.mp3" },
   { title: "$NOT - Beretta", path: "assets/music/Beretta.mp3" },
-  { title: "Yeat - bigger thën everything", path: "assets/music/BiggerThenEverything.mp3", },
+  { title: "Yeat - bigger thën everything", path: "assets/music/BiggerThenEverything.mp3" },
   { title: "Rich Amiri - One Call", path: "assets/music/OneCall.mp3" },
   { title: "SoFaygo - Hell Yeah", path: "assets/music/HellYeah.mp3" },
   { title: "Yeat - Power Trip", path: "assets/music/PowerTrip.mp3" },
@@ -45,14 +46,14 @@ const tracks = [
   { title: "Ken Carson - Green Room", path: "assets/music/GreenRoom.mp3" },
   { title: "Ken Carson - Lose It", path: "assets/music/LoseIt.mp3" },
   { title: "Anuel AA - LHNA", path: "assets/music/LHNA.mp3" },
-  { title: "Anuel AA - Diamantes en Mis Dientes", path: "assets/music/DiamantesEnMisDientes.mp3", },
+  { title: "Anuel AA - Diamantes en Mis Dientes", path: "assets/music/DiamantesEnMisDientes.mp3" },
   { title: "$uicideboy$ - Bizarro", path: "assets/music/Bizarro.mp3" },
   { title: "King Von - 2 A.M.", path: "assets/music/2AM.mp3" },
   { title: "$uicideboy$ - 1000 Blunts", path: "assets/music/1000Blunts.mp3" },
   { title: "Khea x Duki - Loca", path: "assets/music/Loca.mp3" },
   { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" },
   { title: "Playboi Carti - Fell In Luv", path: "assets/music/FellInLuv.mp3" },
-  { title: "Trippie Redd x Summrs - BIGGEST BIRD", path: "assets/music/BiggestBird.mp3", },
+  { title: "Trippie Redd x Summrs - BIGGEST BIRD", path: "assets/music/BiggestBird.mp3" },
   { title: "Juice WRLD - Feline", path: "assets/music/Feline.mp3" },
   { title: "Yeat - No morë talk", path: "assets/music/NoMoreTalk.mp3" },
   { title: "Yeat - Talk", path: "assets/music/Talk.mp3" },
