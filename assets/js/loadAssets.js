@@ -88,13 +88,6 @@ async function fetchImages(imgElement, userId) {
     return null;
 }
 
-function rgbToFilter(rgbColor) {
-    const [r, g, b] = rgbColor.match(/\d+/g).map(Number);
-    const normalizedColor = [r / 255, g / 255, b / 255];
-
-    return `invert(100%) sepia(100%) saturate(10000%) hue-rotate(${Math.atan2(normalizedColor[1] - normalizedColor[0], normalizedColor[2] - normalizedColor[0])}deg)`;
-}
-
 function applyColorsFromImage(imgElement) {
     if (!imgElement.complete) {
         console.error('Image not fully loaded!');
@@ -128,10 +121,6 @@ function applyColorsFromImage(imgElement) {
 
         const cursorFilter = rgbToFilter(lighterTextColor);
 
-        // document.documentElement.style.setProperty('--cursor-filter', cursorFilter);
-        // document.documentElement.style.setProperty('cursor', `url('https://img.icons8.com/?size=16&id=71212&format=png') 0 0, auto`);
-        // document.documentElement.style.setProperty('--pointer-cursor', `url('https://img.icons8.com/?size=16&id=83171&format=png') 0 0, pointer`);
-
         console.log('Colors and cursors applied based on the image:', {
             dominantColor: dominantColorRgb,
             textColor: textColor,
@@ -143,6 +132,13 @@ function applyColorsFromImage(imgElement) {
     } catch (error) {
         console.error('Error extracting colors from the image:', error);
     }
+}
+
+function rgbToFilter(rgbColor) {
+    const [r, g, b] = rgbColor.match(/\d+/g).map(Number);
+    const normalizedColor = [r / 255, g / 255, b / 255];
+
+    return `invert(100%) sepia(100%) saturate(10000%) hue-rotate(${Math.atan2(normalizedColor[1] - normalizedColor[0], normalizedColor[2] - normalizedColor[0])}deg)`;
 }
 
 function adjustColorBrightness(rgbColor, amount) {
