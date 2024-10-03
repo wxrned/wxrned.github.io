@@ -58,6 +58,7 @@ const tracks = [
   { title: "Yeat - No morë talk", path: "assets/music/NoMoreTalk.mp3" },
   { title: "Yeat - Talk", path: "assets/music/Talk.mp3" },
   { title: "Yeat - Already Rich", path: "assets/music/AlreadyRich.mp3" },
+  { title: "Destroy Lonely - THRILL", path: "assets/music/THRILL.mp3" },
 ];
 
 audioPlayer.volume = 0.1;
