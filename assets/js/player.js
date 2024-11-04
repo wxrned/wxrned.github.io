@@ -59,6 +59,9 @@ const tracks = [
   { title: "Yeat - Talk", path: "assets/music/Talk.mp3" },
   { title: "Yeat - Already Rich", path: "assets/music/AlreadyRich.mp3" },
   { title: "Destroy Lonely - THRILL", path: "assets/music/THRILL.mp3" },
+  { title: "Yeat - GEEK TIMË", path: "assets/music/GeekTime.mp3" },
+  { title: "Ken Carson - loading", path: "assets/music/Loading.mp3" },
+  { title: "Yeat - Bad bënd / DëMON", path: "assets/music/BadBend.mp3" },
 ];
 
 audioPlayer.volume = 0.1;
