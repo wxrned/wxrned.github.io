@@ -9,4 +9,4 @@ function animateTitle(Title,delay){
     document.title=newtitle;
     },delay);
 }
-animateTitle('@.wxrn',300);
+animateTitle('@4kpx',300);
