@@ -149,5 +149,5 @@ function adjustColorBrightness(rgbColor, amount) {
     return `rgb(${r}, ${g}, ${b})`;
 }
 
-syncDisplayName();
 fetchAvatarsForAll();
+syncDisplayName();
