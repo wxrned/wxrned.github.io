@@ -70,19 +70,14 @@ async function fetchAvatarsForAll() {
 async function fetchImages(imgElement, userId) {
     try {
         let response = await fetch(`https://api.wxrn.lol/api/discord/${userId}`);
-
-        if (!response.ok) {
-            response = await fetch(`https://cors-anywhere.herokuapp.com/https://api.wxrn.lol/api/discord/${userId}`);
-        }
-
         const data = await response.json();
 
         if (data.avatarUrl) {
-            imgElement.src = data.avatarUrl;
+            const base64Url = await fetchImageAsBase64(data.avatarUrl);
+            imgElement.src = base64Url;
 
             const avatarPromise = new Promise((resolve, reject) => {
                 imgElement.onload = () => {
-                    applyColorsFromImage(imgElement);
                     resolve(data);
                 };
 
@@ -101,6 +96,17 @@ async function fetchImages(imgElement, userId) {
     }
 
     return null;
+}
+
+async function fetchImageAsBase64(url) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
 }
 
 function applyColorsFromImage(imgElement) {
