@@ -61,7 +61,6 @@ async function fetchAvatarsForAll() {
                 await fetchImages(imgElement, userId);
             } else {
                 imgElement.src = "assets/img/black.png";
-                applyColorsFromImage(imgElement);
             }
         }
     }
