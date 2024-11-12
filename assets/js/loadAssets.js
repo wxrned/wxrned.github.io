@@ -1,8 +1,18 @@
 const colorThief = new ColorThief();
 const discordId = '1158429903629336646';
 
+const useDiscordSync = false;
+const defaultName = "ᴡᴀʀɴ";
+const defaultProfile = "assets/img/pfp.gif";
+const defaultBanner = "assets/img/bg.gif";
+
 async function syncDisplayName() {
     const nameElement = document.querySelector('#who');
+
+    if (!useDiscordSync) {
+        nameElement.innerHTML = defaultName;
+        return;
+    }
 
     let response = await fetch(`https://api.wxrn.lol/api/discord/${discordId}`);
     const data = await response.json();
@@ -18,19 +28,24 @@ async function fetchAvatarsForAll() {
     const faviconElement = document.querySelector('#short-icon');
 
     if (avatarElement) {
-        avatarElement.src = "assets/img/black.png";
-        const resData = await fetchImages(avatarElement, discordId);
+        if (useDiscordSync) {
+            const resData = await fetchImages(avatarElement, discordId);
 
-        if (resData && resData.bannerUrl) {
-            document.body.style.backgroundImage = `url(${resData.bannerUrl + "?size=2048"})`;
-            document.body.style.backgroundSize = 'cover';
-            document.body.style.backgroundPosition = 'center';
-        }
+            if (resData && resData.bannerUrl) {
+                document.body.style.backgroundImage = `url(${resData.bannerUrl + "?size=2048"})`;
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+            }
 
-        if (resData && resData.avatarUrl && faviconElement) {
-            faviconElement.href = resData.avatarUrl;
-        } else if (!faviconElement) {
-            console.error('No element with id="short-icon" found.');
+            if (resData && resData.avatarUrl && faviconElement) {
+                faviconElement.href = resData.avatarUrl;
+            } else if (!faviconElement) {
+                console.error('No element with id="short-icon" found.');
+            }
+        } else {
+            avatarElement.src = defaultProfile;
+            document.body.style.backgroundImage = `url("${defaultBanner}")`;
+            applyColorsFromImage(avatarElement);
         }
     } else {
         console.error('No element with id="dc-pfp" found.');
@@ -41,12 +56,12 @@ async function fetchAvatarsForAll() {
 
         if (imgElement) {
             const userId = imgElement.alt;
-            imgElement.src = "assets/img/black.png";
 
             if (userId) {
                 await fetchImages(imgElement, userId);
             } else {
-                console.error('No Discord User ID found in the alt attribute.');
+                imgElement.src = "assets/img/black.png";
+                applyColorsFromImage(imgElement);
             }
         }
     }
