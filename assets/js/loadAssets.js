@@ -1,7 +1,7 @@
 const colorThief = new ColorThief();
 const discordId = '1158429903629336646';
 
-const useDiscordSync = false;
+const useDiscordSync = true;
 const defaultName = "ᴡᴀʀɴ";
 const defaultProfile = "assets/img/pfp.gif";
 const defaultBanner = "assets/img/bg.gif";
