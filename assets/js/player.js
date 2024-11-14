@@ -16,7 +16,7 @@ const lyricsCloseBtn = document.getElementById("lyrics-close");
 const lyricsButton = document.getElementById("lyrics-button");
 
 const API_URL = "https://api.wxrn.lol/api/lyrics";
-const defaultFooterText = "〤 unbothered 〤";
+const defaultFooterText = "〤 bethy <3 〤";
 
 const tracks = [
   { title: "Destroy Lonely - if looks could kill", path: "assets/music/iflookscouldkill.mp3" },
