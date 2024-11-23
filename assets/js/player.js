@@ -62,6 +62,10 @@ const tracks = [
   { title: "Yeat - GEEK TIMË", path: "assets/music/GeekTime.mp3" },
   { title: "Ken Carson - loading", path: "assets/music/Loading.mp3" },
   { title: "Yeat - Bad bënd / DëMON", path: "assets/music/BadBend.mp3" },
+  { title: "Ken Carson - Hardcore", path: "assets/music/Hardcore.mp3" },
+  { title: "Che - I Rot, I Rot", path: "assets/music/IRotIRot.mp3" },
+  { title: "Yeat x Summrs - GO2WORK", path: "assets/music/GO2WORK.mp3" },
+  { title: "Ken Carson - Rock N Roll", path: "assets/music/RockNRoll.mp3" },
 ];
 
 audioPlayer.volume = 0.1;
