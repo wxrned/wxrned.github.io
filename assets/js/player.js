@@ -66,6 +66,7 @@ const tracks = [
   { title: "Che - I Rot, I Rot", path: "assets/music/IRotIRot.mp3" },
   { title: "Yeat x Summrs - GO2WORK", path: "assets/music/GO2WORK.mp3" },
   { title: "Ken Carson - Rock N Roll", path: "assets/music/RockNRoll.mp3" },
+  { title: "Ken Carson - Overseas", path: "assets/music/Overseas.mp3" },
 ];
 
 audioPlayer.volume = 0.1;
