@@ -19,42 +19,29 @@ const API_URL = "https://api.wxrn.lol/api/lyrics";
 const defaultFooterText = "〤 @4kpx 〤";
 
 const tracks = [
-  { title: "Destroy Lonely - if looks could kill", path: "assets/music/iflookscouldkill.mp3" },
-  { title: "Internet Money - Lemonade", path: "assets/music/Lemonade.mp3" },
-  { title: "1nonly x Jasiah - GHOSTKILLA", path: "assets/music/GHOSTKILLA.mp3" },
-  { title: "$NOT - Beretta", path: "assets/music/Beretta.mp3" },
-  { title: "Yeat - bigger thën everything", path: "assets/music/BiggerThenEverything.mp3" },
-  { title: "Rich Amiri - One Call", path: "assets/music/OneCall.mp3" },
-  { title: "SoFaygo - Hell Yeah", path: "assets/music/HellYeah.mp3" },
+  {
+    title: "Destroy Lonely - if looks could kill",
+    path: "assets/music/iflookscouldkill.mp3",
+  },
+  {
+    title: "Yeat - bigger thën everything",
+    path: "assets/music/BiggerThenEverything.mp3",
+  },
   { title: "Yeat - Power Trip", path: "assets/music/PowerTrip.mp3" },
-  { title: "Polo G - Neva Cared", path: "assets/music/NevaCared.mp3" },
-  { title: "Polo G - Pop Out", path: "assets/music/PopOut.mp3" },
-  { title: "YNW Melly - Virtual", path: "assets/music/Virtual.mp3" },
-  { title: "Trippie Redd - Weeeeee", path: "assets/music/Weeeeee.mp3" },
-  { title: "SSGKobe - MIA", path: "assets/music/MIA.mp3" },
   { title: "Yeat - Heavy stunts", path: "assets/music/HeavyStunts.mp3" },
   { title: "Yeat - Tell më", path: "assets/music/TellMe.mp3" },
   { title: "Destroy Lonely - how u feel?", path: "assets/music/HowUFeel.mp3" },
   { title: "Yeat - Luv monëy", path: "assets/music/LuvMoney.mp3" },
-  { title: "Internet Money - His & Hers", path: "assets/music/HisAndHers.mp3" },
-  { title: "Lil Tjay - Zoo York", path: "assets/music/ZooYork.mp3" },
   { title: "Ken Carson - Succubus", path: "assets/music/Succubus.mp3" },
-  { title: "Don Toliver - Bandit", path: "assets/music/Bandit.mp3" },
   { title: "Yeat - Shade", path: "assets/music/Shade.mp3" },
-  { title: "Ndotz - Embrace It", path: "assets/music/EmbraceIt.mp3" },
-  { title: "DJ Scheme - Blue Bills", path: "assets/music/BlueBills.mp3" },
   { title: "Ken Carson - Green Room", path: "assets/music/GreenRoom.mp3" },
   { title: "Ken Carson - Lose It", path: "assets/music/LoseIt.mp3" },
-  { title: "Anuel AA - LHNA", path: "assets/music/LHNA.mp3" },
-  { title: "Anuel AA - Diamantes en Mis Dientes", path: "assets/music/DiamantesEnMisDientes.mp3" },
-  { title: "$uicideboy$ - Bizarro", path: "assets/music/Bizarro.mp3" },
-  { title: "King Von - 2 A.M.", path: "assets/music/2AM.mp3" },
-  { title: "$uicideboy$ - 1000 Blunts", path: "assets/music/1000Blunts.mp3" },
-  { title: "Khea x Duki - Loca", path: "assets/music/Loca.mp3" },
   { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" },
   { title: "Playboi Carti - Fell In Luv", path: "assets/music/FellInLuv.mp3" },
-  { title: "Trippie Redd x Summrs - BIGGEST BIRD", path: "assets/music/BiggestBird.mp3" },
-  { title: "Juice WRLD - Feline", path: "assets/music/Feline.mp3" },
+  {
+    title: "Trippie Redd x Summrs - BIGGEST BIRD",
+    path: "assets/music/BiggestBird.mp3",
+  },
   { title: "Yeat - No morë talk", path: "assets/music/NoMoreTalk.mp3" },
   { title: "Yeat - Talk", path: "assets/music/Talk.mp3" },
   { title: "Yeat - Already Rich", path: "assets/music/AlreadyRich.mp3" },
@@ -67,6 +54,21 @@ const tracks = [
   { title: "Yeat x Summrs - GO2WORK", path: "assets/music/GO2WORK.mp3" },
   { title: "Ken Carson - Rock N Roll", path: "assets/music/RockNRoll.mp3" },
   { title: "Ken Carson - Overseas", path: "assets/music/Overseas.mp3" },
+  { title: "Ken Carson - Nightcore 2", path: "assets/music/Nightcore2.mp3" },
+  { title: "yuke - my bad", path: "assets/music/mybad.mp3" },
+  { title: "yuke - RRegret", path: "assets/music/RRegret.mp3" },
+  {
+    title: "OsamaSon - ik what you did last summer",
+    path: "assets/music/ikwydls.mp3",
+  },
+  {
+    title: "OsamaSon - Baghdad",
+    path: "assets/music/Baghdad.mp3",
+  },
+  {
+    title: "OsamaSon - Troops",
+    path: "assets/music/Troops.mp3",
+  },
 ];
 
 audioPlayer.volume = 0.1;
@@ -160,7 +162,7 @@ function createLyricsQuery(track) {
     .split("")
     .map((char) => accentsMap[char] || char)
     .join("");
-  
+
   track.lyricsQuery = normalizedTitle;
 }
 
@@ -287,11 +289,11 @@ async function displayLyrics() {
       console.warn("Fetch aborted for lyrics.");
     } else {
       lyricsDisplay.innerHTML =
-        "<div class='loading'>Error fetching lyrics.</div>";
+        "<div class='loading'>No lyrics available</div>";
       console.error("Error fetching lyrics:", error);
       setTimeout(() => {
         lyricsDisplay.innerHTML =
-          "<div class='error-display'>Error fetching lyrics.</div>";
+          "<div class='error-display'>No lyrics available</div>";
       }, 1000);
     }
   } finally {

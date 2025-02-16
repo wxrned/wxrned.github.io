@@ -1,109 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta property="og:title" content="@.wxrn" />
-    <meta property="og:description" content="Six, six, six. I'm so fucking sick." />
-    <meta property="og:image" id="embed-icon" content="https://wxrn.lol/assets/img/black.png" />
+    <meta
+      property="og:description"
+      content="Six, six, six. I'm so fucking sick."
+    />
+    <meta
+      property="og:image"
+      id="embed-icon"
+      content="https://wxrn.lol/assets/img/black.png"
+    />
     <meta name="theme-color" content="#808080" />
     <title>_</title>
     <link rel="stylesheet" href="assets/css/style.css" />
-    <link rel="shortcut icon" id="short-icon" href="assets/img/black.png" type="image/x-icon" />
-    <script src="https://kit.fontawesome.com/b756c00e57.js" crossorigin="anonymous"></script>
+    <link
+      rel="shortcut icon"
+      id="short-icon"
+      href="assets/img/black.png"
+      type="image/x-icon"
+    />
+    <script
+      src="https://kit.fontawesome.com/b756c00e57.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <title></title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="entry-overlay" class="entry-overlay">
-        <div class="overlay-content">
-            <p id="check-p">Checking your connection!</p>
-        </div>
+      <div class="overlay-content">
+        <p id="check-p">Checking your connection!</p>
+      </div>
     </div>
 
     <main>
-        <div id="view-counter" class="view-counter">
-            <span><i class="fa-regular fa-eye"></i> </span>
-            <span id="page_views">0</span>
-        </div>
+      <div id="view-counter" class="view-counter">
+        <span><i class="fa-regular fa-eye"></i> </span>
+        <span id="page_views">0</span>
+      </div>
 
-        <img id="dc-pfp" crossorigin="anonymous" src="assets/img/black.png" />
-        <span id="who">warn</span>
-        <span id="footer"></span>
+      <img id="dc-pfp" crossorigin="anonymous" src="assets/img/black.png" />
+      <span id="who">warn</span>
+      <span id="footer"></span>
 
-        <div class="music-player">
-            <input type="range" id="seek-bar" value="0" min="0" max="100" step="1" />
-            <div class="controls">
-                <div class="volume-control">
-                    <button id="volume-button">
-                        <i class="icon fa-solid fa-volume-up"></i>
-                    </button>
-                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" style="display:none;" />
-                </div>
-                <button id="prev"><i class="icon fa-solid fa-backward"></i></button>
-                <button id="play-pause"><i class="icon fa-solid fa-play"></i></button>
-                <button id="next"><i class="icon fa-solid fa-forward"></i></button>
-                <button id="lyrics-button"><i class="icon fa-solid fa-music"></i></button>
-            </div>
+      <div class="music-player">
+        <input
+          type="range"
+          id="seek-bar"
+          value="0"
+          min="0"
+          max="100"
+          step="1"
+        />
+        <div class="controls">
+          <div class="volume-control">
+            <button id="volume-button">
+              <i class="icon fa-solid fa-volume-up"></i>
+            </button>
+            <input
+              type="range"
+              id="volume-slider"
+              min="0"
+              max="1"
+              step="0.01"
+              style="display: none"
+            />
+          </div>
+          <button id="prev"><i class="icon fa-solid fa-backward"></i></button>
+          <button id="play-pause"><i class="icon fa-solid fa-play"></i></button>
+          <button id="next"><i class="icon fa-solid fa-forward"></i></button>
+          <button id="lyrics-button">
+            <i class="icon fa-solid fa-music"></i>
+          </button>
         </div>
+      </div>
 
-        <div class="flexbox">
-            <a href="https://t.me/wxrned" target="_blank">
-                <button><i class="icon fa-brands telegram"></i>@wxrned</button>
-            </a>
-            <a href="https://www.tiktok.com/@wxrn4l" target="_blank">
-                <button><i class="icon fa-brands tiktok"></i>@wxrn4l</button>
-            </a>
-            <a href="discord" target="_blank">
-                <button><i class="icon fa-brands discord"></i>/wxrn</button>
-            </a>
-        </div>
+      <div class="flexbox">
+        <a href="https://t.me/wxrned" target="_blank">
+          <button><i class="icon fa-brands telegram"></i>@wxrned</button>
+        </a>
+        <a href="https://www.tiktok.com/@wxrn4l" target="_blank">
+          <button><i class="icon fa-brands tiktok"></i>@wxrn4l</button>
+        </a>
+        <a href="discord" target="_blank">
+          <button><i class="icon fa-brands discord"></i>/wxrn</button>
+        </a>
+      </div>
     </main>
 
     <div id="overlay"></div>
 
     <div id="lyrics-popup">
-        <h2>〤 lyrics 〤</h2>
-        <div id="lyricsDisplay"><div class='loading'></div></div>
-        <button id="lyrics-close">close</button>
+      <h2>〤 lyrics 〤</h2>
+      <div id="lyricsDisplay"><div class="loading"></div></div>
+      <button id="lyrics-close">close</button>
     </div>
 
     <div id="popup">
-        <h2>〤 ♡ 〤</h2>
-        <ul>
-            <li>
-                <img src="" id="vods" alt="1244736082722164736" /><span class="friend-name">vods</span>
-            </li>
-            <li>
-                <img src="" id="ashy" alt="1227712414318071901" /><span class="friend-name">ashy</span>
-            </li>
-            <li>
-                <img src="" id="blicks" alt="1182596956787331092" /><span class="friend-name">blicks</span>
-            </li>
-            <li>
-                <img src="" id="peta" alt="721733236660895764" /><span class="friend-name">peta</span>
-            </li>
-            <li>
-                <img src="" id="zau" alt="1073011548768964749" /><span class="friend-name">zau</span>
-            </li>
-            <li>
-                <img src="" id="ryzzx" alt="1319136320404324431" /><span class="friend-name">ryzzx</span>
-            </li>
-        </ul>
-        <button onclick="closePopup()">close</button>
+      <h2>〤 ♡ 〤</h2>
+      <ul>
+        <li>
+          <img src="" id="vods" alt="1244736082722164736" /><span
+            class="friend-name"
+            >vods</span
+          >
+        </li>
+        <li>
+          <img src="" id="ashy" alt="1227712414318071901" /><span
+            class="friend-name"
+            >ashy</span
+          >
+        </li>
+        <li>
+          <img src="" id="blicks" alt="1182596956787331092" /><span
+            class="friend-name"
+            >blicks</span
+          >
+        </li>
+        <li>
+          <img src="" id="peta" alt="721733236660895764" /><span
+            class="friend-name"
+            >peta</span
+          >
+        </li>
+        <li>
+          <img src="" id="zau" alt="1073011548768964749" /><span
+            class="friend-name"
+            >zau</span
+          >
+        </li>
+        <li>
+          <img src="" id="ryzzx" alt="1319136320404324431" /><span
+            class="friend-name"
+            >ryzzx</span
+          >
+        </li>
+      </ul>
+      <button onclick="closePopup()">close</button>
     </div>
 
     <audio id="audio"></audio>
 
     <!-- Scripts -->
-    <script src="assets/js/inspect.js"></script>
+    <!-- <script src="assets/js/inspect.js"></script> -->
     <script src="assets/js/title.js"></script>
     <script src="assets/js/viewCount.js"></script>
     <script src="assets/js/popup.js"></script>
     <script src="assets/js/loadAssets.js"></script>
     <script src="assets/js/player.js"></script>
-</body>
+  </body>
 </html>
