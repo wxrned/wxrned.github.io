@@ -1,11 +1,25 @@
-var database;
-await fetch("https://api.wxrn.lol/getFirebaseConfig")
-  .then(async (response) => response.json())
-  .then(async (firebaseConfig) => {
-    await firebase.initializeApp(firebaseConfig);
-    database = await firebase.database();
-  })
-  .catch((error) => console.error("Error fetching Firebase config:", error));
+// var database;
+// await fetch("https://api.wxrn.lol/getFirebaseConfig")
+//   .then(async (response) => response.json())
+//   .then(async (firebaseConfig) => {
+//     await firebase.initializeApp(firebaseConfig);
+//     database = await firebase.database();
+//   })
+//   .catch((error) => console.error("Error fetching Firebase config:", error));
+const firebaseConfig = {
+  apiKey: "AIzaSyCTzKMUnEqwoEiiYN-NEqZO5fbcUPJFYxY",
+  authDomain: "wxrnlol-eb507.firebaseapp.com",
+  databaseURL:
+    "https://wxrnlol-eb507-default-rtdb.europe-west1.firebasedatabase.app/",
+  projectId: "wxrnlol-eb507",
+  storageBucket: "wxrnlol-eb507.appspot.com",
+  messagingSenderId: "130600299639",
+  appId: "1:130600299639:web:8c24f992f6be60898a6a72",
+  measurementId: "G-4MHBKXVH15",
+};
+
+firebase.initializeApp(firebaseConfig);
+var database = firebase.database();
 
 function get_viewers_ip(json) {
   let ip = json.ip;
