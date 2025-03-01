@@ -63,6 +63,9 @@ const tracks = [
   },
   { title: "OsamaSon - Baghdad", path: "assets/music/Baghdad.mp3" },
   { title: "OsamaSon - Troops", path: "assets/music/Troops.mp3" },
+  { title: "OsamaSon - X & Sex", path: "assets/music/X&Sex.mp3" },
+  { title: "OsamaSon - Freestyle", path: "assets/music/Freestyle.mp3" },
+  { title: "OsamaSon - Frontin", path: "assets/music/Frontin.mp3" },
 ];
 
 audioPlayer.volume = 0.1;
