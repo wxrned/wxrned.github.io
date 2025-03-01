@@ -51,7 +51,7 @@ const tracks = [
   { title: "Yeat - Bad bënd / DëMON", path: "assets/music/BadBend.mp3" },
   { title: "Ken Carson - Hardcore", path: "assets/music/Hardcore.mp3" },
   { title: "Che - I Rot, I Rot", path: "assets/music/IRotIRot.mp3" },
-  { title: "Yeat x Summrs - GO2WORK", path: "assets/music/GO2WORK.mp3" },
+  { title: "Yeat - GO2WORK", path: "assets/music/GO2WORK.mp3" },
   { title: "Ken Carson - Rock N Roll", path: "assets/music/RockNRoll.mp3" },
   { title: "Ken Carson - Overseas", path: "assets/music/Overseas.mp3" },
   { title: "Ken Carson - Nightcore 2", path: "assets/music/Nightcore2.mp3" },
