@@ -61,14 +61,8 @@ const tracks = [
     title: "OsamaSon - ik what you did last summer",
     path: "assets/music/ikwydls.mp3",
   },
-  {
-    title: "OsamaSon - Baghdad",
-    path: "assets/music/Baghdad.mp3",
-  },
-  {
-    title: "OsamaSon - Troops",
-    path: "assets/music/Troops.mp3",
-  },
+  { title: "OsamaSon - Baghdad", path: "assets/music/Baghdad.mp3" },
+  { title: "OsamaSon - Troops", path: "assets/music/Troops.mp3" },
 ];
 
 audioPlayer.volume = 0.1;
