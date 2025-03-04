@@ -1,53 +1,30 @@
+// Assuming Color Thief is already included
 const colorThief = new ColorThief();
-const discordId = "1158429903629336646";
-
-const useDiscordSync = true;
-const defaultName = "ᴡᴀʀɴ";
-const defaultProfile = "assets/img/pfp.gif";
-const defaultBanner = "assets/img/bg.gif";
-
-async function syncDisplayName() {
-  const nameElement = document.querySelector("#who");
-
-  if (!useDiscordSync) {
-    nameElement.innerHTML = defaultName;
-    return;
-  }
-
-  let response = await fetch(`https://api.wxrn.lol/api/discord/${discordId}`);
-  const data = await response.json();
-
-  if (data.displayName) {
-    nameElement.innerHTML = data.displayName;
-  }
-}
 
 async function fetchAvatarsForAll() {
   const liElements = document.querySelectorAll("#popup li");
+
+  // Set avatar and banner for the main user (with the specified Discord ID)
+  const discordId = "1158429903629336646"; // Main user's Discord ID
   const avatarElement = document.querySelector("#dc-pfp");
   const faviconElement = document.querySelector("#short-icon");
 
   if (avatarElement) {
-    if (useDiscordSync) {
-      const resData = await fetchImages(avatarElement, discordId);
+    avatarElement.src = "assets/img/black.png"; // Placeholder while fetching
+    const resData = await fetchImages(avatarElement, discordId);
 
-      if (resData && resData.bannerUrl) {
-        document.body.style.backgroundImage = `url(${
-          resData.bannerUrl + "?size=2048"
-        })`;
-        document.body.style.backgroundSize = "cover";
-        document.body.style.backgroundPosition = "center";
-      }
+    if (resData && resData.bannerUrl) {
+      document.body.style.backgroundImage = `url(${
+        resData.bannerUrl + "?size=1024"
+      })`;
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundPosition = "center";
+    }
 
-      if (resData && resData.avatarUrl && faviconElement) {
-        faviconElement.href = resData.avatarUrl;
-      } else if (!faviconElement) {
-        console.error('No element with id="short-icon" found.');
-      }
-    } else {
-      avatarElement.src = defaultProfile;
-      document.body.style.backgroundImage = `url("${defaultBanner}")`;
-      applyColorsFromImage(avatarElement);
+    if (resData && resData.avatarUrl && faviconElement) {
+      faviconElement.href = resData.avatarUrl;
+    } else if (!faviconElement) {
+      console.error('No element with id="short-icon" found.');
     }
   } else {
     console.error('No element with id="dc-pfp" found.');
@@ -58,11 +35,12 @@ async function fetchAvatarsForAll() {
 
     if (imgElement) {
       const userId = imgElement.alt;
+      imgElement.src = "assets/img/black.png"; // Placeholder while fetching
 
       if (userId) {
         await fetchImages(imgElement, userId);
       } else {
-        imgElement.src = "assets/img/black.png";
+        console.error("No Discord User ID found in the alt attribute.");
       }
     }
   }
@@ -71,15 +49,25 @@ async function fetchAvatarsForAll() {
 async function fetchImages(imgElement, userId) {
   try {
     let response = await fetch(`https://api.wxrn.lol/api/discord/${userId}`);
+
+    // Fallback fetch in case of failure with the primary URL
+    if (!response.ok) {
+      response = await fetch(
+        `https://cors-anywhere.herokuapp.com/https://api.wxrn.lol/api/discord/${userId}`
+      );
+    }
+
     const data = await response.json();
 
     if (data.avatarUrl) {
-      const base64Url = await fetchImageAsBase64(data.avatarUrl);
-      imgElement.src = base64Url;
+      // Set the avatar URL for the img element
+      imgElement.src = data.avatarUrl;
 
+      // Return a promise to handle the image load
       const avatarPromise = new Promise((resolve, reject) => {
         imgElement.onload = () => {
-          resolve(data);
+          applyColorsFromImage(imgElement);
+          resolve(data); // Resolve with the full data object (avatar and banner URLs)
         };
 
         imgElement.onerror = () => {
@@ -88,7 +76,7 @@ async function fetchImages(imgElement, userId) {
         };
       });
 
-      return avatarPromise;
+      return avatarPromise; // Resolve the promise with the data
     } else if (data.error) {
       console.error(`Error for user ${userId}: ${data.error}`);
     }
@@ -99,18 +87,7 @@ async function fetchImages(imgElement, userId) {
     );
   }
 
-  return null;
-}
-
-async function fetchImageAsBase64(url) {
-  const response = await fetch(url);
-  const blob = await response.blob();
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
+  return null; // Return null if there was an error
 }
 
 function applyColorsFromImage(imgElement) {
@@ -127,16 +104,18 @@ function applyColorsFromImage(imgElement) {
   ctx.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
 
   try {
+    // Get the dominant color from the image
     const dominantColor = colorThief.getColor(canvas);
     const dominantColorRgb = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
 
+    // Update CSS variables for accent and other colors
     document.documentElement.style.setProperty(
       "--accent-color",
       dominantColorRgb
     );
-    const textColor = adjustColorBrightness(dominantColorRgb, -50);
-    const lighterTextColor = adjustColorBrightness(dominantColorRgb, 20);
-    const iconColor = dominantColorRgb;
+    const textColor = adjustColorBrightness(dominantColorRgb, -50); // Darker text color
+    const lighterTextColor = adjustColorBrightness(dominantColorRgb, 20); // Lighter text color
+    const iconColor = dominantColorRgb; // Use accent color for icons
     document.documentElement.style.setProperty("--text-color", textColor);
     document.documentElement.style.setProperty(
       "--text-color-light",
@@ -148,49 +127,39 @@ function applyColorsFromImage(imgElement) {
       dominantColorRgb
     );
 
+    // Apply a very darkened version of the color for the background
     const darkenedBackgroundColor = adjustColorBrightness(
       dominantColorRgb,
       -80
-    );
+    ); // Darken by 80%
     document.documentElement.style.setProperty(
       "--bg-color",
       darkenedBackgroundColor
     );
 
+    // Directly set the background color without any blur
     document.body.style.backgroundColor = darkenedBackgroundColor;
 
-    const cursorFilter = rgbToFilter(lighterTextColor);
-
-    console.log("Colors and cursors applied based on the image:", {
+    console.log("Colors applied based on the image:", {
       dominantColor: dominantColorRgb,
       textColor: textColor,
       lighterTextColor: lighterTextColor,
       iconColor: iconColor,
       darkenedBackgroundColor: darkenedBackgroundColor,
-      cursorFilter: cursorFilter,
     });
   } catch (error) {
     console.error("Error extracting colors from the image:", error);
   }
 }
 
-function rgbToFilter(rgbColor) {
-  const [r, g, b] = rgbColor.match(/\d+/g).map(Number);
-  const normalizedColor = [r / 255, g / 255, b / 255];
-
-  return `invert(100%) sepia(100%) saturate(10000%) hue-rotate(${Math.atan2(
-    normalizedColor[1] - normalizedColor[0],
-    normalizedColor[2] - normalizedColor[0]
-  )}deg)`;
+// Helper function to adjust color brightness
+function adjustColorBrightness(color, percent) {
+  const rgb = color.match(/\d+/g).map(Number);
+  const adjust = (value, percent) =>
+    Math.min(255, Math.max(0, value + Math.floor(value * (percent / 100))));
+  const adjustedColor = rgb.map((value) => adjust(value, percent));
+  return `rgb(${adjustedColor[0]}, ${adjustedColor[1]}, ${adjustedColor[2]})`;
 }
 
-function adjustColorBrightness(rgbColor, amount) {
-  const rgb = rgbColor.match(/\d+/g).map(Number);
-  const r = Math.min(Math.max(rgb[0] + amount, 0), 255);
-  const g = Math.min(Math.max(rgb[1] + amount, 0), 255);
-  const b = Math.min(Math.max(rgb[2] + amount, 0), 255);
-  return `rgb(${r}, ${g}, ${b})`;
-}
-
+// Call the function to fetch avatars for all users
 fetchAvatarsForAll();
-syncDisplayName();

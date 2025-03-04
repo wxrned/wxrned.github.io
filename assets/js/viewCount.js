@@ -1,11 +1,3 @@
-// var database;
-// await fetch("https://api.wxrn.lol/getFirebaseConfig")
-//   .then(async (response) => response.json())
-//   .then(async (firebaseConfig) => {
-//     await firebase.initializeApp(firebaseConfig);
-//     database = await firebase.database();
-//   })
-//   .catch((error) => console.error("Error fetching Firebase config:", error));
 const firebaseConfig = {
   apiKey: "AIzaSyCTzKMUnEqwoEiiYN-NEqZO5fbcUPJFYxY",
   authDomain: "wxrnlol-eb507.firebaseapp.com",
