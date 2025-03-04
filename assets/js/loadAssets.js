@@ -1,15 +1,14 @@
-
 const colorThief = new ColorThief();
 
 async function fetchAvatarsForAll() {
   const liElements = document.querySelectorAll("#popup li");
--
-  const discordId = "1158429903629336646";-
+
+  const discordId = "1158429903629336646";
   const avatarElement = document.querySelector("#dc-pfp");
   const faviconElement = document.querySelector("#short-icon");
 
   if (avatarElement) {
-    avatarElement.src = "assets/img/black.png";-
+    avatarElement.src = "assets/img/black.png";
     const resData = await fetchImages(avatarElement, discordId);
 
     if (resData && resData.bannerUrl) {
@@ -72,7 +71,7 @@ async function fetchImages(imgElement, userId) {
         };
       });
 
-      return avatarPromise; // Resolve the promise with the data
+      return avatarPromise;
     } else if (data.error) {
       console.error(`Error for user ${userId}: ${data.error}`);
     }
