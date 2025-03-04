@@ -1,15 +1,15 @@
 function get_viewers_ip(json) {
   let ip = json.ip;
 
-  // if (json.security.vpn || json.security.proxy) {
-  //   document.getElementById("check-p").innerHTML =
-  //     "vpn/proxy detected.<br>click to enter.";
-  //   document.getElementById("entry-overlay").style.display = "flex";
-  //   window.addEventListener("click", enterSite);
-  // } else {
-  // countViews(ip);
-  enterSite();
-  // }
+  if (json.security.vpn || json.security.proxy) {
+    document.getElementById("check-p").innerHTML =
+      "vpn/proxy detected.<br>click to enter.";
+    document.getElementById("entry-overlay").style.display = "flex";
+    window.addEventListener("click", enterSite);
+  } else {
+    countViews(ip);
+    enterSite();
+  }
 }
 
 function enterSite() {
@@ -57,38 +57,39 @@ function countViews(ip) {
     });
 }
 
-fetch("https://api.ipify.org/?format=json")
-  .then((response) => response.json())
-  .then((data) => {
-    fetch(
-      `https://vpnapi.io/api/${data.ip}?key=0840c7c180ee4f9a81d591f222762774`
-    )
-      .then((response) => response.json())
-      .then((securityData) => {
-        get_viewers_ip(securityData);
-      });
-  })
-  .catch((error) => {
-    console.error("Error fetching IP:", error);
-  });
-
 function animateCountUp(targetNumber) {
   const pageViewsElement = document.getElementById("page_views");
   const currentNumber = parseInt(pageViewsElement.innerHTML);
-  const increment = Math.ceil((targetNumber - currentNumber) / 100); // Increment step
-  const duration = 1000; // Duration of the animation in milliseconds
-  const steps = Math.ceil(duration / 50); // Number of steps for the animation
+  const increment = Math.ceil((targetNumber - currentNumber) / 100);
+  const steps = Math.ceil(duration / 50);
   let count = currentNumber;
 
   const interval = setInterval(() => {
     count += increment;
     if (increment > 0 && count >= targetNumber) {
-      count = targetNumber; // Stop at target number
+      count = targetNumber;
       clearInterval(interval);
     } else if (increment < 0 && count <= targetNumber) {
-      count = targetNumber; // Stop at target number
+      count = targetNumber;
       clearInterval(interval);
     }
     pageViewsElement.innerHTML = count;
   }, 40);
 }
+
+// fetch("https://api.ipify.org/?format=json")
+//   .then((response) => response.json())
+//   .then((data) => {
+//     fetch(
+//       `https://vpnapi.io/api/${data.ip}?key=0840c7c180ee4f9a81d591f222762774`
+//     )
+//       .then((response) => response.json())
+//       .then((securityData) => {
+//         get_viewers_ip(securityData);
+//       });
+//   })
+//   .catch((error) => {
+//     console.error("Error fetching IP:", error);
+//   });
+
+enterSite();
