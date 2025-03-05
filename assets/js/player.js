@@ -14,59 +14,13 @@ const lyricsPopup = document.getElementById("lyrics-popup");
 const lyricsDisplay = document.getElementById("lyricsDisplay");
 const lyricsCloseBtn = document.getElementById("lyrics-close");
 const lyricsButton = document.getElementById("lyrics-button");
+const pfpImage = document.getElementById("dc-pfp");
 
 const API_URL = "https://api.wxrn.lol/api/lyrics";
 const defaultFooterText = "〤 @4kpx 〤";
 
-const tracks = [
-  {
-    title: "Destroy Lonely - if looks could kill",
-    path: "assets/music/iflookscouldkill.mp3",
-  },
-  {
-    title: "Yeat - bigger thën everything",
-    path: "assets/music/BiggerThenEverything.mp3",
-  },
-  { title: "Yeat - Power Trip", path: "assets/music/PowerTrip.mp3" },
-  { title: "Yeat - Heavy stunts", path: "assets/music/HeavyStunts.mp3" },
-  { title: "Yeat - Tell më", path: "assets/music/TellMe.mp3" },
-  { title: "Destroy Lonely - how u feel?", path: "assets/music/HowUFeel.mp3" },
-  { title: "Yeat - Luv monëy", path: "assets/music/LuvMoney.mp3" },
-  { title: "Ken Carson - Succubus", path: "assets/music/Succubus.mp3" },
-  { title: "Yeat - Shade", path: "assets/music/Shade.mp3" },
-  { title: "Ken Carson - Green Room", path: "assets/music/GreenRoom.mp3" },
-  { title: "Ken Carson - Lose It", path: "assets/music/LoseIt.mp3" },
-  { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" },
-  { title: "Playboi Carti - Fell In Luv", path: "assets/music/FellInLuv.mp3" },
-  {
-    title: "Trippie Redd x Summrs - BIGGEST BIRD",
-    path: "assets/music/BiggestBird.mp3",
-  },
-  { title: "Yeat - No morë talk", path: "assets/music/NoMoreTalk.mp3" },
-  { title: "Yeat - Talk", path: "assets/music/Talk.mp3" },
-  { title: "Yeat - Already Rich", path: "assets/music/AlreadyRich.mp3" },
-  { title: "Destroy Lonely - THRILL", path: "assets/music/THRILL.mp3" },
-  { title: "Yeat - GEEK TIMË", path: "assets/music/GeekTime.mp3" },
-  { title: "Ken Carson - loading", path: "assets/music/Loading.mp3" },
-  { title: "Yeat - Bad bënd / DëMON", path: "assets/music/BadBend.mp3" },
-  { title: "Ken Carson - Hardcore", path: "assets/music/Hardcore.mp3" },
-  { title: "Che - I Rot, I Rot", path: "assets/music/IRotIRot.mp3" },
-  { title: "Yeat - GO2WORK", path: "assets/music/GO2WORK.mp3" },
-  { title: "Ken Carson - Rock N Roll", path: "assets/music/RockNRoll.mp3" },
-  { title: "Ken Carson - Overseas", path: "assets/music/Overseas.mp3" },
-  { title: "Ken Carson - Nightcore 2", path: "assets/music/Nightcore2.mp3" },
-  { title: "yuke - my bad", path: "assets/music/mybad.mp3" },
-  { title: "yuke - RRegret", path: "assets/music/RRegret.mp3" },
-  {
-    title: "OsamaSon - ik what you did last summer",
-    path: "assets/music/ikwydls.mp3",
-  },
-  { title: "OsamaSon - Baghdad", path: "assets/music/Baghdad.mp3" },
-  { title: "OsamaSon - Troops", path: "assets/music/Troops.mp3" },
-  { title: "OsamaSon - X & Sex", path: "assets/music/X&Sex.mp3" },
-  { title: "OsamaSon - Freestyle", path: "assets/music/Freestyle.mp3" },
-  { title: "OsamaSon - Frontin", path: "assets/music/Frontin.mp3" },
-];
+const musicDir = "assets/music/";
+let tracks = [];
 
 audioPlayer.volume = 0.1;
 let currentTrack = 0;
@@ -332,7 +286,9 @@ function showDefaultFooter(animationClass) {
   footer.classList.add(animationClass);
 }
 
-window.onload = function () {
+window.onload = async function () {
+  await fetchMusicFiles();
+
   tracks.forEach((track) => {
     createLyricsQuery(track);
   });
@@ -378,3 +334,100 @@ window.onload = function () {
 
   showDefaultFooter("slide-in-right");
 };
+
+async function fetchMusicFiles() {
+  try {
+    const response = await fetch("assets/music/");
+    if (!response.ok) throw new Error("Failed to fetch music files");
+
+    const text = await response.text();
+    const fileNames = [...text.matchAll(/href="([^"]+\.m4a)"/g)].map(
+      (match) => match[1]
+    );
+
+    if (fileNames.length === 0) throw new Error("No music files found");
+
+    const trackPromises = fileNames.map(async (file) => {
+      const cleanName = decodeURIComponent(
+        file.replace(".m4a", "").replace(/_/g, " ")
+      );
+
+      const [artist, title] = cleanName.includes(" - ")
+        ? cleanName.split(" - ")
+        : ["Unknown", cleanName];
+
+      const track = {
+        title: `${artist} - ${title.split(" [")[0]}`,
+        path: `assets/music/${file}`,
+      };
+
+      try {
+        const blob = await fetch(track.path).then((res) => res.blob());
+        const fileObj = new File([blob], file, { type: "audio/m4a" });
+
+        const tagData = await new Promise((resolve, reject) => {
+          jsmediatags.read(fileObj, {
+            onSuccess: function (tag) {
+              resolve(tag.tags);
+            },
+            onError: function (error) {
+              reject(error);
+            },
+          });
+        });
+
+        if (tagData) {
+          track.title = tagData.title || track.title;
+          track.artist = tagData.artist || artist;
+        }
+      } catch (error) {
+        console.warn("Error fetching metadata for", track.path, error);
+      }
+
+      return track;
+    });
+
+    tracks = await Promise.all(trackPromises);
+
+    loadRandomTrack();
+  } catch (error) {
+    console.error("Error fetching music files:", error);
+  }
+}
+
+async function extractMetadata(filePath) {
+  const response = await fetch(filePath);
+  const arrayBuffer = await response.arrayBuffer();
+  const blob = new Blob([arrayBuffer]);
+
+  const jsmediatags = await import(
+    "https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"
+  );
+
+  return new Promise((resolve, reject) => {
+    jsmediatags.default.read(blob, {
+      onSuccess: (tag) => {
+        let metadata = {
+          title: tag.tags.title || null,
+          artist: tag.tags.artist || null,
+          albumCover: null,
+        };
+
+        if (tag.tags.picture) {
+          let { data, format } = tag.tags.picture;
+          let base64String = "";
+          for (let i = 0; i < data.length; i++) {
+            base64String += String.fromCharCode(data[i]);
+          }
+          metadata.albumCover = `data:${format};base64,${btoa(base64String)}`;
+        }
+
+        resolve(metadata);
+      },
+      onError: (error) => {
+        console.error("Metadata extraction error:", error);
+        resolve({});
+      },
+    });
+  });
+}
