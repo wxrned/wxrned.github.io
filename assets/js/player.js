@@ -19,7 +19,6 @@ const pfpImage = document.getElementById("dc-pfp");
 const API_URL = "https://api.wxrn.lol/api/lyrics";
 const defaultFooterText = "〤 @4kpx 〤";
 
-const musicDir = "assets/music/";
 let tracks = [];
 
 audioPlayer.volume = 0.1;
@@ -337,7 +336,7 @@ window.onload = async function () {
 
 async function fetchMusicFiles() {
   try {
-    const response = await fetch("assets/music/");
+    const response = await fetch("/assets/music/");
     if (!response.ok) throw new Error("Failed to fetch music files");
 
     const text = await response.text();
@@ -358,7 +357,7 @@ async function fetchMusicFiles() {
 
       const track = {
         title: `${artist} - ${title.split(" [")[0]}`,
-        path: `assets/music/${file}`,
+        path: `/assets/music/${file}`,
       };
 
       try {
