@@ -19,7 +19,55 @@ const pfpImage = document.getElementById("dc-pfp");
 const API_URL = "https://api.wxrn.lol/api/lyrics";
 const defaultFooterText = "〤 @4kpx 〤";
 
-let tracks = [];
+const tracks = [
+  {
+    title: "Destroy Lonely - if looks could kill",
+    path: "assets/music/iflookscouldkill.mp3",
+  },
+  {
+    title: "Yeat - bigger thën everything",
+    path: "assets/music/BiggerThenEverything.mp3",
+  },
+  { title: "Yeat - Power Trip", path: "assets/music/PowerTrip.mp3" },
+  { title: "Yeat - Heavy stunts", path: "assets/music/HeavyStunts.mp3" },
+  { title: "Yeat - Tell më", path: "assets/music/TellMe.mp3" },
+  { title: "Destroy Lonely - how u feel?", path: "assets/music/HowUFeel.mp3" },
+  { title: "Yeat - Luv monëy", path: "assets/music/LuvMoney.mp3" },
+  { title: "Ken Carson - Succubus", path: "assets/music/Succubus.mp3" },
+  { title: "Yeat - Shade", path: "assets/music/Shade.mp3" },
+  { title: "Ken Carson - Green Room", path: "assets/music/GreenRoom.mp3" },
+  { title: "Ken Carson - Lose It", path: "assets/music/LoseIt.mp3" },
+  { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" },
+  { title: "Playboi Carti - Fell In Luv", path: "assets/music/FellInLuv.mp3" },
+  {
+    title: "Trippie Redd x Summrs - BIGGEST BIRD",
+    path: "assets/music/BiggestBird.mp3",
+  },
+  { title: "Yeat - No morë talk", path: "assets/music/NoMoreTalk.mp3" },
+  { title: "Yeat - Talk", path: "assets/music/Talk.mp3" },
+  { title: "Yeat - Already Rich", path: "assets/music/AlreadyRich.mp3" },
+  { title: "Destroy Lonely - THRILL", path: "assets/music/THRILL.mp3" },
+  { title: "Yeat - GEEK TIMË", path: "assets/music/GeekTime.mp3" },
+  { title: "Ken Carson - loading", path: "assets/music/Loading.mp3" },
+  { title: "Yeat - Bad bënd / DëMON", path: "assets/music/BadBend.mp3" },
+  { title: "Ken Carson - Hardcore", path: "assets/music/Hardcore.mp3" },
+  { title: "Che - I Rot, I Rot", path: "assets/music/IRotIRot.mp3" },
+  { title: "Yeat - GO2WORK", path: "assets/music/GO2WORK.mp3" },
+  { title: "Ken Carson - Rock N Roll", path: "assets/music/RockNRoll.mp3" },
+  { title: "Ken Carson - Overseas", path: "assets/music/Overseas.mp3" },
+  { title: "Ken Carson - Nightcore 2", path: "assets/music/Nightcore2.mp3" },
+  { title: "yuke - my bad", path: "assets/music/mybad.mp3" },
+  { title: "yuke - RRegret", path: "assets/music/RRegret.mp3" },
+  {
+    title: "OsamaSon - ik what you did last summer",
+    path: "assets/music/ikwydls.mp3",
+  },
+  { title: "OsamaSon - Baghdad", path: "assets/music/Baghdad.mp3" },
+  { title: "OsamaSon - Troops", path: "assets/music/Troops.mp3" },
+  { title: "OsamaSon - X & Sex", path: "assets/music/X&Sex.mp3" },
+  { title: "OsamaSon - Freestyle", path: "assets/music/Freestyle.mp3" },
+  { title: "OsamaSon - Frontin", path: "assets/music/Frontin.mp3" },
+];
 
 audioPlayer.volume = 0.1;
 let currentTrack = 0;
@@ -286,7 +334,7 @@ function showDefaultFooter(animationClass) {
 }
 
 window.onload = async function () {
-  await fetchMusicFiles();
+  // await fetchMusicFiles();
 
   tracks.forEach((track) => {
     createLyricsQuery(track);
