@@ -17,7 +17,7 @@ const lyricsButton = document.getElementById("lyrics-button");
 const pfpImage = document.getElementById("dc-pfp");
 
 const API_URL = "https://api.wxrn.lol/api/lyrics";
-const defaultFooterText = "〤 @4kpx 〤";
+const defaultFooterText = "〤 probably coding lol 〤";
 
 const tracks = [
   {
