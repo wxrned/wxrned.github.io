@@ -16,7 +16,8 @@ const lyricsCloseBtn = document.getElementById("lyrics-close");
 const lyricsButton = document.getElementById("lyrics-button");
 const pfpImage = document.getElementById("dc-pfp");
 
-const API_URL = "https://api.wxrn.lol/api/lyrics";
+const API_KEY = "19e10c07b37daa7e48724ba6e7e6bded";
+const API_URL = "https://api.musixmatch.com/ws/1.1/matcher.subtitle.get";
 const defaultFooterText = "〤 probably coding lol 〤";
 
 const tracks = [
@@ -196,46 +197,96 @@ function loadTrack(index, animationClass) {
   displayLyrics(currentTrack);
 }
 
-async function fetchLyrics(track, options = {}) {
+async function getTrackID(songName, artistName) {
+  const searchUrl = `https://api.musixmatch.com/ws/1.1/track.search?q_track=${encodeURIComponent(
+    songName
+  )}&q_artist=${encodeURIComponent(
+    artistName
+  )}&page_size=1&page=1&s_track_rating=desc&apikey=${API_KEY}`;
+  try {
+    const response = await fetch(searchUrl);
+    const data = await response.json();
+    if (data.message.body.track_list.length > 0) {
+      return data.message.body.track_list[0].track.track_id;
+    } else {
+      throw new Error("Track not found");
+    }
+  } catch (error) {
+    console.error("Error fetching track ID:", error);
+    return null;
+  }
+}
+
+async function fetchLyrics(track) {
   const response = await fetch(
-    `${API_URL}?query=${encodeURIComponent(track)}`,
-    options
+    `${API_URL}?q_track=${encodeURIComponent(
+      track
+    )}&apikey=${API_KEY}&format=json`
   );
+
   if (!response.ok) throw new Error("Network response was not ok");
+
   const data = await response.json();
-  return data;
+
+  if (
+    !data.message ||
+    !data.message.body ||
+    !data.message.body.subtitle_list.length
+  ) {
+    throw new Error("No lyrics found");
+  }
+
+  const subtitles = data.message.body.subtitle_list[0].subtitle.subtitle_body;
+  return parseLrc(subtitles);
+}
+
+function parseLrc(lrcString) {
+  return lrcString
+    .split("\n")
+    .map((line) => {
+      const match = line.match(/\[(\d+):(\d+).(\d+)\](.*)/);
+      if (!match) return null;
+      return {
+        seconds:
+          parseInt(match[1]) * 60 +
+          parseInt(match[2]) +
+          parseInt(match[3]) / 1000,
+        lyrics: match[4].trim(),
+      };
+    })
+    .filter((line) => line);
 }
 
 async function displayLyrics() {
-  const playingTrack = tracks[currentTrack].lyricsQuery;
+  const fullTitle = tracks[currentTrack].title;
+  const [songArtist, songTitle] = fullTitle.includes(" - ")
+    ? fullTitle.split(" - ")
+    : [fullTitle, fullTitle];
+
   lyricsDisplay.innerHTML = "<div class='loading'></div>";
   lyricsDisplay.style.color = "white";
   isLoading = true;
 
   try {
-    const lyricsArray = await fetchLyrics(playingTrack);
-    if (!lyricsArray || lyricsArray.error) {
+    const trackID = await getTrackID(songTitle, songArtist);
+    if (!trackID) {
+      throw new Error("Track ID not found");
+    }
+
+    const lyricsArray = await fetchLyrics(trackID);
+    if (!lyricsArray.length) {
       lyricsDisplay.innerHTML = "No lyrics available.";
       isLoading = false;
       return;
     }
 
     lyricsDisplay.textContent = "";
-
     const lyricsWrapper = document.createElement("div");
     lyricsWrapper.className = "lyrics-wrapper";
     lyricsDisplay.appendChild(lyricsWrapper);
-    const fullTitle = tracks[currentTrack].title;
-    const songArtist = fullTitle.includes(" - ")
-      ? fullTitle.split(" - ")[0]
-      : fullTitle;
-    const songTitle = fullTitle.includes(" - ")
-      ? fullTitle.split(" - ")[1]
-      : fullTitle;
 
     lyricsWrapper.innerHTML = `<div class="lyric-line title">${songArtist}<br><br>${songTitle}</div>`;
-    const firstLyricTimestamp =
-      lyricsArray.length > 0 ? lyricsArray[0].seconds : 0;
+    const firstLyricTimestamp = lyricsArray[0]?.seconds || 0;
     let lastRenderedIndex = -1;
 
     const updateDisplayedLyrics = () => {
@@ -245,28 +296,28 @@ async function displayLyrics() {
         return;
       }
 
-      let currentIndex = 0;
-      for (let i = 0; i < lyricsArray.length; i++) {
-        if (currentTime >= lyricsArray[i].seconds) {
-          currentIndex = i;
-        } else {
-          break;
-        }
-      }
+      let currentIndex = lyricsArray.findIndex(
+        (line, i) =>
+          currentTime >= line.seconds &&
+          (!lyricsArray[i + 1] || currentTime < lyricsArray[i + 1].seconds)
+      );
 
       if (currentIndex !== lastRenderedIndex) {
         lastRenderedIndex = currentIndex;
         lyricsWrapper.innerHTML = "";
+
         if (currentIndex > 0) {
           const prevLine = document.createElement("div");
           prevLine.className = "lyric-line previous";
           prevLine.textContent = lyricsArray[currentIndex - 1].lyrics;
           lyricsWrapper.appendChild(prevLine);
         }
+
         const currentLine = document.createElement("div");
         currentLine.className = "lyric-line highlight slide-in";
         currentLine.textContent = lyricsArray[currentIndex].lyrics;
         lyricsWrapper.appendChild(currentLine);
+
         if (currentIndex < lyricsArray.length - 1) {
           const nextLine = document.createElement("div");
           nextLine.className = "lyric-line next slide-in";
@@ -283,17 +334,9 @@ async function displayLyrics() {
     audioPlayer.removeEventListener("timeupdate", updateDisplayedLyrics);
     audioPlayer.addEventListener("timeupdate", updateDisplayedLyrics);
   } catch (error) {
-    if (error.name === "AbortError") {
-      console.warn("Fetch aborted for lyrics.");
-    } else {
-      lyricsDisplay.innerHTML =
-        "<div class='loading'>No lyrics available</div>";
-      console.error("Error fetching lyrics:", error);
-      setTimeout(() => {
-        lyricsDisplay.innerHTML =
-          "<div class='error-display'>No lyrics available</div>";
-      }, 1000);
-    }
+    console.error("Error fetching lyrics:", error);
+    lyricsDisplay.innerHTML =
+      "<div class='error-display'>No lyrics available</div>";
   } finally {
     isLoading = false;
   }
