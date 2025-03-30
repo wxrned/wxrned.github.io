@@ -16,8 +16,7 @@ const lyricsCloseBtn = document.getElementById("lyrics-close");
 const lyricsButton = document.getElementById("lyrics-button");
 const pfpImage = document.getElementById("dc-pfp");
 
-const API_KEY = "19e10c07b37daa7e48724ba6e7e6bded";
-const API_URL = "https://api.musixmatch.com/ws/1.1/matcher.subtitle.get";
+const API_URL = "https://api.wxrn.lol/api/lyrics";
 const defaultFooterText = "〤 probably coding lol 〤";
 
 const tracks = [
@@ -69,6 +68,12 @@ const tracks = [
   { title: "OsamaSon - Freestyle", path: "assets/music/Freestyle.mp3" },
   { title: "OsamaSon - Frontin", path: "assets/music/Frontin.mp3" },
 ];
+
+tracks.forEach((track) => {
+  const [artist, song] = track.title.split(" - ");
+  track.artist = artist;
+  track.song = song;
+});
 
 audioPlayer.volume = 0.1;
 let currentTrack = 0;
@@ -194,50 +199,12 @@ function loadTrack(index, animationClass) {
   footer.classList.remove("slide-in-right", "slide-in-left");
   void footer.offsetWidth;
   footer.classList.add(animationClass);
-  displayLyrics(currentTrack);
-}
-
-async function getTrackID(songName, artistName) {
-  const searchUrl = `https://api.musixmatch.com/ws/1.1/track.search?q_track=${encodeURIComponent(
-    songName
-  )}&q_artist=${encodeURIComponent(
-    artistName
-  )}&page_size=1&page=1&s_track_rating=desc&apikey=${API_KEY}`;
-  try {
-    const response = await fetch(searchUrl);
-    const data = await response.json();
-    if (data.message.body.track_list.length > 0) {
-      return data.message.body.track_list[0].track.track_id;
-    } else {
-      throw new Error("Track not found");
-    }
-  } catch (error) {
-    console.error("Error fetching track ID:", error);
-    return null;
-  }
-}
-
-async function fetchLyrics(track) {
-  const response = await fetch(
-    `${API_URL}?q_track=${encodeURIComponent(
-      track
-    )}&apikey=${API_KEY}&format=json`
+  displayLyrics(
+    tracks[currentTrack].song,
+    tracks[currentTrack].artist,
+    audioPlayer,
+    lyricsDisplay
   );
-
-  if (!response.ok) throw new Error("Network response was not ok");
-
-  const data = await response.json();
-
-  if (
-    !data.message ||
-    !data.message.body ||
-    !data.message.body.subtitle_list.length
-  ) {
-    throw new Error("No lyrics found");
-  }
-
-  const subtitles = data.message.body.subtitle_list[0].subtitle.subtitle_body;
-  return parseLrc(subtitles);
 }
 
 function parseLrc(lrcString) {
@@ -254,29 +221,43 @@ function parseLrc(lrcString) {
         lyrics: match[4].trim(),
       };
     })
-    .filter((line) => line);
+    .filter(Boolean);
 }
 
-async function displayLyrics() {
-  const fullTitle = tracks[currentTrack].title;
-  const [songArtist, songTitle] = fullTitle.includes(" - ")
-    ? fullTitle.split(" - ")
-    : [fullTitle, fullTitle];
+async function fetchLyrics(songName, artistName) {
+  console.log("Fetching lyrics for:", songName, artistName); // Log to track function execution
+  const response = await fetch(
+    `${API_URL}?song=${encodeURIComponent(
+      songName
+    )}&artist=${encodeURIComponent(artistName)}`
+  );
 
-  lyricsDisplay.innerHTML = "<div class='loading'></div>";
+  if (!response.ok) {
+    console.error("Network response was not ok");
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+  console.log("Lyrics data:", data); // Log the data returned from API
+
+  if (!data.lyrics) {
+    console.error("No lyrics found");
+    throw new Error("No lyrics found");
+  }
+
+  return parseLrc(data.lyrics);
+}
+
+async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
+  console.log("Displaying lyrics for:", songName, artistName);
+  lyricsDisplay.innerHTML = "<div class='loading'>Loading lyrics...</div>";
   lyricsDisplay.style.color = "white";
-  isLoading = true;
 
   try {
-    const trackID = await getTrackID(songTitle, songArtist);
-    if (!trackID) {
-      throw new Error("Track ID not found");
-    }
-
-    const lyricsArray = await fetchLyrics(trackID);
+    const lyricsArray = await fetchLyrics(songName, artistName);
+    console.log("Fetched lyrics array:", lyricsArray);
     if (!lyricsArray.length) {
       lyricsDisplay.innerHTML = "No lyrics available.";
-      isLoading = false;
       return;
     }
 
@@ -285,14 +266,14 @@ async function displayLyrics() {
     lyricsWrapper.className = "lyrics-wrapper";
     lyricsDisplay.appendChild(lyricsWrapper);
 
-    lyricsWrapper.innerHTML = `<div class="lyric-line title">${songArtist}<br><br>${songTitle}</div>`;
     const firstLyricTimestamp = lyricsArray[0]?.seconds || 0;
     let lastRenderedIndex = -1;
 
     const updateDisplayedLyrics = () => {
       const currentTime = audioPlayer.currentTime;
+      console.log("Current time:", currentTime);
       if (currentTime < firstLyricTimestamp) {
-        lyricsWrapper.innerHTML = `<div class="lyric-line title">${songArtist}<br><br>${songTitle}</div>`;
+        lyricsWrapper.innerHTML = "";
         return;
       }
 
@@ -337,8 +318,6 @@ async function displayLyrics() {
     console.error("Error fetching lyrics:", error);
     lyricsDisplay.innerHTML =
       "<div class='error-display'>No lyrics available</div>";
-  } finally {
-    isLoading = false;
   }
 }
 
