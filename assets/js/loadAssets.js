@@ -7,26 +7,52 @@ async function fetchAvatarsForAll() {
   const avatarElement = document.querySelector("#dc-pfp");
   const faviconElement = document.querySelector("#short-icon");
 
-  if (avatarElement) {
-    avatarElement.src = "assets/img/black.png";
-    const resData = await fetchImages(avatarElement, discordId);
+if (avatarElement) {
+  avatarElement.src = "assets/img/black.png";
+  avatarElement.style.borderRadius = "50%"; // Makes the image round
 
-    if (resData && resData.bannerUrl) {
-      document.body.style.backgroundImage = `url(${
-        resData.bannerUrl + "?size=1024"
-      })`;
-      document.body.style.backgroundSize = "cover";
-      document.body.style.backgroundPosition = "center";
-    }
+  const resData = await fetchImages(avatarElement, discordId);
 
-    if (resData && resData.avatarUrl && faviconElement) {
-      faviconElement.href = resData.avatarUrl;
-    } else if (!faviconElement) {
-      console.error('No element with id="short-icon" found.');
-    }
-  } else {
-    console.error('No element with id="dc-pfp" found.');
+  if (resData && resData.bannerUrl) {
+    document.body.style.backgroundImage = `url(${resData.bannerUrl + "?size=1024"})`;
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundPosition = "center";
   }
+
+  if (resData && resData.avatarUrl) {
+    avatarElement.src = resData.avatarUrl;
+  }
+
+  if (resData && resData.profileDecorationUrl) {
+    const decorationElement = document.createElement("img");
+    decorationElement.src = resData.profileDecorationUrl;
+    decorationElement.style.position = "absolute";
+    decorationElement.style.top = "0";
+    decorationElement.style.left = "0";
+    decorationElement.style.width = "100%";
+    decorationElement.style.height = "100%";
+    decorationElement.style.pointerEvents = "none"; // Prevents interaction
+    decorationElement.style.borderRadius = "50%"; // Ensures the decoration follows the round shape
+
+    // Ensure the avatar container is positioned correctly
+    const avatarContainer = avatarElement.parentElement;
+    avatarContainer.style.position = "relative";
+    avatarContainer.style.display = "inline-block";
+    avatarContainer.style.width = avatarElement.width + "px";
+    avatarContainer.style.height = avatarElement.height + "px";
+
+    // Append the decoration overlay
+    avatarContainer.appendChild(decorationElement);
+  }
+
+  if (resData && resData.avatarUrl && faviconElement) {
+    faviconElement.href = resData.avatarUrl;
+  } else if (!faviconElement) {
+    console.error('No element with id="short-icon" found.');
+  }
+} else {
+  console.error('No element with id="dc-pfp" found.');
+}
 
   for (let li of liElements) {
     const imgElement = li.querySelector("img");
