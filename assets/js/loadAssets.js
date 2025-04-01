@@ -10,6 +10,7 @@ async function fetchAvatarsForAll() {
 if (avatarElement) {
   avatarElement.src = "assets/img/black.png";
   avatarElement.style.borderRadius = "50%"; // Round avatar
+  avatarElement.style.border = "3px solid white"; // Optional: Adds a subtle outline
 
   const resData = await fetchImages(avatarElement, discordId);
 
@@ -31,26 +32,24 @@ if (avatarElement) {
       avatarContainer.id = "avatar-container";
       avatarContainer.style.position = "relative";
       avatarContainer.style.display = "inline-block";
-      avatarContainer.style.borderRadius = "50%"; // Keep container round
 
-      // Ensure it wraps tightly around the avatar
+      // Wraps the avatar inside the container
       avatarElement.parentNode.insertBefore(avatarContainer, avatarElement);
       avatarContainer.appendChild(avatarElement);
     }
 
-    // Ensure the container matches avatar size
+    // Ensure the container matches the avatar size
     avatarContainer.style.width = avatarElement.clientWidth + "px";
     avatarContainer.style.height = avatarElement.clientHeight + "px";
 
     let decorationElement = document.createElement("img");
     decorationElement.src = resData.profileDecorationUrl;
     decorationElement.style.position = "absolute";
-    decorationElement.style.top = "-5%"; // Move decoration slightly up
-    decorationElement.style.left = "-5%"; // Adjust for full coverage
-    decorationElement.style.width = "110%"; // Make it slightly larger than the avatar
-    decorationElement.style.height = "110%";
+    decorationElement.style.top = "-8%"; // Moves slightly up to align like Discord
+    decorationElement.style.left = "-8%"; // Ensures full coverage
+    decorationElement.style.width = "116%"; // Slightly larger than the avatar
+    decorationElement.style.height = "116%";
     decorationElement.style.pointerEvents = "none"; // Prevent interaction
-    decorationElement.style.borderRadius = "50%"; // Matches round shape
 
     // Remove any existing decoration before adding a new one
     let oldDecoration = document.getElementById("avatar-decoration");
