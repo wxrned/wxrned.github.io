@@ -9,7 +9,8 @@ async function fetchAvatarsForAll() {
 
 if (avatarElement) {
   avatarElement.src = "assets/img/black.png";
-  avatarElement.style.borderRadius = "50%"; // Makes the image round
+  avatarElement.style.borderRadius = "50%"; // Ensures round avatar
+  avatarElement.style.position = "relative"; // Ensures proper stacking
 
   const resData = await fetchImages(avatarElement, discordId);
 
@@ -24,7 +25,23 @@ if (avatarElement) {
   }
 
   if (resData && resData.profileDecorationUrl) {
-    const decorationElement = document.createElement("img");
+    let avatarContainer = document.getElementById("avatar-container");
+
+    if (!avatarContainer) {
+      avatarContainer = document.createElement("div");
+      avatarContainer.id = "avatar-container";
+      avatarContainer.style.position = "relative";
+      avatarContainer.style.display = "inline-block";
+      avatarContainer.style.width = avatarElement.clientWidth + "px";
+      avatarContainer.style.height = avatarElement.clientHeight + "px";
+      avatarContainer.style.borderRadius = "50%"; // Keep container round
+      avatarContainer.style.overflow = "hidden"; // Prevents decoration from spilling
+
+      avatarElement.parentNode.insertBefore(avatarContainer, avatarElement);
+      avatarContainer.appendChild(avatarElement);
+    }
+
+    let decorationElement = document.createElement("img");
     decorationElement.src = resData.profileDecorationUrl;
     decorationElement.style.position = "absolute";
     decorationElement.style.top = "0";
@@ -32,16 +49,8 @@ if (avatarElement) {
     decorationElement.style.width = "100%";
     decorationElement.style.height = "100%";
     decorationElement.style.pointerEvents = "none"; // Prevents interaction
-    decorationElement.style.borderRadius = "50%"; // Ensures the decoration follows the round shape
+    decorationElement.style.borderRadius = "50%"; // Matches round shape
 
-    // Ensure the avatar container is positioned correctly
-    const avatarContainer = avatarElement.parentElement;
-    avatarContainer.style.position = "relative";
-    avatarContainer.style.display = "inline-block";
-    avatarContainer.style.width = avatarElement.width + "px";
-    avatarContainer.style.height = avatarElement.height + "px";
-
-    // Append the decoration overlay
     avatarContainer.appendChild(decorationElement);
   }
 
