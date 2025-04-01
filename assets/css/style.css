@@ -205,6 +205,33 @@ a:hover,
   box-shadow: 0 0 15px var(--accent-color);
 }
 
+#avatar-container, #avatar-decoration {
+  overflow: visible !important;
+  clip-path: none !important;
+}
+
+#avatar-decoration {
+  position: absolute !important;
+  top: -10%; /* Adjust as needed */
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  z-index: 9999 !important;
+  pointer-events: none;
+}
+
+/* Ensure avatar is positioned correctly */
+#avatar-container {
+  position: relative; /* Keeps avatar in place */
+  display: inline-block;
+}
+
+/* If needed, ensure higher-level containers don't cut off decoration */
+body, html {
+  overflow: visible !important;
+}
+
+
 .platforms-popup {
   position: relative;
 }
