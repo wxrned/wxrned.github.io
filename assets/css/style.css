@@ -51,6 +51,10 @@ body {
   -o-user-select: none;
 }
 
+body, html {
+  overflow: visible !important;
+}
+
 .no-click * {
   pointer-events: none;
 }
@@ -216,7 +220,7 @@ a:hover,
   left: -10%;
   width: 120%;
   height: 120%;
-  z-index: 9999 !important;
+  z-index: 9980 !important;
   pointer-events: none;
 }
 
@@ -225,12 +229,6 @@ a:hover,
   position: relative; /* Keeps avatar in place */
   display: inline-block;
 }
-
-/* If needed, ensure higher-level containers don't cut off decoration */
-body, html {
-  overflow: visible !important;
-}
-
 
 .platforms-popup {
   position: relative;
