@@ -10,7 +10,7 @@ async function fetchAvatarsForAll() {
 if (avatarElement) {
   avatarElement.src = "assets/img/black.png";
   avatarElement.style.borderRadius = "50%"; // Round avatar
-  avatarElement.style.border = "3px solid white"; // Optional: Adds outline
+  avatarElement.style.border = "3px solid white"; // Optional: Avatar outline
 
   const resData = await fetchImages(avatarElement, discordId);
 
@@ -25,34 +25,46 @@ if (avatarElement) {
   }
 
   if (resData && resData.profileDecorationUrl) {
+    let avatarContainer = document.getElementById("avatar-container");
+
+    // Create the container if it doesn't exist
+    if (!avatarContainer) {
+      avatarContainer = document.createElement("div");
+      avatarContainer.id = "avatar-container";
+      avatarContainer.style.position = "relative"; // Ensures proper overlaying
+      avatarContainer.style.display = "inline-block";
+
+      // Move avatar inside container
+      avatarElement.parentNode.insertBefore(avatarContainer, avatarElement);
+      avatarContainer.appendChild(avatarElement);
+    }
+
+    // Ensure the container is correctly sized
+    avatarContainer.style.width = avatarElement.clientWidth + "px";
+    avatarContainer.style.height = avatarElement.clientHeight + "px";
+
     let decorationElement = document.getElementById("avatar-decoration");
 
-    // Create the decoration if it doesn't exist
+    // Create decoration if it doesn’t exist
     if (!decorationElement) {
       decorationElement = document.createElement("img");
       decorationElement.id = "avatar-decoration";
-      document.body.appendChild(decorationElement); // Append it to body, not inside avatar container
+      avatarContainer.appendChild(decorationElement);
     }
 
-    // Set decoration properties
+    // Set decoration styles
     decorationElement.src = resData.profileDecorationUrl;
     decorationElement.style.position = "absolute";
-    decorationElement.style.width = "120%"; // Slightly larger than avatar
+    decorationElement.style.top = "-10%"; // Move up slightly to match Discord
+    decorationElement.style.left = "-10%"; // Slightly offset to fit correctly
+    decorationElement.style.width = "120%"; // Slightly larger for correct fit
     decorationElement.style.height = "120%";
     decorationElement.style.pointerEvents = "none"; // Prevent interaction
-    decorationElement.style.zIndex = "9999"; // Ensures it's always on top
+    decorationElement.style.zIndex = "2"; // Ensure it's above the avatar
 
-    // Position the decoration to match the avatar's position
-    const avatarRect = avatarElement.getBoundingClientRect();
-    decorationElement.style.left = `${avatarRect.left - avatarElement.clientWidth * 0.1}px`;
-    decorationElement.style.top = `${avatarRect.top - avatarElement.clientHeight * 0.1}px`;
-
-    // Reposition on window resize (ensures it stays aligned)
-    window.addEventListener("resize", () => {
-      const avatarRect = avatarElement.getBoundingClientRect();
-      decorationElement.style.left = `${avatarRect.left - avatarElement.clientWidth * 0.1}px`;
-      decorationElement.style.top = `${avatarRect.top - avatarElement.clientHeight * 0.1}px`;
-    });
+    // Ensure avatar is below the decoration
+    avatarElement.style.position = "relative";
+    avatarElement.style.zIndex = "1";
   }
 
   if (resData && resData.avatarUrl && faviconElement) {
