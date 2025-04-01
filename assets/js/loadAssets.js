@@ -9,8 +9,7 @@ async function fetchAvatarsForAll() {
 
 if (avatarElement) {
   avatarElement.src = "assets/img/black.png";
-  avatarElement.style.borderRadius = "50%"; // Ensures round avatar
-  avatarElement.style.position = "relative"; // Ensures proper stacking
+  avatarElement.style.borderRadius = "50%"; // Round avatar
 
   const resData = await fetchImages(avatarElement, discordId);
 
@@ -32,25 +31,32 @@ if (avatarElement) {
       avatarContainer.id = "avatar-container";
       avatarContainer.style.position = "relative";
       avatarContainer.style.display = "inline-block";
-      avatarContainer.style.width = avatarElement.clientWidth + "px";
-      avatarContainer.style.height = avatarElement.clientHeight + "px";
       avatarContainer.style.borderRadius = "50%"; // Keep container round
-      avatarContainer.style.overflow = "hidden"; // Prevents decoration from spilling
 
+      // Ensure it wraps tightly around the avatar
       avatarElement.parentNode.insertBefore(avatarContainer, avatarElement);
       avatarContainer.appendChild(avatarElement);
     }
 
+    // Ensure the container matches avatar size
+    avatarContainer.style.width = avatarElement.clientWidth + "px";
+    avatarContainer.style.height = avatarElement.clientHeight + "px";
+
     let decorationElement = document.createElement("img");
     decorationElement.src = resData.profileDecorationUrl;
     decorationElement.style.position = "absolute";
-    decorationElement.style.top = "0";
-    decorationElement.style.left = "0";
-    decorationElement.style.width = "100%";
-    decorationElement.style.height = "100%";
-    decorationElement.style.pointerEvents = "none"; // Prevents interaction
+    decorationElement.style.top = "-5%"; // Move decoration slightly up
+    decorationElement.style.left = "-5%"; // Adjust for full coverage
+    decorationElement.style.width = "110%"; // Make it slightly larger than the avatar
+    decorationElement.style.height = "110%";
+    decorationElement.style.pointerEvents = "none"; // Prevent interaction
     decorationElement.style.borderRadius = "50%"; // Matches round shape
 
+    // Remove any existing decoration before adding a new one
+    let oldDecoration = document.getElementById("avatar-decoration");
+    if (oldDecoration) oldDecoration.remove();
+
+    decorationElement.id = "avatar-decoration";
     avatarContainer.appendChild(decorationElement);
   }
 
