@@ -32,6 +32,7 @@ if (avatarElement) {
     avatarContainer.id = "avatar-container";
     avatarContainer.style.position = "relative";
     avatarContainer.style.display = "inline-block";
+    avatarContainer.style.overflow = "visible"; // Allow decoration to overflow
 
     // Move avatar inside container
     avatarElement.parentNode.insertBefore(avatarContainer, avatarElement);
@@ -51,21 +52,20 @@ if (avatarElement) {
   if (!decorationElement) {
     decorationElement = document.createElement("img");
     decorationElement.id = "avatar-decoration";
-    decorationElement.src = resData.profileDecorationUrl;
-
-    // Append directly to the body to prevent clipping
-    document.body.appendChild(decorationElement);
+    avatarContainer.appendChild(decorationElement); // Append inside avatarContainer
   }
 
-  // Apply decoration styles
+  // Set decoration properties
+  decorationElement.src = resData.profileDecorationUrl;
   decorationElement.style.position = "absolute";
-  decorationElement.style.top = avatarElement.getBoundingClientRect().top - (avatarElement.clientHeight * 0.1) + "px";
-  decorationElement.style.left = avatarElement.getBoundingClientRect().left - (avatarElement.clientWidth * 0.1) + "px";
-  decorationElement.style.width = avatarElement.clientWidth * 1.2 + "px";
-  decorationElement.style.height = avatarElement.clientHeight * 1.2 + "px";
-  decorationElement.style.zIndex = "9999";
+  decorationElement.style.top = "-10%"; // Slightly above the avatar
+  decorationElement.style.left = "-10%"; // Slightly offset for alignment
+  decorationElement.style.width = "120%"; // Scale to fit
+  decorationElement.style.height = "120%";
   decorationElement.style.pointerEvents = "none";
+  decorationElement.style.zIndex = "2"; // Ensure it's above the avatar
 }
+
 
   if (resData && resData.avatarUrl && faviconElement) {
     faviconElement.href = resData.avatarUrl;
