@@ -95,11 +95,11 @@ async function fetchAvatarsForAll() {
 
 async function fetchImages(imgElement, userId) {
   try {
-    let response = await fetch(`https://api.wxrn.lol/discord_info/${userId}`);
+    let response = await fetch(`https://api.wxrn.lol/discord/${userId}`);
 
     if (!response.ok) {
       response = await fetch(
-        `https://cors-anywhere.herokuapp.com/https://api.wxrn.lol/discord_info/${userId}`
+        `https://cors-anywhere.herokuapp.com/https://api.wxrn.lol/discord/${userId}`
       );
     }
 
