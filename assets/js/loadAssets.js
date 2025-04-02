@@ -7,74 +7,75 @@ async function fetchAvatarsForAll() {
   const avatarElement = document.querySelector("#dc-pfp");
   const faviconElement = document.querySelector("#short-icon");
 
-if (avatarElement) {
-  avatarElement.src = "assets/img/black.png";
-  avatarElement.style.borderRadius = "50%"; // Round avatar
-  avatarElement.style.border = "3px solid white"; // Optional: Avatar outline
+  if (avatarElement) {
+    avatarElement.src = "assets/img/black.png";
+    avatarElement.style.borderRadius = "50%"; // Round avatar
+    avatarElement.style.border = "3px solid white"; // Optional: Avatar outline
 
-  const resData = await fetchImages(avatarElement, discordId);
+    const resData = await fetchImages(avatarElement, discordId);
 
-  if (resData && resData.bannerUrl) {
-    document.body.style.backgroundImage = `url(${resData.bannerUrl + "?size=1024"})`;
-    document.body.style.backgroundSize = "cover";
-    document.body.style.backgroundPosition = "center";
+    if (resData && resData.bannerUrl) {
+      document.body.style.backgroundImage = `url(${
+        resData.bannerUrl + "?size=1024"
+      })`;
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundPosition = "center";
+    }
+
+    if (resData && resData.avatarUrl) {
+      avatarElement.src = resData.avatarUrl;
+    }
+
+    if (resData && resData.profileDecorationUrl) {
+      // Ensure avatar-container exists
+      let avatarContainer = document.getElementById("avatar-container");
+      if (!avatarContainer) {
+        avatarContainer = document.createElement("div");
+        avatarContainer.id = "avatar-container";
+        avatarContainer.style.position = "relative";
+        avatarContainer.style.display = "inline-block";
+        avatarContainer.style.overflow = "visible"; // Allow decoration to overflow
+
+        // Move avatar inside container
+        avatarElement.parentNode.insertBefore(avatarContainer, avatarElement);
+        avatarContainer.appendChild(avatarElement);
+      }
+
+      // Ensure the container is correctly sized
+      avatarContainer.style.width = avatarElement.clientWidth + "px";
+      avatarContainer.style.height = avatarElement.clientHeight + "px";
+
+      // Ensure avatar is below the decoration
+      avatarElement.style.position = "relative";
+      avatarElement.style.zIndex = "1";
+
+      // Create or select decoration element
+      let decorationElement = document.getElementById("avatar-decoration");
+      if (!decorationElement) {
+        decorationElement = document.createElement("img");
+        decorationElement.id = "avatar-decoration";
+        avatarContainer.appendChild(decorationElement); // Append inside avatarContainer
+      }
+
+      // Set decoration properties
+      decorationElement.src = resData.profileDecorationUrl;
+      decorationElement.style.position = "absolute";
+      decorationElement.style.top = "-10%"; // Slightly above the avatar
+      decorationElement.style.left = "-10%"; // Slightly offset for alignment
+      decorationElement.style.width = "120%"; // Scale to fit
+      decorationElement.style.height = "120%";
+      decorationElement.style.pointerEvents = "none";
+      decorationElement.style.zIndex = "2"; // Ensure it's above the avatar
+    }
+
+    if (resData && resData.avatarUrl && faviconElement) {
+      faviconElement.href = resData.avatarUrl;
+    } else if (!faviconElement) {
+      console.error('No element with id="short-icon" found.');
+    }
+  } else {
+    console.error('No element with id="dc-pfp" found.');
   }
-
-  if (resData && resData.avatarUrl) {
-    avatarElement.src = resData.avatarUrl;
-  }
-
-  if (resData && resData.profileDecorationUrl) {
-  // Ensure avatar-container exists
-  let avatarContainer = document.getElementById("avatar-container");
-  if (!avatarContainer) {
-    avatarContainer = document.createElement("div");
-    avatarContainer.id = "avatar-container";
-    avatarContainer.style.position = "relative";
-    avatarContainer.style.display = "inline-block";
-    avatarContainer.style.overflow = "visible"; // Allow decoration to overflow
-
-    // Move avatar inside container
-    avatarElement.parentNode.insertBefore(avatarContainer, avatarElement);
-    avatarContainer.appendChild(avatarElement);
-  }
-
-  // Ensure the container is correctly sized
-  avatarContainer.style.width = avatarElement.clientWidth + "px";
-  avatarContainer.style.height = avatarElement.clientHeight + "px";
-
-  // Ensure avatar is below the decoration
-  avatarElement.style.position = "relative";
-  avatarElement.style.zIndex = "1";
-
-  // Create or select decoration element
-  let decorationElement = document.getElementById("avatar-decoration");
-  if (!decorationElement) {
-    decorationElement = document.createElement("img");
-    decorationElement.id = "avatar-decoration";
-    avatarContainer.appendChild(decorationElement); // Append inside avatarContainer
-  }
-
-  // Set decoration properties
-  decorationElement.src = resData.profileDecorationUrl;
-  decorationElement.style.position = "absolute";
-  decorationElement.style.top = "-10%"; // Slightly above the avatar
-  decorationElement.style.left = "-10%"; // Slightly offset for alignment
-  decorationElement.style.width = "120%"; // Scale to fit
-  decorationElement.style.height = "120%";
-  decorationElement.style.pointerEvents = "none";
-  decorationElement.style.zIndex = "2"; // Ensure it's above the avatar
-}
-
-
-  if (resData && resData.avatarUrl && faviconElement) {
-    faviconElement.href = resData.avatarUrl;
-  } else if (!faviconElement) {
-    console.error('No element with id="short-icon" found.');
-  }
-} else {
-  console.error('No element with id="dc-pfp" found.');
-}
 
   for (let li of liElements) {
     const imgElement = li.querySelector("img");
@@ -94,11 +95,11 @@ if (avatarElement) {
 
 async function fetchImages(imgElement, userId) {
   try {
-    let response = await fetch(`https://api.wxrn.lol/api/discord/${userId}`);
+    let response = await fetch(`https://api.wxrn.lol/discord_info/${userId}`);
 
     if (!response.ok) {
       response = await fetch(
-        `https://cors-anywhere.herokuapp.com/https://api.wxrn.lol/api/discord/${userId}`
+        `https://cors-anywhere.herokuapp.com/https://api.wxrn.lol/discord_info/${userId}`
       );
     }
 
