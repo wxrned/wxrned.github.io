@@ -458,7 +458,7 @@ a:hover,
 #lyrics-popup.show {
   display: block;
   pointer-events: auto;
-  z-index: 1000;
+  z-index: 9970;
   opacity: 1;
 }
 
