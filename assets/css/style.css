@@ -435,6 +435,7 @@ a:hover,
   border-radius: 10px;
   width: 300px;
   height: 300px;
+  z-index: 9991;
   opacity: 0;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
   overflow: hidden;
@@ -458,7 +459,7 @@ a:hover,
 #lyrics-popup.show {
   display: block;
   pointer-events: auto;
-  z-index: 9970;
+  z-index: 9991;
   opacity: 1;
 }
 
