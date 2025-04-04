@@ -226,7 +226,7 @@ function parseLrc(lrcString) {
 
 async function fetchLyrics(songName, artistName) {
   const response = await fetch(
-    `/api/lyrics?song=${encodeURIComponent(
+    `https://api.wxrn.lol/lyrics?song=${encodeURIComponent(
       songName
     )}&artist=${encodeURIComponent(artistName)}`
   );
