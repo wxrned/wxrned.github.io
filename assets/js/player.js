@@ -225,23 +225,17 @@ function parseLrc(lrcString) {
 }
 
 async function fetchLyrics(songName, artistName) {
-  console.log("Fetching lyrics for:", songName, artistName); // Log to track function execution
   const response = await fetch(
-    `${API_URL}?song=${encodeURIComponent(
+    `/api/lyrics?song=${encodeURIComponent(
       songName
     )}&artist=${encodeURIComponent(artistName)}`
   );
 
-  if (!response.ok) {
-    console.error("Network response was not ok");
-    throw new Error("Network response was not ok");
-  }
+  if (!response.ok) throw new Error("Network response was not ok");
 
   const data = await response.json();
-  console.log("Lyrics data:", data); // Log the data returned from API
 
   if (!data.lyrics) {
-    console.error("No lyrics found");
     throw new Error("No lyrics found");
   }
 
