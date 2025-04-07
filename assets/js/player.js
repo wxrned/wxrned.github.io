@@ -288,14 +288,12 @@ async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
         }
 
         lyricsWrapper.style.display = "block";
-        // Custom smooth scrolling implementation
         const lyricsContainer = lyricsDisplay.querySelector(".lyrics-wrapper");
         const targetPosition =
           currentLine.offsetTop -
           lyricsContainer.offsetHeight / 2 +
           currentLine.offsetHeight / 2;
 
-        // Enhanced smooth scrolling with fallback
         lyricsContainer.style.scrollBehavior = "smooth";
         lyricsContainer.scrollTop = targetPosition;
 
@@ -373,8 +371,6 @@ function showDefaultFooter(animationClass) {
 }
 
 window.onload = async function () {
-  // await fetchMusicFiles();
-
   tracks.forEach((track) => {
     createLyricsQuery(track);
   });
