@@ -294,20 +294,17 @@ async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
           lyricsContainer.offsetHeight / 2 +
           currentLine.offsetHeight / 2;
 
-        // Ensure smooth scrolling works consistently
         lyricsContainer.style.overflowY = "auto";
         lyricsContainer.style.scrollBehavior = "smooth";
 
-        // First try native smooth scrolling
         lyricsContainer.scrollTop = targetPosition;
 
-        // Fallback with animation if needed
         setTimeout(() => {
           const currentPos = lyricsContainer.scrollTop;
           if (Math.abs(currentPos - targetPosition) > 5) {
             const startPosition = currentPos;
             const distance = targetPosition - startPosition;
-            const duration = 600; // 600ms duration for smoother effect
+            const duration = 600;
             let startTime = null;
 
             const animateScroll = (timestamp) => {
