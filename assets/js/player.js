@@ -207,23 +207,6 @@ function loadTrack(index, animationClass) {
   );
 }
 
-function parseLrc(lrcString) {
-  return lrcString
-    .split("\n")
-    .map((line) => {
-      const match = line.match(/\[(\d+):(\d+).(\d+)\](.*)/);
-      if (!match) return null;
-      return {
-        seconds:
-          parseInt(match[1]) * 60 +
-          parseInt(match[2]) +
-          parseInt(match[3]) / 1000,
-        lyrics: match[4].trim(),
-      };
-    })
-    .filter(Boolean);
-}
-
 async function fetchLyrics(songName, artistName) {
   const response = await fetch(
     `https://api.wxrn.lol/lyrics?song=${encodeURIComponent(
@@ -250,6 +233,7 @@ async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
   try {
     const lyricsArray = await fetchLyrics(songName, artistName);
     console.log("Fetched lyrics array:", lyricsArray);
+
     if (!lyricsArray.length) {
       lyricsDisplay.innerHTML = "No lyrics available.";
       return;
@@ -260,21 +244,24 @@ async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
     lyricsWrapper.className = "lyrics-wrapper";
     lyricsDisplay.appendChild(lyricsWrapper);
 
-    const firstLyricTimestamp = lyricsArray[0]?.seconds || 0;
+    const fullTitle = `${artistName} - ${songName}`;
+    lyricsWrapper.innerHTML = `<div class="lyric-line title">${fullTitle}</div>`;
+
+    const firstLyricTimeMs = lyricsArray[0]?.timestamp || 0;
     let lastRenderedIndex = -1;
 
     const updateDisplayedLyrics = () => {
-      const currentTime = audioPlayer.currentTime;
-      console.log("Current time:", currentTime);
-      if (currentTime < firstLyricTimestamp) {
-        lyricsWrapper.innerHTML = "";
+      const currentTime = audioPlayer.currentTime * 1000;
+
+      if (currentTime < firstLyricTimeMs) {
+        lyricsWrapper.innerHTML = `<div class="lyric-line title">${fullTitle}</div>`;
         return;
       }
 
       let currentIndex = lyricsArray.findIndex(
         (line, i) =>
-          currentTime >= line.seconds &&
-          (!lyricsArray[i + 1] || currentTime < lyricsArray[i + 1].seconds)
+          currentTime >= line.timestamp &&
+          (!lyricsArray[i + 1] || currentTime < lyricsArray[i + 1].timestamp)
       );
 
       if (currentIndex !== lastRenderedIndex) {
@@ -301,11 +288,47 @@ async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
         }
 
         lyricsWrapper.style.display = "block";
-        currentLine.scrollIntoView({ behavior: "smooth", block: "center" });
+        // Custom smooth scrolling implementation
+        const lyricsContainer = lyricsDisplay.querySelector(".lyrics-wrapper");
+        const targetPosition =
+          currentLine.offsetTop -
+          lyricsContainer.offsetHeight / 2 +
+          currentLine.offsetHeight / 2;
+
+        // Enhanced smooth scrolling with fallback
+        lyricsContainer.style.scrollBehavior = "smooth";
+        lyricsContainer.scrollTop = targetPosition;
+
+        if (!("scrollBehavior" in document.documentElement.style)) {
+          const startPosition = lyricsContainer.scrollTop;
+          const distance = targetPosition - startPosition;
+          const duration = 500;
+          let startTime = null;
+
+          const animateScroll = (timestamp) => {
+            if (!startTime) startTime = timestamp;
+            const progress = timestamp - startTime;
+            const percentage = Math.min(progress / duration, 1);
+
+            lyricsContainer.scrollTop =
+              startPosition + distance * easeInOutQuad(percentage);
+
+            if (progress < duration) {
+              window.requestAnimationFrame(animateScroll);
+            }
+          };
+
+          window.requestAnimationFrame(animateScroll);
+        }
+
+        function easeInOutQuad(t) {
+          return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        }
       }
     };
 
     updateDisplayedLyrics();
+
     audioPlayer.removeEventListener("timeupdate", updateDisplayedLyrics);
     audioPlayer.addEventListener("timeupdate", updateDisplayedLyrics);
   } catch (error) {
