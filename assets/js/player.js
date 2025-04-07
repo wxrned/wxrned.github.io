@@ -239,7 +239,7 @@ async function fetchLyrics(songName, artistName) {
     throw new Error("No lyrics found");
   }
 
-  return parseLrc(data.lyrics);
+  return data.lyrics;
 }
 
 async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
