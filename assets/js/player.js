@@ -244,7 +244,7 @@ async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
     lyricsWrapper.className = "lyrics-wrapper";
     lyricsDisplay.appendChild(lyricsWrapper);
 
-    const fullTitle = `${artistName} - ${songName}`;
+    const fullTitle = `${artistName}<br><br>-<br><br>${songName}`;
     lyricsWrapper.innerHTML = `<div class="lyric-line title">${fullTitle}</div>`;
 
     const firstLyricTimeMs = lyricsArray[0]?.timestamp || 0;
@@ -294,30 +294,38 @@ async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
           lyricsContainer.offsetHeight / 2 +
           currentLine.offsetHeight / 2;
 
+        // Ensure smooth scrolling works consistently
+        lyricsContainer.style.overflowY = "auto";
         lyricsContainer.style.scrollBehavior = "smooth";
+
+        // First try native smooth scrolling
         lyricsContainer.scrollTop = targetPosition;
 
-        if (!("scrollBehavior" in document.documentElement.style)) {
-          const startPosition = lyricsContainer.scrollTop;
-          const distance = targetPosition - startPosition;
-          const duration = 500;
-          let startTime = null;
+        // Fallback with animation if needed
+        setTimeout(() => {
+          const currentPos = lyricsContainer.scrollTop;
+          if (Math.abs(currentPos - targetPosition) > 5) {
+            const startPosition = currentPos;
+            const distance = targetPosition - startPosition;
+            const duration = 600; // 600ms duration for smoother effect
+            let startTime = null;
 
-          const animateScroll = (timestamp) => {
-            if (!startTime) startTime = timestamp;
-            const progress = timestamp - startTime;
-            const percentage = Math.min(progress / duration, 1);
+            const animateScroll = (timestamp) => {
+              if (!startTime) startTime = timestamp;
+              const progress = timestamp - startTime;
+              const percentage = Math.min(progress / duration, 1);
 
-            lyricsContainer.scrollTop =
-              startPosition + distance * easeInOutQuad(percentage);
+              lyricsContainer.scrollTop =
+                startPosition + distance * easeInOutQuad(percentage);
 
-            if (progress < duration) {
-              window.requestAnimationFrame(animateScroll);
-            }
-          };
+              if (progress < duration) {
+                window.requestAnimationFrame(animateScroll);
+              }
+            };
 
-          window.requestAnimationFrame(animateScroll);
-        }
+            window.requestAnimationFrame(animateScroll);
+          }
+        }, 50);
 
         function easeInOutQuad(t) {
           return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
