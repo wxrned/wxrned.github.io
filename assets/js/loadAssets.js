@@ -97,12 +97,6 @@ async function fetchImages(imgElement, userId) {
   try {
     let response = await fetch(`https://api.wxrn.lol/discord/${userId}`);
 
-    if (!response.ok) {
-      response = await fetch(
-        `https://cors-anywhere.herokuapp.com/https://api.wxrn.lol/discord/${userId}`
-      );
-    }
-
     const data = await response.json();
 
     if (data.avatarUrl) {
