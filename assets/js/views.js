@@ -62,7 +62,18 @@ function countViews(ip) {
       domain: domain,
     }),
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then((text) => {
+      if (!text) {
+        throw new Error("Empty response from server");
+      }
+      return JSON.parse(text);
+    })
     .then((data) => {
       if (data.views !== undefined) {
         animateCountUp(data.views);
