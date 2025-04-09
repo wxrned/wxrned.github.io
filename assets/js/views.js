@@ -1,16 +1,3 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyDpNoW4lIKHLgA2BSHoJfJ-Me1YoyEkFnk",
-  authDomain: "shiku-wtf.firebaseapp.com",
-  projectId: "shiku-wtf",
-  storageBucket: "shiku-wtf.firebasestorage.app",
-  messagingSenderId: "4241050687",
-  appId: "1:4241050687:web:7aca502b0b87a130bf7c8a",
-  measurementId: "G-VPEHTYG15M",
-};
-
-firebase.initializeApp(firebaseConfig);
-var database = firebase.database();
-
 function get_viewers_ip(json) {
   let ip = json.ip;
 
@@ -36,16 +23,6 @@ function enterSite() {
   mainContent.classList.add("fade-in");
 
   window.removeEventListener("click", enterSite);
-
-  fetch("https://api.ipify.org/?format=json")
-    .then((response) => response.json())
-    .then((data) => {
-      const ip = data.ip;
-      countViews(ip);
-    })
-    .catch((error) => {
-      console.error("Error fetching IP:", error);
-    });
 }
 
 function countViews(ip) {
@@ -102,18 +79,18 @@ fetch("https://api.ipify.org/?format=json")
 function animateCountUp(targetNumber) {
   const pageViewsElement = document.getElementById("page_views");
   const currentNumber = parseInt(pageViewsElement.innerHTML);
-  const increment = Math.ceil((targetNumber - currentNumber) / 100); // Increment step
-  const duration = 1000; // Duration of the animation in milliseconds
-  const steps = Math.ceil(duration / 50); // Number of steps for the animation
+  const increment = Math.ceil((targetNumber - currentNumber) / 100);
+  const duration = 1000;
+  const steps = Math.ceil(duration / 50);
   let count = currentNumber;
 
   const interval = setInterval(() => {
     count += increment;
     if (increment > 0 && count >= targetNumber) {
-      count = targetNumber; // Stop at target number
+      count = targetNumber;
       clearInterval(interval);
     } else if (increment < 0 && count <= targetNumber) {
-      count = targetNumber; // Stop at target number
+      count = targetNumber;
       clearInterval(interval);
     }
     pageViewsElement.innerHTML = count;
