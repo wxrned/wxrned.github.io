@@ -95,6 +95,7 @@ img {
   font-size: clamp(25px, 8vw, 30px);
   margin-top: 12px;
   margin-bottom: 6px;
+  padding-top: 6px;
 }
 
 #footer {
@@ -222,6 +223,17 @@ a:hover,
   clip-path: none !important;
 }
 
+/* Remove dotted/striped outline and background color from avatar container and image */
+#avatar-container {
+  border: none !important;
+  background-color: transparent !important;
+}
+
+#avatar-container img {
+  border: none !important;
+  background-color: transparent !important;
+}
+
 #avatar-decoration {
   position: absolute !important;
   top: -10%;
@@ -231,6 +243,11 @@ a:hover,
   height: 120%;
   z-index: 9980 !important;
   pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+#avatar-decoration.fade-out {
+  opacity: 0;
 }
 
 /* Ensure avatar is positioned correctly */

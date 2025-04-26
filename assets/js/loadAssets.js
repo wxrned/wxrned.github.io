@@ -6,11 +6,12 @@ async function fetchAvatarsForAll() {
   const discordId = "1158429903629336646";
   const avatarElement = document.querySelector("#dc-pfp");
   const faviconElement = document.querySelector("#short-icon");
+  let decorationElement = document.getElementById("avatar-decoration");
 
   if (avatarElement) {
     avatarElement.src = "assets/img/black.png";
-    avatarElement.style.borderRadius = "50%"; // Round avatar
-    avatarElement.style.border = "3px solid white"; // Optional: Avatar outline
+    avatarElement.style.borderRadius = "50%";
+    avatarElement.style.border = "3px solid white";
 
     const resData = await fetchImages(avatarElement, discordId);
 
@@ -27,21 +28,18 @@ async function fetchAvatarsForAll() {
     }
 
     if (resData && resData.profileDecorationUrl) {
-      // Ensure avatar-container exists
       let avatarContainer = document.getElementById("avatar-container");
       if (!avatarContainer) {
         avatarContainer = document.createElement("div");
         avatarContainer.id = "avatar-container";
         avatarContainer.style.position = "relative";
         avatarContainer.style.display = "inline-block";
-        avatarContainer.style.overflow = "visible"; // Allow decoration to overflow
+        avatarContainer.style.overflow = "visible";
 
-        // Move avatar inside container
         avatarElement.parentNode.insertBefore(avatarContainer, avatarElement);
         avatarContainer.appendChild(avatarElement);
       }
 
-      // Ensure the container is correctly sized
       avatarContainer.style.width = avatarElement.clientWidth + "px";
       avatarContainer.style.height = avatarElement.clientHeight + "px";
 
@@ -50,22 +48,20 @@ async function fetchAvatarsForAll() {
       avatarElement.style.zIndex = "1";
 
       // Create or select decoration element
-      let decorationElement = document.getElementById("avatar-decoration");
       if (!decorationElement) {
         decorationElement = document.createElement("img");
         decorationElement.id = "avatar-decoration";
-        avatarContainer.appendChild(decorationElement); // Append inside avatarContainer
+        avatarContainer.appendChild(decorationElement);
       }
 
-      // Set decoration properties
       decorationElement.src = resData.profileDecorationUrl;
       decorationElement.style.position = "absolute";
-      decorationElement.style.top = "-10%"; // Slightly above the avatar
-      decorationElement.style.left = "-10%"; // Slightly offset for alignment
-      decorationElement.style.width = "120%"; // Scale to fit
+      decorationElement.style.top = "-10%";
+      decorationElement.style.left = "-10%";
+      decorationElement.style.width = "120%";
       decorationElement.style.height = "120%";
       decorationElement.style.pointerEvents = "none";
-      decorationElement.style.zIndex = "2"; // Ensure it's above the avatar
+      decorationElement.style.zIndex = "2";
     }
 
     if (resData && resData.avatarUrl && faviconElement) {
