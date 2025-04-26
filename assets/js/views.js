@@ -5,7 +5,10 @@ function get_viewers_ip(json) {
     document.getElementById("check-p").innerHTML =
       "vpn/proxy detected.<br>click to enter.";
     document.getElementById("entry-overlay").style.display = "flex";
-    window.addEventListener("click", enterSite);
+    window.addEventListener("click", () => {
+      countViews();
+      enterSite();
+    });
   } else {
     countViews(ip);
     enterSite();
