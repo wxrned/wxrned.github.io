@@ -657,46 +657,47 @@ a:hover,
 }
 
 .lyric-line {
-  color: #555;
-  font-size: 18px;
-  padding: 10px;
-  transition: color 0.3s ease, opacity 0.5s ease-in-out, transform 0.3s ease;
-  opacity: 0;
-  transform: translateY(10px);
-  max-width: 100%;
-  word-wrap: break-word;
-}
-
-.lyric-line.slide-in {
-  opacity: 1;
-  transform: translateY(0);
+  color: #555;
+  font-size: 18px;
+  padding: 10px;
+  transition: color 0.3s, opacity 0.5s ease-in-out;
+  opacity: 1;
+  max-width: 100%;
+  word-wrap: break-word;
 }
 
 .lyric-line.title {
-  color: var(--accent-color);
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  padding: 20px;
+  color: var(--accent-color);
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  padding: 20px;
 }
 
-.lyric-line.highlight {
-  font-size: 18px;
-  color: var(--text-color-light);
-  font-weight: bold;
-  opacity: 1;
+.highlight {
+  font-size: 18px;
+  color: var(--text-color-light);
+  font-weight: bold;
+  opacity: 1;
 }
 
-.lyric-line.previous {
-  font-size: 14px;
-  opacity: 0.5;
-  color: #aaa;
+.previous,
+.next {
+  font-size: 14px;
+  opacity: 0.5;
+  color: #888;
 }
 
-.lyric-line.next {
-  font-size: 14px;
-  opacity: 0.5;
-  color: #777;
+@keyframes slideIn {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 #overlay {
