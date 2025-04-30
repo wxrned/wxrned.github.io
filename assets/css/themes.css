@@ -1,0 +1,36 @@
+/* AMOLED theme overrides */
+body.amoled-theme {
+    --bg-color: #000000;
+    --accent-color: #cccccc;
+    --img-border-color: var(--accent-color);
+    --btn-border-color: #666666;
+    --btn-bg: #000000;
+    --text-color: #ffffff;
+    --text-color-light: #999999;
+    --btn-color: var(--text-color);
+    --ahref-color: var(--accent-color);
+    --icon-color: var(--accent-color);
+    --icon-bg: rgba(204, 204, 204, 0.1);
+    --btn-hover-bg: rgba(204, 204, 204, 0.2);
+    --btn-border: 2px solid var(--btn-border-color);
+    --img-border: 2px dashed var(--img-border-color);
+    --scroll-bar: var(--accent-color);
+    --selection: rgba(204, 204, 204, 0.3);
+}
+
+/* Volume slider overrides for amoled theme */
+body.amoled-theme #volume-slider {
+    background: #444444;
+}
+
+body.amoled-theme #volume-slider::-webkit-slider-thumb {
+    background: #cccccc;
+}
+
+body.amoled-theme #volume-slider::-moz-range-thumb {
+    background: #cccccc;
+}
+
+body.amoled-theme #volume-slider::-moz-range-track {
+    background: #444444;
+}

@@ -1,16 +1,141 @@
-function enterSite() {
-  const mainContent = document.querySelector("main");
+document.addEventListener("DOMContentLoaded", () => {
+  const contextMenu = document.getElementById("custom-context-menu");
+  const themeSwitcher = document.querySelector("#theme-switcher");
+  const refreshPageBtn = document.getElementById("refresh-page");
+  const toggleMusicBtn = document.querySelector("#toggle-music");
+  const copyUrlBtn = document.getElementById("copy-url");
+  const musicPlayer = document.querySelector(".music-player");
+  const body = document.body;
 
-  document.getElementById("entry-overlay").style.display = "none";
-  document.getElementById("entry-overlay").style.visibility = "hidden";
-  document.getElementById("entry-overlay").style.opacity = 0;
+  const themes = ["default", "amoled"];
+  let currentThemeIndex = 0;
 
-  mainContent.style.display = "flex";
-  mainContent.classList.add("fade-in");
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme && themes.includes(savedTheme)) {
+    currentThemeIndex = themes.indexOf(savedTheme);
+    applyTheme(savedTheme);
+  } else {
+    applyTheme("default");
+  }
 
-  window.removeEventListener("click", enterSite);
-}
+  function applyTheme(theme) {
+    body.classList.remove("amoled-theme");
+    if (theme === "amoled") {
+      body.classList.add("amoled-theme");
+    }
+    localStorage.setItem("theme", theme);
+  }
 
-document.getElementById("check-p").innerHTML = "click to enter";
-document.getElementById("entry-overlay").style.display = "flex";
-window.addEventListener("click", enterSite);
+  document.addEventListener("contextmenu", (e) => {
+    const entryOverlay = document.getElementById("entry-overlay");
+    if (entryOverlay) {
+      const style = window.getComputedStyle(entryOverlay);
+      if (
+        style.display !== "none" &&
+        style.visibility !== "hidden" &&
+        parseFloat(style.opacity) > 0
+      ) {
+        if (entryOverlay.contains(e.target)) {
+          e.preventDefault();
+          return;
+        }
+      }
+    }
+    e.preventDefault();
+    const clickX = e.clientX;
+    const clickY = e.clientY;
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+    const menuW = contextMenu.offsetWidth;
+    const menuH = contextMenu.offsetHeight;
+
+    const posX = clickX + menuW > screenW ? screenW - menuW - 5 : clickX;
+    const posY = clickY + menuH > screenH ? screenH - menuH - 5 : clickY;
+
+    contextMenu.style.left = posX + "px";
+    contextMenu.style.top = posY + "px";
+    contextMenu.style.display = "block";
+  });
+
+  // Long press support for mobile devices
+  let touchTimer = null;
+  let touchX = 0;
+  let touchY = 0;
+
+  document.addEventListener("touchstart", (e) => {
+    if (e.touches.length !== 1) return; // Only single touch
+    const touch = e.touches[0];
+    touchX = touch.clientX;
+    touchY = touch.clientY;
+    touchTimer = setTimeout(() => {
+      e.preventDefault();
+      const screenW = window.innerWidth;
+      const screenH = window.innerHeight;
+      const menuW = contextMenu.offsetWidth;
+      const menuH = contextMenu.offsetHeight;
+
+      const posX = touchX + menuW > screenW ? screenW - menuW - 5 : touchX;
+      const posY = touchY + menuH > screenH ? screenH - menuH - 5 : touchY;
+
+      contextMenu.style.left = posX + "px";
+      contextMenu.style.top = posY + "px";
+      contextMenu.style.display = "block";
+    }, 600); // 600ms long press threshold
+  });
+
+  document.addEventListener("touchend", (e) => {
+    if (touchTimer) {
+      clearTimeout(touchTimer);
+      touchTimer = null;
+    }
+  });
+
+  document.addEventListener("touchmove", (e) => {
+    if (touchTimer) {
+      clearTimeout(touchTimer);
+      touchTimer = null;
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (contextMenu.style.display === "block") {
+      contextMenu.style.display = "none";
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && contextMenu.style.display === "block") {
+      contextMenu.style.display = "none";
+    }
+  });
+
+  themeSwitcher.addEventListener("click", () => {
+    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+    applyTheme(themes[currentThemeIndex]);
+  });
+
+  refreshPageBtn.addEventListener("click", () => {
+    location.reload();
+  });
+
+  toggleMusicBtn.addEventListener("click", () => {
+    if (
+      musicPlayer.style.display === "none" ||
+      getComputedStyle(musicPlayer).display === "none"
+    ) {
+      musicPlayer.style.display = "flex";
+    } else {
+      musicPlayer.style.display = "none";
+    }
+  });
+
+  copyUrlBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(window.location.href);
+    //   .then(() => {
+    //     alert("URL copied!");
+    //   })
+    //   .catch(() => {
+    //     alert("Failed to copy URL.");
+    //   });
+  });
+});
