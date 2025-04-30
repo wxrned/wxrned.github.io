@@ -536,6 +536,38 @@ a:hover,
   opacity: 1;
 }
 
+.slide-in {
+  animation: slideIn 0.5s ease forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-out {
+  animation: slideOut 0.5s ease forwards;
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+}
+
 .loading {
   display: flex;
   color: white;
@@ -612,6 +644,16 @@ a:hover,
   justify-content: center;
   position: fixed;
   transition: transform 0.5s ease-in-out;
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+}
+
+.lyrics-wrapper::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 .lyric-line {

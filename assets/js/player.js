@@ -273,59 +273,39 @@ async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
           prevLine.className = "lyric-line previous";
           prevLine.textContent = lyricsArray[currentIndex - 1].lyrics;
           lyricsWrapper.appendChild(prevLine);
+
+          // Trigger reflow to restart animation
+          void prevLine.offsetWidth;
+          prevLine.classList.add("slide-in");
+          prevLine.addEventListener("animationend", () => {
+            prevLine.classList.remove("slide-in");
+          });
         }
 
         const currentLine = document.createElement("div");
-        currentLine.className = "lyric-line highlight slide-in";
+        currentLine.className = "lyric-line highlight";
         currentLine.textContent = lyricsArray[currentIndex].lyrics;
         lyricsWrapper.appendChild(currentLine);
 
+        // Trigger reflow to restart animation
+        void currentLine.offsetWidth;
+        currentLine.classList.add("slide-in");
+        currentLine.addEventListener("animationend", () => {
+          currentLine.classList.remove("slide-in");
+        });
+
         if (currentIndex < lyricsArray.length - 1) {
           const nextLine = document.createElement("div");
-          nextLine.className = "lyric-line next slide-in";
+          nextLine.className = "lyric-line next";
           nextLine.textContent = lyricsArray[currentIndex + 1].lyrics;
           lyricsWrapper.appendChild(nextLine);
-        }
 
-        lyricsWrapper.style.display = "block";
-        const lyricsContainer = lyricsDisplay.querySelector(".lyrics-wrapper");
-        const targetPosition =
-          currentLine.offsetTop -
-          lyricsContainer.offsetHeight / 2 +
-          currentLine.offsetHeight / 2;
-
-        lyricsContainer.style.overflowY = "auto";
-        lyricsContainer.style.scrollBehavior = "smooth";
-
-        lyricsContainer.scrollTop = targetPosition;
-
-        setTimeout(() => {
-          const currentPos = lyricsContainer.scrollTop;
-          if (Math.abs(currentPos - targetPosition) > 5) {
-            const startPosition = currentPos;
-            const distance = targetPosition - startPosition;
-            const duration = 600;
-            let startTime = null;
-
-            const animateScroll = (timestamp) => {
-              if (!startTime) startTime = timestamp;
-              const progress = timestamp - startTime;
-              const percentage = Math.min(progress / duration, 1);
-
-              lyricsContainer.scrollTop =
-                startPosition + distance * easeInOutQuad(percentage);
-
-              if (progress < duration) {
-                window.requestAnimationFrame(animateScroll);
-              }
-            };
-
-            window.requestAnimationFrame(animateScroll);
-          }
-        }, 50);
-
-        function easeInOutQuad(t) {
-          return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+          // Trigger reflow to restart animation
+          void nextLine.offsetWidth;
+          nextLine.classList.add("slide-in");
+          nextLine.addEventListener("animationend", () => {
+            nextLine.classList.remove("slide-in");
+          });
         }
       }
     };
