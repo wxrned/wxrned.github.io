@@ -540,6 +540,11 @@ a:hover,
   animation: slideIn 0.5s ease forwards;
 }
 
+.previous.slide-in,
+.next.slide-in {
+  animation-name: slideInNoOpacity;
+}
+
 @keyframes slideIn {
   from {
     transform: translateY(30px);
@@ -549,6 +554,18 @@ a:hover,
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes slideInNoOpacity {
+  from {
+    transform: translateY(30px);
+    opacity: 0.5;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 0.5;
   }
 }
 
