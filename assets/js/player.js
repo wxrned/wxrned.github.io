@@ -28,6 +28,7 @@ const tracks = [
     title: "Yeat - bigger thën everything",
     path: "assets/music/BiggerThenEverything.mp3",
   },
+  { title: "Playboi Carti - 24 Songs", path: "assets/music/24Songs.mp3" },
   { title: "Yeat - Power Trip", path: "assets/music/PowerTrip.mp3" },
   { title: "Yeat - Heavy stunts", path: "assets/music/HeavyStunts.mp3" },
   { title: "Yeat - Tell më", path: "assets/music/TellMe.mp3" },
