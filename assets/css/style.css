@@ -2,7 +2,6 @@
 
 @import url(variables.css);
 
-/* Custom Right Click Menu Styles */
 #custom-context-menu {
   position: fixed;
   z-index: 10000;
@@ -268,7 +267,6 @@ a:hover,
 #avatar-decoration {
   position: absolute !important;
   top: -10%;
-  /* Adjust as needed */
   left: -10%;
   width: 120%;
   height: 120%;
@@ -281,10 +279,8 @@ a:hover,
   opacity: 0;
 }
 
-/* Ensure avatar is positioned correctly */
 #avatar-container {
   position: relative;
-  /* Keeps avatar in place */
   display: inline-block;
 }
 
@@ -640,16 +636,12 @@ a:hover,
   justify-content: center;
   position: fixed;
   transition: transform 0.5s ease-in-out;
-  /* Hide scrollbar */
   scrollbar-width: none;
-  /* Firefox */
   -ms-overflow-style: none;
-  /* IE and Edge */
 }
 
 .lyrics-wrapper::-webkit-scrollbar {
   display: none;
-  /* Chrome, Safari, Opera */
 }
 
 .lyric-line {
