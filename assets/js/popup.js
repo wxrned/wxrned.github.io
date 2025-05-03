@@ -2,6 +2,11 @@ document.getElementById("dc-pfp").addEventListener("click", function () {
   const popup = document.getElementById("popup");
   const overlay = document.getElementById("overlay");
   const avatarDecoration = document.getElementById("avatar-decoration");
+  const visualizer = document.getElementById("visualizer");
+
+  if (visualizer) {
+    visualizer.style.display = "none";
+  }
 
   popup.style.display = "block";
   overlay.style.display = "block";
@@ -19,11 +24,16 @@ function closePopup() {
   const popup = document.getElementById("popup");
   const overlay = document.getElementById("overlay");
   const avatarDecoration = document.getElementById("avatar-decoration");
+  const visualizer = document.getElementById("visualizer");
 
   popup.classList.remove("show");
   overlay.classList.remove("show");
   if (avatarDecoration) {
     avatarDecoration.classList.remove("fade-out");
+  }
+
+  if (visualizer) {
+    visualizer.style.display = "none";
   }
 
   setTimeout(() => {
@@ -34,6 +44,7 @@ function closePopup() {
 
 lyricsCloseBtn.addEventListener("click", () => {
   const avatarDecoration = document.getElementById("avatar-decoration");
+  const visualizer = document.getElementById("visualizer");
 
   lyricsPopup.classList.remove("show");
   mainContent.classList.remove("no-click");
@@ -42,6 +53,11 @@ lyricsCloseBtn.addEventListener("click", () => {
   if (avatarDecoration) {
     avatarDecoration.classList.remove("fade-out");
   }
+
+  if (visualizer) {
+    visualizer.style.display = "none";
+  }
+
   setTimeout(() => {
     lyricsPopup.style.display = "none";
     overlay.style.display = "none";
@@ -50,6 +66,7 @@ lyricsCloseBtn.addEventListener("click", () => {
 
 lyricsButton.addEventListener("click", () => {
   const avatarDecoration = document.getElementById("avatar-decoration");
+  const visualizer = document.getElementById("visualizer");
 
   lyricsPopup.style.display = "block";
   overlay.style.display = "block";
@@ -59,10 +76,15 @@ lyricsButton.addEventListener("click", () => {
   if (avatarDecoration) {
     avatarDecoration.classList.add("fade-out");
   }
+
+  if (visualizer) {
+    visualizer.style.display = "block";
+  }
 });
 
 footer.addEventListener("click", () => {
   const avatarDecoration = document.getElementById("avatar-decoration");
+  const visualizer = document.getElementById("visualizer");
 
   lyricsPopup.style.display = "block";
   overlay.style.display = "block";
@@ -71,5 +93,9 @@ footer.addEventListener("click", () => {
   overlay.classList.add("show");
   if (avatarDecoration) {
     avatarDecoration.classList.add("fade-out");
+  }
+
+  if (visualizer) {
+    visualizer.style.display = "block";
   }
 });
