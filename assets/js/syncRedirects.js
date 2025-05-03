@@ -1,6 +1,5 @@
 const colorThief = new ColorThief();
 const iconElement = document.getElementById("icon");
-// iconElement.crossOrigin = 'anonymous';
 
 function applyColorsFromImage(imgElement) {
   if (!imgElement.complete) {
@@ -19,12 +18,12 @@ function applyColorsFromImage(imgElement) {
     const dominantColor = colorThief.getColor(canvas);
     const dominantColorRgb = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
 
+    const textColor = adjustColorBrightness(dominantColorRgb, -50);
+    const lighterTextColor = adjustColorBrightness(dominantColorRgb, 20);
     document.documentElement.style.setProperty(
       "--accent-color",
       lighterTextColor
     );
-    const textColor = adjustColorBrightness(dominantColorRgb, -50);
-    const lighterTextColor = adjustColorBrightness(dominantColorRgb, 20);
     const iconColor = dominantColorRgb;
     document.documentElement.style.setProperty("--text-color", iconColor);
     document.documentElement.style.setProperty(
@@ -81,4 +80,10 @@ function adjustColorBrightness(rgbColor, amount) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-iconElement.onload = applyColorsFromImage(iconElement);
+iconElement.onload = function () {
+  applyColorsFromImage(iconElement);
+};
+
+iconElement.onchange = function () {
+  if (iconElement.complete) applyColorsFromImage(iconElement);
+};
