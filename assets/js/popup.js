@@ -33,6 +33,8 @@ function closePopup() {
 }
 
 lyricsCloseBtn.addEventListener("click", () => {
+  const avatarDecoration = document.getElementById("avatar-decoration");
+
   lyricsPopup.classList.remove("show");
   mainContent.classList.remove("no-click");
   overlay.style.display = "block";
@@ -47,6 +49,8 @@ lyricsCloseBtn.addEventListener("click", () => {
 });
 
 lyricsButton.addEventListener("click", () => {
+  const avatarDecoration = document.getElementById("avatar-decoration");
+
   lyricsPopup.style.display = "block";
   overlay.style.display = "block";
   mainContent.classList.add("no-click");
@@ -58,6 +62,8 @@ lyricsButton.addEventListener("click", () => {
 });
 
 footer.addEventListener("click", () => {
+  const avatarDecoration = document.getElementById("avatar-decoration");
+
   lyricsPopup.style.display = "block";
   overlay.style.display = "block";
   mainContent.classList.add("no-click");
