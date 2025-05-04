@@ -29,6 +29,7 @@ const tracks = [
     path: "assets/music/BiggerThenEverything.mp3",
   },
   { title: "Playboi Carti - 24 Songs", path: "assets/music/24Songs.mp3" },
+  { title: "Yeat - The Bell", path: "assets/music/TheBell.mp3" },
   { title: "Yeat - Power Trip", path: "assets/music/PowerTrip.mp3" },
   { title: "Yeat - Heavy stunts", path: "assets/music/HeavyStunts.mp3" },
   { title: "Yeat - Tell më", path: "assets/music/TellMe.mp3" },
@@ -41,16 +42,18 @@ const tracks = [
   { title: "che - GET NAKED", path: "assets/music/GetNaked.mp3" },
   { title: "Playboi Carti - Fell In Luv", path: "assets/music/FellInLuv.mp3" },
   {
-    title: "Trippie Redd x Summrs - BIGGEST BIRD",
+    title: "Trippie Redd - BIGGEST BIRD",
     path: "assets/music/BiggestBird.mp3",
   },
   { title: "Yeat - No morë talk", path: "assets/music/NoMoreTalk.mp3" },
+  { title: "Yeat - ILUV", path: "assets/music/ILUV.mp3" },
+  { title: "Ken Carson - Psycho", path: "assets/music/Psycho.mp3" },
+  { title: "Ken Carson - Money Spread", path: "assets/music/MoneySpread.mp3" },
   { title: "Yeat - Talk", path: "assets/music/Talk.mp3" },
   { title: "Yeat - Already Rich", path: "assets/music/AlreadyRich.mp3" },
   { title: "Destroy Lonely - THRILL", path: "assets/music/THRILL.mp3" },
   { title: "Yeat - GEEK TIMË", path: "assets/music/GeekTime.mp3" },
   { title: "Ken Carson - loading", path: "assets/music/Loading.mp3" },
-  { title: "Yeat - Bad bënd / DëMON", path: "assets/music/BadBend.mp3" },
   { title: "Ken Carson - Hardcore", path: "assets/music/Hardcore.mp3" },
   { title: "Che - I Rot, I Rot", path: "assets/music/IRotIRot.mp3" },
   { title: "Yeat - GO2WORK", path: "assets/music/GO2WORK.mp3" },
@@ -518,6 +521,7 @@ function setupVisualizer() {
   audioContext = new (window.AudioContext || window.webkitAudioContext)();
   analyser = audioContext.createAnalyser();
   analyser.fftSize = 64;
+  analyser.smoothingTimeConstant = 0.75;
 
   sourceNode = audioContext.createMediaElementSource(audioPlayer);
   sourceNode.connect(analyser);
@@ -545,6 +549,7 @@ function drawVisualizer() {
 
   for (let i = 0; i < mirroredBars; i++) {
     const value = dataArray[bufferLength - 1 - i];
+    const scaledValue = Math.sqrt(value / 255);
     const barHeight = (value / 255) * visualizerCanvas.height;
 
     const xLeft = centerX - (i + 1) * (barWidth + gap);
