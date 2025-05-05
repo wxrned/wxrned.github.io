@@ -71,6 +71,11 @@ const tracks = [
   { title: "OsamaSon - X & Sex", path: "assets/music/X&Sex.mp3" },
   { title: "OsamaSon - Freestyle", path: "assets/music/Freestyle.mp3" },
   { title: "OsamaSon - Frontin", path: "assets/music/Frontin.mp3" },
+  { title: "Nettspend - F*CK SWAG", path: "assets/music/FCKSWAG.mp3" },
+  { title: "Che - Sayso", path: "assets/music/Sayso.mp3" },
+  { title: "Che - sos", path: "assets/music/sos.mp3" },
+  { title: "Yeat - Cali", path: "assets/music/Cali.mp3" },
+  { title: "Ufo361 - RICK OWENS", path: "assets/music/RICKOWENS.mp3" },
 ];
 
 tracks.forEach((track) => {
