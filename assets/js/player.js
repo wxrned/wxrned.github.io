@@ -535,6 +535,15 @@ function drawVisualizer() {
   const dataArray = new Uint8Array(bufferLength);
   analyser.getByteFrequencyData(dataArray);
 
+  // Get average bass level (first ~6 bins)
+  const bassBins = 6;
+  let bassSum = 0;
+  for (let i = 0; i < bassBins; i++) {
+    bassSum += dataArray[i];
+  }
+  const bassAvg = bassSum / bassBins;
+  const bassSensitivity = 1 / (0.3 + bassAvg / 255);
+
   canvasCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
 
   const barCount = 64;
@@ -548,9 +557,18 @@ function drawVisualizer() {
     .trim();
 
   for (let i = 0; i < mirroredBars; i++) {
-    const value = dataArray[bufferLength - 1 - i];
-    const scaledValue = Math.sqrt(value / 255);
-    const barHeight = (value / 255) * visualizerCanvas.height;
+    const index = bufferLength - 1 - i;
+    let value = dataArray[index];
+
+    const isBass = index < bassBins;
+    const scale = isBass
+      ? 1.1 * bassSensitivity
+      : 1.05 - 0.4 * (index / bufferLength);
+
+    value *= scale;
+
+    const scaledValue = Math.pow(value / 255, 0.75);
+    const barHeight = scaledValue * visualizerCanvas.height;
 
     const xLeft = centerX - (i + 1) * (barWidth + gap);
     const xRight = centerX + i * (barWidth + gap);
