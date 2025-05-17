@@ -335,7 +335,7 @@ lyricsCloseBtn.addEventListener("click", () => {
   mainContent.classList.remove("no-click");
   overlay.style.display = "block";
   overlay.classList.remove("show");
-  stopVisualizer();
+  // stopVisualizer();
   setTimeout(() => {
     lyricsPopup.style.display = "none";
     overlay.style.display = "none";
@@ -347,7 +347,7 @@ lyricsButton.addEventListener("click", () => {
   overlay.style.display = "block";
   mainContent.classList.add("no-click");
   lyricsPopup.classList.add("show");
-  startVisualizer();
+  // startVisualizer();
   overlay.classList.add("show");
 });
 
@@ -356,7 +356,7 @@ footer.addEventListener("click", () => {
   overlay.style.display = "block";
   mainContent.classList.add("no-click");
   lyricsPopup.classList.add("show");
-  startVisualizer();
+  // startVisualizer();
   overlay.classList.add("show");
 });
 
