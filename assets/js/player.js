@@ -190,7 +190,7 @@ playPauseBtn.addEventListener("click", () => {
   if (audioPlayer.paused) {
     audioPlayer.play();
     playPauseBtn.innerHTML = '<i class="icon fa-solid fa-pause"></i>';
-    footer.textContent = `ʚ ${tracks[currentTrack].title} ɞ`;
+    footer.textContent = `〤 ${tracks[currentTrack].title} 〤`;
     footer.classList.remove("slide-in-right", "slide-in-left");
     void footer.offsetWidth;
     footer.classList.add("slide-in-right");
@@ -236,7 +236,7 @@ async function fetchLyrics(songName, artistName) {
 
 async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
   console.log("Displaying lyrics for:", songName, artistName);
-  lyricsDisplay.innerHTML = "<div class='loading'>Loading lyrics...</div>";
+  lyricsDisplay.innerHTML = "<div class='loading'></div>";
   lyricsDisplay.style.color = "white";
 
   try {
