@@ -335,7 +335,6 @@ lyricsCloseBtn.addEventListener("click", () => {
   mainContent.classList.remove("no-click");
   overlay.style.display = "block";
   overlay.classList.remove("show");
-  // stopVisualizer();
   setTimeout(() => {
     lyricsPopup.style.display = "none";
     overlay.style.display = "none";
@@ -347,7 +346,6 @@ lyricsButton.addEventListener("click", () => {
   overlay.style.display = "block";
   mainContent.classList.add("no-click");
   lyricsPopup.classList.add("show");
-  // startVisualizer();
   overlay.classList.add("show");
 });
 
@@ -356,7 +354,6 @@ footer.addEventListener("click", () => {
   overlay.style.display = "block";
   mainContent.classList.add("no-click");
   lyricsPopup.classList.add("show");
-  // startVisualizer();
   overlay.classList.add("show");
 });
 
@@ -509,105 +506,4 @@ async function extractMetadata(filePath) {
       },
     });
   });
-}
-
-let audioContext, analyser, sourceNode, visualizerCanvas, canvasCtx;
-let visualizerInitialized = false;
-let animationId = null;
-
-function setupVisualizer() {
-  if (visualizerInitialized) return;
-
-  visualizerCanvas = document.getElementById("visualizer");
-  if (!visualizerCanvas) return;
-
-  canvasCtx = visualizerCanvas.getContext("2d");
-
-  audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  analyser = audioContext.createAnalyser();
-  analyser.fftSize = 64;
-  analyser.smoothingTimeConstant = 0.75;
-
-  sourceNode = audioContext.createMediaElementSource(audioPlayer);
-  sourceNode.connect(analyser);
-  analyser.connect(audioContext.destination);
-
-  visualizerInitialized = true;
-}
-
-function drawVisualizer() {
-  const bufferLength = analyser.frequencyBinCount;
-  const dataArray = new Uint8Array(bufferLength);
-  analyser.getByteFrequencyData(dataArray);
-
-  // Get average bass level (first ~6 bins)
-  const bassBins = 6;
-  let bassSum = 0;
-  for (let i = 0; i < bassBins; i++) {
-    bassSum += dataArray[i];
-  }
-  const bassAvg = bassSum / bassBins;
-  const bassSensitivity = 1 / (0.3 + bassAvg / 255);
-
-  canvasCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
-
-  const barCount = 64;
-  const mirroredBars = Math.floor(barCount / 2);
-  const centerX = visualizerCanvas.width / 2;
-  const barWidth = (visualizerCanvas.width / barCount) * 0.7;
-  const gap = (visualizerCanvas.width / barCount) * 0.3;
-
-  const textColor = getComputedStyle(document.documentElement)
-    .getPropertyValue("--text-color")
-    .trim();
-
-  for (let i = 0; i < mirroredBars; i++) {
-    const index = bufferLength - 1 - i;
-    let value = dataArray[index];
-
-    const isBass = index < bassBins;
-    const scale = isBass
-      ? 1.1 * bassSensitivity
-      : 1.05 - 0.4 * (index / bufferLength);
-
-    value *= scale;
-
-    const scaledValue = Math.pow(value / 255, 0.75);
-    const barHeight = scaledValue * visualizerCanvas.height;
-
-    const xLeft = centerX - (i + 1) * (barWidth + gap);
-    const xRight = centerX + i * (barWidth + gap);
-
-    canvasCtx.fillStyle = textColor;
-
-    canvasCtx.fillRect(
-      xLeft,
-      visualizerCanvas.height - barHeight,
-      barWidth,
-      barHeight
-    );
-    canvasCtx.fillRect(
-      xRight,
-      visualizerCanvas.height - barHeight,
-      barWidth,
-      barHeight
-    );
-  }
-
-  animationId = requestAnimationFrame(drawVisualizer);
-}
-
-function startVisualizer() {
-  setupVisualizer();
-  if (audioContext && audioContext.state === "suspended") {
-    audioContext.resume();
-  }
-  cancelAnimationFrame(animationId);
-  drawVisualizer();
-}
-
-function stopVisualizer() {
-  if (animationId) cancelAnimationFrame(animationId);
-  if (canvasCtx)
-    canvasCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
 }
