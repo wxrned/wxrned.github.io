@@ -99,10 +99,9 @@ let abortController;
  */
 async function fetchLastFmAlbumCover(artist, title) {
   try {
-    const apiKey = "9bcce615ed318d2972425be925dc13f2";
-    const apiUrl = `http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${apiKey}&artist=${encodeURIComponent(
+    const apiUrl = `https://api.wxrn.lol/lastfm/cover?artist=${encodeURIComponent(
       artist
-    )}&track=${encodeURIComponent(title)}&format=json`;
+    )}&track=${encodeURIComponent(title)}`;
 
     const response = await fetch(apiUrl);
     if (!response.ok) {
@@ -111,18 +110,8 @@ async function fetchLastFmAlbumCover(artist, title) {
     }
 
     const data = await response.json();
-    if (
-      data.track &&
-      data.track.album &&
-      data.track.album.image &&
-      data.track.album.image.length > 0
-    ) {
-      const largeImage = data.track.album.image.find(
-        (img) => img.size === "large"
-      );
-      if (largeImage && largeImage["#text"]) {
-        return largeImage["#text"];
-      }
+    if (data.imageUrl) {
+      return data.imageUrl;
     }
     return null;
   } catch (error) {
