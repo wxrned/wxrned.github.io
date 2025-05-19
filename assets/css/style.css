@@ -237,6 +237,20 @@ button:hover {
 
 #dc-pfp {
   cursor: pointer;
+  object-fit: cover;
+}
+
+@keyframes lp-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#dc-pfp.rotating {
+  animation: lp-rotate 4s linear infinite;
 }
 
 #dc-pfp,
@@ -266,10 +280,10 @@ a:hover,
 
 #avatar-decoration {
   position: absolute !important;
-  top: -10%;
-  left: -10%;
-  width: 120%;
-  height: 120%;
+  top: 0;
+  left: 0;
+  width: 150px;
+  height: 150px;
   z-index: 9980 !important;
   pointer-events: none;
   transition: opacity 0.3s ease-in-out;

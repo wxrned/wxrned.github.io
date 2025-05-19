@@ -125,6 +125,10 @@ async function fetchImages(imgElement, userId) {
 }
 
 function applyColorsFromImage(imgElement) {
+  if (imgElement.dataset.isAlbumCover === "true") {
+    return;
+  }
+
   if (!imgElement.complete) {
     console.error("Image not fully loaded!");
     return;

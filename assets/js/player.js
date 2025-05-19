@@ -92,6 +92,114 @@ let lastRenderedIndex = -1;
 let cachedLyrics = null;
 let abortController;
 
+/**
+ * @param {string} artist
+ * @param {string} title
+ * @returns {Promise<string|null>}
+ */
+async function fetchLastFmAlbumCover(artist, title) {
+  try {
+    const apiKey = "9bcce615ed318d2972425be925dc13f2";
+    const apiUrl = `http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${apiKey}&artist=${encodeURIComponent(
+      artist
+    )}&track=${encodeURIComponent(title)}&format=json`;
+
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+      console.error("Last.fm API error:", response.status, response.statusText);
+      return null;
+    }
+
+    const data = await response.json();
+    if (
+      data.track &&
+      data.track.album &&
+      data.track.album.image &&
+      data.track.album.image.length > 0
+    ) {
+      const largeImage = data.track.album.image.find(
+        (img) => img.size === "large"
+      );
+      if (largeImage && largeImage["#text"]) {
+        return largeImage["#text"];
+      }
+    }
+    return null;
+  } catch (error) {
+    console.error("Error fetching Last.fm album cover:", error);
+    return null;
+  }
+}
+
+/**
+ * @param {string|null} imageUrl
+ */
+function updateAlbumCover(imageUrl) {
+  if (imageUrl) {
+    if (!pfpImage.dataset.originalSrc) {
+      pfpImage.dataset.originalSrc = pfpImage.src;
+      pfpImage.dataset.originalWidth = pfpImage.style.width || "";
+      pfpImage.dataset.originalHeight = pfpImage.style.height || "";
+      pfpImage.dataset.originalObjectFit = pfpImage.style.objectFit || "";
+    }
+    pfpImage.dataset.isAlbumCover = "true";
+    pfpImage.src = imageUrl;
+
+    const img = new Image();
+    img.onload = () => {
+      pfpImage.style.width = img.width + "px";
+      pfpImage.style.height = img.height + "px";
+      pfpImage.style.objectFit = "cover";
+    };
+    img.src = pfpImage.dataset.originalSrc || pfpImage.src;
+  } else {
+    if (pfpImage.dataset.originalSrc) {
+      pfpImage.dataset.isAlbumCover = "false";
+      pfpImage.src = pfpImage.dataset.originalSrc;
+      pfpImage.style.width = pfpImage.dataset.originalWidth;
+      pfpImage.style.height = pfpImage.dataset.originalHeight;
+      pfpImage.style.objectFit = pfpImage.dataset.originalObjectFit;
+      delete pfpImage.dataset.originalSrc;
+      delete pfpImage.dataset.originalWidth;
+      delete pfpImage.dataset.originalHeight;
+      delete pfpImage.dataset.originalObjectFit;
+    }
+  }
+}
+
+/**
+ * @param {boolean} isPlaying
+ */
+function toggleRotation(isPlaying) {
+  if (isPlaying) {
+    pfpImage.classList.add("rotating");
+  } else {
+    pfpImage.classList.remove("rotating");
+  }
+}
+
+audioPlayer.addEventListener("play", async () => {
+  toggleRotation(true);
+  const track = tracks[currentTrack];
+  if (track && track.artist && track.song) {
+    const albumCoverUrl = await fetchLastFmAlbumCover(track.artist, track.song);
+    updateAlbumCover(albumCoverUrl);
+  }
+});
+
+audioPlayer.addEventListener("pause", () => {
+  toggleRotation(false);
+  if (pfpImage.dataset.originalSrc) {
+    pfpImage.src = pfpImage.dataset.originalSrc;
+    delete pfpImage.dataset.originalSrc;
+  }
+});
+
+const originalLoadTrack = loadTrack;
+loadTrack = function (index, animationClass) {
+  originalLoadTrack(index, animationClass);
+};
+
 function showSlider() {
   volumeSlider.style.display = "block";
   setTimeout(() => volumeSlider.classList.add("show"), 10);
