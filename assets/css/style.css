@@ -984,3 +984,28 @@ a:hover,
   opacity: 0.75;
   image-rendering: auto;
 }
+
+.copy-notification {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--btn-bg);
+  border: var(--btn-border);
+  color: var(--btn-color);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 18px;
+  cursor: default;
+  box-shadow: 0 0 15px var(--accent-color);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 10001;
+}
+
+.copy-notification.show {
+  opacity: 1;
+  pointer-events: auto;
+}

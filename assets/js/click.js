@@ -57,13 +57,12 @@ document.addEventListener("DOMContentLoaded", () => {
     contextMenu.style.display = "block";
   });
 
-  // Long press support for mobile devices
   let touchTimer = null;
   let touchX = 0;
   let touchY = 0;
 
   document.addEventListener("touchstart", (e) => {
-    if (e.touches.length !== 1) return; // Only single touch
+    if (e.touches.length !== 1) return;
     const touch = e.touches[0];
     touchX = touch.clientX;
     touchY = touch.clientY;
@@ -80,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
       contextMenu.style.left = posX + "px";
       contextMenu.style.top = posY + "px";
       contextMenu.style.display = "block";
-    }, 600); // 600ms long press threshold
+    }, 600);
   });
 
   document.addEventListener("touchend", (e) => {
@@ -129,13 +128,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Create notification popup element if it doesn't exist
+  let copyNotification = document.querySelector(".copy-notification");
+  if (!copyNotification) {
+    copyNotification = document.createElement("div");
+    copyNotification.className = "copy-notification";
+    document.body.appendChild(copyNotification);
+  }
+
+  function showCopyNotification(message) {
+    copyNotification.textContent = message;
+    copyNotification.classList.add("show");
+    setTimeout(() => {
+      copyNotification.classList.remove("show");
+    }, 3000);
+  }
+
   copyUrlBtn.addEventListener("click", () => {
-    navigator.clipboard.writeText(window.location.href);
-    //   .then(() => {
-    //     alert("URL copied!");
-    //   })
-    //   .catch(() => {
-    //     alert("Failed to copy URL.");
-    //   });
+    navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => {
+        showCopyNotification(`copied website url`);
+      })
+      .catch(() => {
+        showCopyNotification("failed to copy url");
+      });
   });
 });
