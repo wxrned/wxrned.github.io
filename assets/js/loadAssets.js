@@ -1,4 +1,5 @@
 const colorThief = new ColorThief();
+const bannerSync = false;
 
 async function fetchAvatarsForAll() {
   const liElements = document.querySelectorAll("#popup li");
@@ -16,9 +17,11 @@ async function fetchAvatarsForAll() {
     const resData = await fetchImages(avatarElement, discordId);
 
     if (resData && resData.bannerUrl) {
-      document.body.style.backgroundImage = `url(${
-        resData.bannerUrl + "?size=1024"
-      })`;
+      if (bannerSync) {
+        document.body.style.backgroundImage = `url(${
+          resData.bannerUrl + "?size=1024"
+        })`;
+      }
       document.body.style.backgroundSize = "cover";
       document.body.style.backgroundPosition = "center";
     }
