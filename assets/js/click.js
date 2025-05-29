@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
       musicPlayer.style.display = "flex";
       audioPlayer.play();
       playPauseBtn.innerHTML = '<i class="icon fa-solid fa-pause"></i>';
-      footer.textContent = `〤 ${tracks[currentTrack].title} 〤`;
+      footer.textContent = `𐕣 ${tracks[currentTrack].title} 𐕣`;
       footer.classList.remove("slide-in-right", "slide-in-left");
       void footer.offsetWidth;
       footer.classList.add("slide-in-right");
