@@ -156,33 +156,33 @@ function updateAlbumCover(imageUrl) {
   }
 }
 
-/**
- * @param {boolean} isPlaying
- */
-function toggleRotation(isPlaying) {
-  if (isPlaying) {
-    pfpImage.classList.add("rotating");
-  } else {
-    pfpImage.classList.remove("rotating");
-  }
-}
+// /**
+//  * @param {boolean} isPlaying
+//  */
+// function toggleRotation(isPlaying) {
+//   if (isPlaying) {
+//     pfpImage.classList.add("rotating");
+//   } else {
+//     pfpImage.classList.remove("rotating");
+//   }
+// }
 
-audioPlayer.addEventListener("play", async () => {
-  toggleRotation(true);
-  const track = tracks[currentTrack];
-  if (track && track.artist && track.song) {
-    const albumCoverUrl = await fetchLastFmAlbumCover(track.artist, track.song);
-    updateAlbumCover(albumCoverUrl);
-  }
-});
+// audioPlayer.addEventListener("play", async () => {
+//   toggleRotation(true);
+//   const track = tracks[currentTrack];
+//   if (track && track.artist && track.song) {
+//     const albumCoverUrl = await fetchLastFmAlbumCover(track.artist, track.song);
+//     updateAlbumCover(albumCoverUrl);
+//   }
+// });
 
-audioPlayer.addEventListener("pause", () => {
-  toggleRotation(false);
-  if (pfpImage.dataset.originalSrc) {
-    pfpImage.src = pfpImage.dataset.originalSrc;
-    delete pfpImage.dataset.originalSrc;
-  }
-});
+// audioPlayer.addEventListener("pause", () => {
+//   toggleRotation(false);
+//   if (pfpImage.dataset.originalSrc) {
+//     pfpImage.src = pfpImage.dataset.originalSrc;
+//     delete pfpImage.dataset.originalSrc;
+//   }
+// });
 
 const originalLoadTrack = loadTrack;
 loadTrack = function (index, animationClass) {
@@ -380,7 +380,6 @@ async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
           prevLine.textContent = lyricsArray[currentIndex - 1].lyrics;
           lyricsWrapper.appendChild(prevLine);
 
-          // Trigger reflow to restart animation
           void prevLine.offsetWidth;
           prevLine.classList.add("slide-in");
           prevLine.addEventListener("animationend", () => {
@@ -393,7 +392,6 @@ async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
         currentLine.textContent = lyricsArray[currentIndex].lyrics;
         lyricsWrapper.appendChild(currentLine);
 
-        // Trigger reflow to restart animation
         void currentLine.offsetWidth;
         currentLine.classList.add("slide-in");
         currentLine.addEventListener("animationend", () => {
@@ -406,7 +404,6 @@ async function displayLyrics(songName, artistName, audioPlayer, lyricsDisplay) {
           nextLine.textContent = lyricsArray[currentIndex + 1].lyrics;
           lyricsWrapper.appendChild(nextLine);
 
-          // Trigger reflow to restart animation
           void nextLine.offsetWidth;
           nextLine.classList.add("slide-in");
           nextLine.addEventListener("animationend", () => {

@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const contextMenu = document.getElementById("custom-context-menu");
+  const contextMenu = document.getElementById("right-click-menu");
   const themeSwitcher = document.querySelector("#theme-switcher");
   const refreshPageBtn = document.getElementById("refresh-page");
   const toggleMusicBtn = document.querySelector("#toggle-music");
@@ -128,7 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Create notification popup element if it doesn't exist
   let copyNotification = document.querySelector(".copy-notification");
   if (!copyNotification) {
     copyNotification = document.createElement("div");

@@ -2,7 +2,7 @@
 
 @import url(variables.css);
 
-#custom-context-menu {
+#right-click-menu {
   position: fixed;
   z-index: 10000;
   background-color: var(--btn-bg);
@@ -16,27 +16,27 @@
   user-select: none;
 }
 
-#custom-context-menu ul {
+#right-click-menu ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-#custom-context-menu ul li {
+#right-click-menu ul li {
   padding: 10px 20px;
   cursor: pointer;
   color: var(--btn-color);
   transition: background-color 0.2s ease-in-out;
 }
 
-#custom-context-menu ul li:hover,
-#custom-context-menu ul li a:hover {
+#right-click-menu ul li:hover,
+#right-click-menu ul li a:hover {
   background-color: var(--btn-hover-bg);
   color: var(--text-color-light);
   text-decoration: none;
 }
 
-#custom-context-menu ul li a {
+#right-click-menu ul li a {
   color: var(--btn-color);
   text-decoration: none;
   display: block;

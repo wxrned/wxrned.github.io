@@ -46,11 +46,9 @@ async function fetchAvatarsForAll() {
       avatarContainer.style.width = avatarElement.clientWidth + "px";
       avatarContainer.style.height = avatarElement.clientHeight + "px";
 
-      // Ensure avatar is below the decoration
       avatarElement.style.position = "relative";
       avatarElement.style.zIndex = "1";
 
-      // Create or select decoration element
       if (!decorationElement) {
         decorationElement = document.createElement("img");
         decorationElement.id = "avatar-decoration";

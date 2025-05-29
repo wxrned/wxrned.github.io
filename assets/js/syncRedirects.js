@@ -2,7 +2,7 @@ const colorThief = new ColorThief();
 
 async function fetchAndApplyIcon() {
   try {
-    const response = await fetch("https://api.wxrn.lol/discord/invite/hurtful");
+    const response = await fetch("https://api.wxrn.lol/discord/invite/huh");
     const data = await response.json();
 
     const iconUrl = data.icon;
