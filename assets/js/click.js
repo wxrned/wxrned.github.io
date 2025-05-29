@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleMusicBtn = document.querySelector("#toggle-music");
   const copyUrlBtn = document.getElementById("copy-url");
   const musicPlayer = document.querySelector(".music-player");
+  // const audioPlayer = document.getElementById("audio");
   const body = document.body;
 
   const themes = ["default", "amoled"];
@@ -123,8 +124,17 @@ document.addEventListener("DOMContentLoaded", () => {
       getComputedStyle(musicPlayer).display === "none"
     ) {
       musicPlayer.style.display = "flex";
+      audioPlayer.play();
+      playPauseBtn.innerHTML = '<i class="icon fa-solid fa-pause"></i>';
+      footer.textContent = `〤 ${tracks[currentTrack].title} 〤`;
+      footer.classList.remove("slide-in-right", "slide-in-left");
+      void footer.offsetWidth;
+      footer.classList.add("slide-in-right");
     } else {
       musicPlayer.style.display = "none";
+      audioPlayer.pause();
+      playPauseBtn.innerHTML = '<i class="icon fa-solid fa-play"></i>';
+      showDefaultFooter("slide-in-right");
     }
   });
 
@@ -147,10 +157,10 @@ document.addEventListener("DOMContentLoaded", () => {
     navigator.clipboard
       .writeText(window.location.href)
       .then(() => {
-        showCopyNotification(`copied website url`);
+        showCopyNotification(`copied url`);
       })
       .catch(() => {
-        showCopyNotification("failed to copy url");
+        showCopyNotification("failed to copy");
       });
   });
 });
