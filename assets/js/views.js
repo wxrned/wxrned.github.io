@@ -1,18 +1,8 @@
 function get_viewers_ip(json) {
   let ip = json.ip;
 
-  if (json.security.vpn || json.security.proxy) {
-    document.getElementById("check-p").innerHTML =
-      "vpn/proxy detected.<br>click to enter.";
-    document.getElementById("entry-overlay").style.display = "flex";
-    window.addEventListener("click", () => {
-      countViews();
-      enterSite();
-    });
-  } else {
-    countViews(ip);
-    enterSite();
-  }
+  countViews(ip);
+  enterSite();
 }
 
 function enterSite() {
@@ -67,13 +57,8 @@ function countViews(ip) {
 fetch("https://api.ipify.org/?format=json")
   .then((response) => response.json())
   .then((data) => {
-    fetch(
-      `https://vpnapi.io/api/${data.ip}?key=0840c7c180ee4f9a81d591f222762774`
-    )
-      .then((response) => response.json())
-      .then((securityData) => {
-        get_viewers_ip(securityData);
-      });
+    countViews(data.ip);
+    enterSite();
   })
   .catch((error) => {
     console.error("Error fetching IP:", error);
