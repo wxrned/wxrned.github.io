@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleMusicBtn = document.querySelector("#toggle-music");
   const copyUrlBtn = document.getElementById("copy-url");
   const musicPlayer = document.querySelector(".music-player");
+  const tweetBtn = document.getElementById("tweet-button");
+  const tweetModal = document.getElementById("tweet-modal");
+  const closeTweetModal = document.getElementById("close-tweet-modal");
   // const audioPlayer = document.getElementById("audio");
   const body = document.body;
 
@@ -162,5 +165,14 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(() => {
         showCopyNotification("failed to copy");
       });
+  });
+
+  tweetBtn.addEventListener("click", () => {
+    tweetModal.classList.remove("hidden");
+    contextMenu.style.display = "none";
+  });
+
+  closeTweetModal.addEventListener("click", () => {
+    tweetModal.classList.add("hidden");
   });
 });
