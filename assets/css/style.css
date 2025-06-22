@@ -1009,3 +1009,10 @@ a:hover,
   opacity: 1;
   pointer-events: auto;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
