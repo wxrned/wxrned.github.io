@@ -49,7 +49,16 @@ const tracks = [
   { title: "ksuuvi - bape shit", path: "assets/music/BapeShit.mp3" },
   { title: "ksuuvi - not tuesday", path: "assets/music/NotTuesday.mp3" },
   { title: "Nettspend - What they say", path: "assets/music/WhatTheySay.mp3" },
-  { title: "Nettspend - Skipping Class", path: "assets/music/SkippingClass.mp3" },
+  {
+    title: "Nettspend - nothing like uuu",
+    path: "assets/music/NothingLikeUuu.mp3",
+  },
+  { title: "Nettspend - Tommy", path: "assets/music/Tommy.mp3" },
+  {
+    title: "Nettspend - Skipping Class",
+    path: "assets/music/SkippingClass.mp3",
+  },
+  { title: "Swapa - Nugget", path: "assets/music/Nugget.mp3" },
 ];
 
 tracks.forEach((track) => {
