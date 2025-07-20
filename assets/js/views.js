@@ -68,8 +68,8 @@ function animateCountUp(targetNumber) {
   const pageViewsElement = document.getElementById("page_views");
   const currentNumber = parseInt(pageViewsElement.innerHTML);
   const increment = Math.ceil((targetNumber - currentNumber) / 100);
-  const duration = 1000;
-  const steps = Math.ceil(duration / 50);
+  const duration = 2000;
+  const steps = Math.ceil(duration / 40);
   let count = currentNumber;
 
   const interval = setInterval(() => {
@@ -82,5 +82,5 @@ function animateCountUp(targetNumber) {
       clearInterval(interval);
     }
     pageViewsElement.innerHTML = count;
-  }, 40);
+  }, steps);
 }
