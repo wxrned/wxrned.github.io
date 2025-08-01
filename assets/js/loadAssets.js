@@ -1,5 +1,5 @@
 const colorThief = new ColorThief();
-const bannerSync = false;
+const bannerSync = true;
 
 async function fetchAvatarsForAll() {
   const liElements = document.querySelectorAll("#popup li");
