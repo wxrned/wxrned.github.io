@@ -487,34 +487,6 @@ a:hover,
   padding: 12px;
 }
 
-.loader {
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #555;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    animation: spin 1s linear infinite;
-    display: inline-block;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-
-  .loader-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: black;
-    border-radius: 50%;
-    overflow: hidden;
-  }
-
-  .hidden {
-    display: none !important;
-}
-
 .avatar-container {
   position: relative;
   display: inline-block;
