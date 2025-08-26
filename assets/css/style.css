@@ -514,6 +514,51 @@ a:hover,
   .hidden {
     display: none !important;
 }
+
+.avatar-container {
+  position: relative;
+  display: inline-block;
+  width: 64px; /* fallback size */
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: black; /* fallback */
+}
+
+/* Avatar images hidden until loaded */
+.avatar-container img {
+  display: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Loader (spinner) */
+.avatar-container::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 2;
+}
+
+/* When avatar is loaded, hide loader */
+.avatar-container.loaded::after {
+  display: none;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 
 #lyrics-popup {
   display: none;
