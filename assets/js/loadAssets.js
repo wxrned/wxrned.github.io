@@ -91,44 +91,37 @@ async function fetchAvatarsForAll() {
 }
 
 async function fetchImages(imgElement, userId) {
-  const container = imgElement.closest(".avatar-container");
-  container.classList.remove("loaded"); // show loader
-  imgElement.style.display = "none";
-
   try {
     let response = await fetch(`https://api.wxrn.lol/discord/${userId}`);
+
     const data = await response.json();
 
     if (data.avatarUrl) {
-      return new Promise((resolve, reject) => {
+      imgElement.src = data.avatarUrl;
+
+      const avatarPromise = new Promise((resolve, reject) => {
         imgElement.onload = () => {
-          container.classList.add("loaded"); // hide loader
-          imgElement.style.display = "block";
           applyColorsFromImage(imgElement);
           resolve(data);
         };
 
         imgElement.onerror = () => {
-          console.error(`Failed to load avatar for ${userId}`);
-          imgElement.src = "assets/img/black.png";
-          container.classList.add("loaded");
-          imgElement.style.display = "block";
-          reject(new Error(`Avatar failed for ${userId}`));
+          console.error(`Failed to load avatar image for user ${userId}`);
+          reject(new Error(`Avatar image failed to load for user ${userId}`));
         };
-
-        imgElement.src = data.avatarUrl;
       });
-    } else {
-      console.error(`Error for user ${userId}: ${data.error || "No avatarUrl"}`);
-      imgElement.src = "assets/img/black.png";
+
+      return avatarPromise;
+    } else if (data.error) {
+      console.error(`Error for user ${userId}: ${data.error}`);
     }
-  } catch (err) {
-    console.error(`Request failed for user ${userId}`, err);
-    imgElement.src = "assets/img/black.png";
+  } catch (error) {
+    console.error(
+      `Failed to fetch avatar and banner for user ${userId}:`,
+      error
+    );
   }
 
-  container.classList.add("loaded");
-  imgElement.style.display = "block";
   return null;
 }
 
