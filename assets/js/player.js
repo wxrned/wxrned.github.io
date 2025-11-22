@@ -91,7 +91,7 @@ let abortController;
  */
 async function fetchLastFmAlbumCover(artist, title) {
   try {
-    const apiUrl = `https://api.wxrn.lol/lastfm/cover?artist=${encodeURIComponent(
+    const apiUrl = `https://api.wxrn.lol:9069/lastfm/cover?artist=${encodeURIComponent(
       artist
     )}&track=${encodeURIComponent(title)}`;
 
@@ -307,7 +307,7 @@ function loadTrack(index, animationClass) {
 
 async function fetchLyrics(songName, artistName) {
   const response = await fetch(
-    `https://api.wxrn.lol/lyrics?song=${encodeURIComponent(
+    `https://api.wxrn.lol:9069/lyrics?song=${encodeURIComponent(
       songName
     )}&artist=${encodeURIComponent(artistName)}`
   );
