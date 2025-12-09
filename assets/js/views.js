@@ -21,7 +21,7 @@ function enterSite() {
 function countViews(ip) {
   const domain = window.location.hostname;
 
-  fetch("https://api.wxrn.lol:9069/count", {
+  fetch("https://api.wxrn.lol/count", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

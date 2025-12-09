@@ -307,7 +307,7 @@ function loadTrack(index, animationClass) {
 
 async function fetchLyrics(songName, artistName) {
   const response = await fetch(
-    `https://api.wxrn.lol:9069/lyrics?song=${encodeURIComponent(
+    `https://api.wxrn.lol/lyrics?song=${encodeURIComponent(
       songName
     )}&artist=${encodeURIComponent(artistName)}`
   );
