@@ -92,7 +92,7 @@ async function fetchAvatarsForAll() {
 
 async function fetchImages(imgElement, userId) {
   try {
-    let response = await fetch(`https://api.wxrn.lol:9069/discord/${userId}`);
+    let response = await fetch(`https://api.wxrn.lol/discord/${userId}`);
 
     const data = await response.json();
 
