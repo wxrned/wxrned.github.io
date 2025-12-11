@@ -400,7 +400,7 @@ a:hover,
   border-radius: 10px;
   z-index: 9990;
   width: 300px;
-  height: 370px;
+  height: 280px; /* 6x 280px | 9x 370px */
   opacity: 0;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
@@ -490,11 +490,11 @@ a:hover,
 .avatar-container {
   position: relative;
   display: inline-block;
-  width: 64px; /* fallback size */
+  width: 64px;
   height: 64px;
   border-radius: 50%;
   overflow: hidden;
-  background: black; /* fallback */
+  background: black;
 }
 
 /* Avatar images hidden until loaded */
@@ -528,10 +528,11 @@ a:hover,
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-
 #lyrics-popup {
   display: none;
   position: absolute;
