@@ -62,8 +62,8 @@ const tracks = [
   { title: "Che - SLAM PUNK", path: "assets/music/SlamPunk.mp3" },
   { title: "Che - ROLLING STONE", path: "assets/music/RollingStone.mp3" },
   { title: "Ken Carson - 200 Kash", path: "assets/music/200Kash.mp3" },
-  { title: "snakechildpain - kookoo", path: "assets/music/kookoo.mp3" },
-  { title: "snakechildpain - hilfiger", path: "assets/music/hilfiger.mp3" },
+  { title: "boolymon - kookoo", path: "assets/music/kookoo.mp3" },
+  { title: "boolymon - hilfiger", path: "assets/music/hilfiger.mp3" },
   {
     title: "Destroy Lonely - vvs valentine",
     path: "assets/music/vvsvalentine.mp3",
