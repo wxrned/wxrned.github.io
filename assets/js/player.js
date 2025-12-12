@@ -64,6 +64,7 @@ const tracks = [
   { title: "Ken Carson - 200 Kash", path: "assets/music/200Kash.mp3" },
   { title: "boolymon - kookoo", path: "assets/music/kookoo.mp3" },
   { title: "boolymon - hilfiger", path: "assets/music/hilfiger.mp3" },
+  { title: "fakemink - Look At Me", path: "assets/music/LookAtMe.mp3" },
   {
     title: "Destroy Lonely - vvs valentine",
     path: "assets/music/vvsvalentine.mp3",
