@@ -16,7 +16,7 @@ const lyricsCloseBtn = document.getElementById("lyrics-close");
 const lyricsButton = document.getElementById("lyrics-button");
 const pfpImage = document.getElementById("dc-pfp");
 
-const defaultFooterText = "𝖗𝖊𝖕𝖚𝖙𝖆𝖙𝖎𝖔𝖓";
+const defaultFooterText = "𝖌𝖊𝖙 𝖗𝖎𝖈𝖍 𝖔𝖗 𝖉𝖎𝖊 𝖙𝖗𝖞𝖎𝖓𝖌";
 
 const tracks = [
   { title: "Playboi Carti - 24 Songs", path: "assets/music/24Songs.mp3" },
@@ -92,7 +92,7 @@ let abortController;
  */
 async function fetchLastFmAlbumCover(artist, title) {
   try {
-    const apiUrl = `https://api.wxrn.lol:9069/lastfm/cover?artist=${encodeURIComponent(
+    const apiUrl = `https://api.wxrn.lol/lastfm/cover?artist=${encodeURIComponent(
       artist
     )}&track=${encodeURIComponent(title)}`;
 
@@ -294,7 +294,7 @@ playPauseBtn.addEventListener("click", () => {
 function loadTrack(index, animationClass) {
   currentTrack = index;
   audioPlayer.src = tracks[currentTrack].path;
-  footer.textContent = `𐕣 ${tracks[currentTrack].title} 𐕣`;
+  footer.textContent = `✰ {tracks[currentTrack].title} ✰`;
   footer.classList.remove("slide-in-right", "slide-in-left");
   void footer.offsetWidth;
   footer.classList.add(animationClass);
