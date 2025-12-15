@@ -280,7 +280,7 @@ playPauseBtn.addEventListener("click", () => {
   if (audioPlayer.paused) {
     audioPlayer.play();
     playPauseBtn.innerHTML = '<i class="icon fa-solid fa-pause"></i>';
-    footer.textContent = `𐕣 ${tracks[currentTrack].title} 𐕣`;
+    footer.textContent = `✰ ${tracks[currentTrack].title} ✰`;
     footer.classList.remove("slide-in-right", "slide-in-left");
     void footer.offsetWidth;
     footer.classList.add("slide-in-right");
@@ -294,7 +294,7 @@ playPauseBtn.addEventListener("click", () => {
 function loadTrack(index, animationClass) {
   currentTrack = index;
   audioPlayer.src = tracks[currentTrack].path;
-  footer.textContent = `✰ {tracks[currentTrack].title} ✰`;
+  footer.textContent = `✰ ${tracks[currentTrack].title} ✰`;
   footer.classList.remove("slide-in-right", "slide-in-left");
   void footer.offsetWidth;
   footer.classList.add(animationClass);
