@@ -23,10 +23,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function applyTheme(theme) {
-    body.classList.remove("amoled-theme");
-    if (theme === "amoled") {
-      body.classList.add("amoled-theme");
+    themes.forEach(t => body.classList.remove(`${t}-theme`));
+
+    if (theme !== "default") {
+      body.classList.add(`${theme}-theme`);
     }
+
     localStorage.setItem("theme", theme);
   }
 
