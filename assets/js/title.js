@@ -1,13 +1,22 @@
 async function fetchUsername() {
   try {
     let userId = "1158429903629336646";
-    const response = await fetch(`https://api.wxrn.lol/discord/${userId}`);
+    // FIXED: Use the new /discord/user/:userId endpoint
+    const response = await fetch(`https://api.wxrn.lol/discord/user/${userId}`);
     const data = await response.json();
 
-    const username = `@${data.username}` || "@user";
-    animateTitle(username, 300);
+    // Check for API errors
+    if (data.error) {
+      console.error("API Error:", data.error);
+      animateTitle("@user", 300);
+      return;
+    }
+
+    const username = data.global_name || data.username || "user";
+    animateTitle(`@${username}`, 300);
   } catch (error) {
     console.error("Error fetching username:", error);
+    animateTitle("@user", 300);
   }
 }
 

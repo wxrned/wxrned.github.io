@@ -2,8 +2,15 @@ const colorThief = new ColorThief();
 
 async function fetchAndApplyIcon() {
   try {
-    const response = await fetch("https://api.wxrn.lol/discord/invite/huh");
+    // FIXED: Use the new /discord/invite/:inviteCode endpoint
+    const response = await fetch("https://api.wxrn.lol/discord/invite/9mynNsHyag");
     const data = await response.json();
+
+    // Check for API errors
+    if (data.error) {
+      console.error("API Error:", data.error);
+      return;
+    }
 
     const iconUrl = data.icon;
     if (!iconUrl) {

@@ -14,7 +14,8 @@ async function fetchAvatarsForAll() {
     avatarElement.style.borderRadius = "50%";
     avatarElement.style.border = "3px solid white";
 
-    const resData = await fetchImages(avatarElement, discordId);
+    // FIXED: Use the new route format
+    const resData = await fetchImages(avatarElement, discordId, true);
 
     if (resData && resData.bannerUrl) {
       if (bannerSync) {
@@ -82,7 +83,8 @@ async function fetchAvatarsForAll() {
       imgElement.src = "assets/img/black.png";
 
       if (userId) {
-        await fetchImages(imgElement, userId);
+        // FIXED: Pass false to indicate this is not the main avatar
+        await fetchImages(imgElement, userId, false);
       } else {
         console.error("No Discord User ID found in the alt attribute.");
       }
@@ -90,36 +92,59 @@ async function fetchAvatarsForAll() {
   }
 }
 
-async function fetchImages(imgElement, userId) {
+// FIXED: Updated function with correct API endpoints
+async function fetchImages(imgElement, userId, isMainAvatar = false) {
   try {
-    let response = await fetch(`https://api.wxrn.lol/discord/${userId}`);
+    // Use the new /discord/user/:userId endpoint
+    const response = await fetch(`https://api.wxrn.lol/discord/user/${userId}`);
 
     const data = await response.json();
-
-    if (data.avatarUrl) {
-      imgElement.src = data.avatarUrl;
-
-      const avatarPromise = new Promise((resolve, reject) => {
-        imgElement.onload = () => {
-          applyColorsFromImage(imgElement);
-          resolve(data);
-        };
-
-        imgElement.onerror = () => {
-          console.error(`Failed to load avatar image for user ${userId}`);
-          reject(new Error(`Avatar image failed to load for user ${userId}`));
-        };
-      });
-
-      return avatarPromise;
-    } else if (data.error) {
+    
+    // Check for API errors
+    if (data.error) {
       console.error(`Error for user ${userId}: ${data.error}`);
+      return null;
+    }
+
+    // For main avatar, we need additional data
+    if (isMainAvatar) {
+      // FIXED: Fetch invite data separately for banner and decoration
+      const inviteResponse = await fetch(`https://api.wxrn.lol/discord/invite/huh`);
+      const inviteData = await inviteResponse.json();
+      
+      const result = {
+        avatarUrl: `https://cdn.discordapp.com/avatars/${userId}/${data.avatar}.${data.avatar?.startsWith('a_') ? 'gif' : 'png'}?size=256`,
+        bannerUrl: inviteData.banner || data.banner,
+        profileDecorationUrl: data.avatar_decoration_data?.asset
+      };
+      
+      if (data.avatar) {
+        imgElement.src = result.avatarUrl;
+        
+        return new Promise((resolve, reject) => {
+          imgElement.onload = () => {
+            applyColorsFromImage(imgElement);
+            resolve(result);
+          };
+          imgElement.onerror = reject;
+        });
+      }
+      return result;
+    } 
+    // For friend avatars
+    else if (data.avatar) {
+      const avatarUrl = `https://cdn.discordapp.com/avatars/${userId}/${data.avatar}.${data.avatar.startsWith('a_') ? 'gif' : 'png'}?size=128`;
+      imgElement.src = avatarUrl;
+      
+      return new Promise((resolve, reject) => {
+        imgElement.onload = () => {
+          resolve({ avatarUrl });
+        };
+        imgElement.onerror = reject;
+      });
     }
   } catch (error) {
-    console.error(
-      `Failed to fetch avatar and banner for user ${userId}:`,
-      error
-    );
+    console.error(`Failed to fetch avatar for user ${userId}:`, error);
   }
 
   return null;
