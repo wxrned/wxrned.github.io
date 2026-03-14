@@ -96,7 +96,7 @@ async function fetchAvatarsForAll() {
 async function fetchImages(imgElement, userId, isMainAvatar = false) {
   try {
     // Use the new /discord/user/:userId endpoint
-    const response = await fetch(`https://api.wxrn.lol/discord/user/${userId}`);
+    const response = await fetch(`https://api.wxrn.lol/user/${userId}`);
 
     const data = await response.json();
     
@@ -109,7 +109,7 @@ async function fetchImages(imgElement, userId, isMainAvatar = false) {
     // For main avatar, we need additional data
     if (isMainAvatar) {
       // FIXED: Fetch invite data separately for banner and decoration
-      const inviteResponse = await fetch(`https://api.wxrn.lol/discord/invite/huh`);
+      const inviteResponse = await fetch(`https://api.wxrn.lol/invite/huh`);
       const inviteData = await inviteResponse.json();
       
       const result = {

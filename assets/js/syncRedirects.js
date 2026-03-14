@@ -3,7 +3,7 @@ const colorThief = new ColorThief();
 async function fetchAndApplyIcon() {
   try {
     // FIXED: Use the new /discord/invite/:inviteCode endpoint
-    const response = await fetch("https://api.wxrn.lol/discord/invite/9mynNsHyag");
+    const response = await fetch("https://api.wxrn.lol/invite/9mynNsHyag");
     const data = await response.json();
 
     // Check for API errors
