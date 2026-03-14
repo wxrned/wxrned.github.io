@@ -33,37 +33,82 @@ async function fetchAvatarsForAll() {
 
     if (resData && resData.profileDecorationUrl) {
       let avatarContainer = document.getElementById("avatar-container");
+      
+      // Create container if it doesn't exist
       if (!avatarContainer) {
         avatarContainer = document.createElement("div");
         avatarContainer.id = "avatar-container";
+        
+        // Center the container properly
         avatarContainer.style.position = "relative";
-        avatarContainer.style.display = "inline-block";
-        avatarContainer.style.overflow = "visible";
-
+        avatarContainer.style.display = "flex";
+        avatarContainer.style.justifyContent = "center";
+        avatarContainer.style.alignItems = "center";
+        avatarContainer.style.margin = "0 auto";
+        avatarContainer.style.width = "fit-content";
+        avatarContainer.style.height = "fit-content";
+        
+        // Insert container before the avatar and move avatar inside
         avatarElement.parentNode.insertBefore(avatarContainer, avatarElement);
         avatarContainer.appendChild(avatarElement);
       }
 
-      avatarContainer.style.width = avatarElement.clientWidth + "px";
-      avatarContainer.style.height = avatarElement.clientHeight + "px";
+      // Ensure container dimensions match avatar
+      const updateContainerSize = () => {
+        const avatarWidth = avatarElement.clientWidth;
+        const avatarHeight = avatarElement.clientHeight;
+        
+        if (avatarWidth > 0 && avatarHeight > 0) {
+          avatarContainer.style.width = avatarWidth + "px";
+          avatarContainer.style.height = avatarHeight + "px";
+        }
+      };
+      
+      // Update size after avatar loads
+      if (avatarElement.complete) {
+        updateContainerSize();
+      } else {
+        avatarElement.onload = updateContainerSize;
+      }
 
+      // Style the avatar
       avatarElement.style.position = "relative";
       avatarElement.style.zIndex = "1";
+      avatarElement.style.display = "block";
+      avatarElement.style.width = "100%";
+      avatarElement.style.height = "100%";
+      avatarElement.style.objectFit = "cover";
+      avatarElement.style.borderRadius = "50%";
 
+      // Create or update decoration element
       if (!decorationElement) {
         decorationElement = document.createElement("img");
         decorationElement.id = "avatar-decoration";
         avatarContainer.appendChild(decorationElement);
       }
 
+      // Style the decoration - FIXED POSITIONING
       decorationElement.src = resData.profileDecorationUrl;
       decorationElement.style.position = "absolute";
-      decorationElement.style.top = "-10%";
-      decorationElement.style.left = "-10%";
+      decorationElement.style.top = "50%";
+      decorationElement.style.left = "50%";
+      decorationElement.style.transform = "translate(-50%, -50%)";
       decorationElement.style.width = "120%";
       decorationElement.style.height = "120%";
       decorationElement.style.pointerEvents = "none";
       decorationElement.style.zIndex = "2";
+      decorationElement.style.objectFit = "contain";
+      
+      // Ensure decoration doesn't overflow
+      decorationElement.style.maxWidth = "none";
+      decorationElement.style.maxHeight = "none";
+      
+      // Log for debugging
+      console.log("Decoration applied:", {
+        url: resData.profileDecorationUrl,
+        containerSize: avatarContainer.style.width,
+        avatarSize: avatarElement.clientWidth
+      });
     }
 
     if (resData && resData.avatarUrl && faviconElement) {
@@ -115,7 +160,9 @@ async function fetchImages(imgElement, userId, isMainAvatar = false) {
       const result = {
         avatarUrl: `https://cdn.discordapp.com/avatars/${userId}/${data.avatar}.${data.avatar?.startsWith('a_') ? 'gif' : 'png'}?size=256`,
         bannerUrl: inviteData.banner || data.banner,
-        profileDecorationUrl: data.avatar_decoration_data?.asset
+        profileDecorationUrl: data.avatar_decoration_data?.asset 
+          ? `https://cdn.discordapp.com/avatar-decoration-presets/${data.avatar_decoration_data.asset}.png?size=128&passthrough=true`
+          : null
       };
       
       if (data.avatar) {
