@@ -1,7 +1,7 @@
 async function fetchUsername() {
   try {
     let userId = "1158429903629336646";
-    // FIXED: Use the new /discord/user/:userId endpoint
+    // FIXED: Use the new /discord/discord/user/:userId endpoint
     const response = await fetch(`https://api.wxrn.lol/user/${userId}`);
     const data = await response.json();
 
