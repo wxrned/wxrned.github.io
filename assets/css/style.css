@@ -479,6 +479,222 @@ a:hover,
   }
 }
 
+/* Social Button Tooltips */
+.social-btn {
+  position: relative;
+  z-index: 10000;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.social-btn button {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Social Tooltip Styles */
+.social-tooltip {
+  z-index: 10001 !important;
+  position: absolute;
+  bottom: calc(100% + 15px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid var(--accent-color);
+  border-radius: 12px;
+  padding: 12px 18px;
+  min-width: 180px;
+  max-width: 280px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 9997;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(159, 74, 198, 0.15);
+  pointer-events: none;
+  text-align: center;
+  color: white;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+/* Arrow for social tooltips */
+.social-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid var(--accent-color);
+}
+
+.social-btn:hover .social-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) scale(1);
+}
+
+.social-tooltip .tooltip-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+}
+
+.social-tooltip .tooltip-loading .spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top: 2px solid var(--accent-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.social-tooltip .stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  gap: 20px;
+  font-size: 13px;
+}
+
+.social-tooltip .stat-row .stat-label {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+}
+
+.social-tooltip .stat-row .stat-value {
+  color: var(--text-color-light);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.social-tooltip .stat-divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 6px 0;
+}
+
+.social-tooltip .tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.social-tooltip .tooltip-header .platform-icon {
+  font-size: 20px;
+}
+
+.social-tooltip .tooltip-header .platform-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--text-color-light);
+}
+
+.social-tooltip .tooltip-header .platform-username {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-left: auto;
+}
+
+.social-tooltip .tooltip-error {
+  color: rgba(255, 100, 100, 0.7);
+  font-size: 13px;
+}
+
+/* Individual platform colors */
+.social-btn[data-social="instagram"] .social-tooltip {
+  border-color: #E4405F;
+}
+.social-btn[data-social="instagram"] .social-tooltip::after {
+  border-top-color: #E4405F;
+}
+
+.social-btn[data-social="tiktok"] .social-tooltip {
+  border-color: #00f2ea;
+}
+.social-btn[data-social="tiktok"] .social-tooltip::after {
+  border-top-color: #00f2ea;
+}
+
+.social-btn[data-social="lastfm"] .social-tooltip {
+  border-color: #d51007;
+}
+.social-btn[data-social="lastfm"] .social-tooltip::after {
+  border-top-color: #d51007;
+}
+
+.social-btn[data-social="github"] .social-tooltip {
+  border-color: #6e5494;
+}
+.social-btn[data-social="github"] .social-tooltip::after {
+  border-top-color: #6e5494;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .social-tooltip {
+    min-width: 140px;
+    max-width: 200px;
+    padding: 10px 14px;
+    font-size: 12px;
+    bottom: calc(100% + 12px);
+  }
+  
+  .social-tooltip .stat-row {
+    font-size: 11px;
+    padding: 2px 0;
+  }
+  
+  .social-tooltip .stat-row .stat-value {
+    font-size: 12px;
+  }
+}
+
+/* Social tooltip hover animation */
+.social-btn button {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.social-btn:hover button {
+  transform: scale(1.05);
+}
+
+.social-tooltip {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.social-tooltip .stat-row {
+  opacity: 0;
+  transform: translateY(5px);
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+.social-tooltip .stat-row:nth-child(1) { animation-delay: 0.05s; }
+.social-tooltip .stat-row:nth-child(2) { animation-delay: 0.10s; }
+.social-tooltip .stat-row:nth-child(3) { animation-delay: 0.15s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .platforms-popup {
   position: relative;
 }
