@@ -1,4 +1,4 @@
-// assets/js/social-stats.js - Fixed with better error handling
+// assets/js/social-stats.js - Complete with Font Awesome icons
 
 const SOCIAL_STATS = {
   instagram: {
@@ -8,7 +8,6 @@ const SOCIAL_STATS = {
       try {
         const response = await fetch(`https://api.wxrn.lol/social/instagram/${username}`);
         
-        // Handle non-200 responses gracefully
         if (!response.ok) {
           if (response.status === 404) {
             console.warn(`Instagram user "${username}" not found`);
@@ -23,7 +22,6 @@ const SOCIAL_STATS = {
         
         const data = await response.json();
         
-        // Check if the response has the expected data
         if (!data || data.error) {
           console.warn('Instagram API error:', data?.error || 'Unknown error');
           return { error: 'api_error', message: data?.error || 'API error' };
@@ -44,13 +42,12 @@ const SOCIAL_STATS = {
       }
     },
     format: (data) => {
-      // Handle error states
       if (!data) return '<div class="tooltip-error">Failed to load stats</div>';
       
       if (data.error === 'not_found') {
         return `
           <div class="tooltip-header">
-            <span class="platform-icon">📸</span>
+            <span class="platform-icon"><i class="fa-brands fa-instagram"></i></span>
             <span class="platform-name">Instagram</span>
             <span class="platform-username">@${data.username || ''}</span>
           </div>
@@ -61,45 +58,44 @@ const SOCIAL_STATS = {
       if (data.error === 'rate_limited' || data.error === 'api_error') {
         return `
           <div class="tooltip-header">
-            <span class="platform-icon">📸</span>
+            <span class="platform-icon"><i class="fa-brands fa-instagram"></i></span>
             <span class="platform-name">Instagram</span>
             <span class="platform-username">@${data.username || ''}</span>
           </div>
-          <div class="tooltip-error" style="padding:8px 0;">⚠️ Temporarily unavailable</div>
+          <div class="tooltip-error" style="padding:8px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Temporarily unavailable</div>
         `;
       }
       
       if (data.error === 'fetch_failed') {
         return `
           <div class="tooltip-header">
-            <span class="platform-icon">📸</span>
+            <span class="platform-icon"><i class="fa-brands fa-instagram"></i></span>
             <span class="platform-name">Instagram</span>
             <span class="platform-username">@${data.username || ''}</span>
           </div>
-          <div class="tooltip-error" style="padding:8px 0;">Could not fetch stats</div>
+          <div class="tooltip-error" style="padding:8px 0;"><i class="fa-solid fa-wifi"></i> Could not fetch stats</div>
         `;
       }
       
-      // Normal data display
       return `
         <div class="tooltip-header">
-          <span class="platform-icon">📸</span>
+          <span class="platform-icon"><i class="fa-brands fa-instagram"></i></span>
           <span class="platform-name">Instagram</span>
           <span class="platform-username">@${data.username || ''}</span>
         </div>
         ${data.fullName ? `<div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:6px;">${data.fullName}</div>` : ''}
-        ${data.isPrivate ? '<div style="color:rgba(255,255,255,0.5);font-size:12px;">🔒 Private Account</div>' : ''}
-        ${data.isVerified ? '<div style="color:#1DA1F2;font-size:12px;">✅ Verified</div>' : ''}
+        ${data.isPrivate ? '<div style="color:rgba(255,255,255,0.5);font-size:12px;"><i class="fa-solid fa-lock"></i> Private Account</div>' : ''}
+        ${data.isVerified ? '<div style="color:#1DA1F2;font-size:12px;"><i class="fa-solid fa-circle-check"></i> Verified</div>' : ''}
         <div class="stat-row">
-          <span class="stat-label">👥 Followers</span>
+          <span class="stat-label"><i class="fa-regular fa-user"></i> Followers</span>
           <span class="stat-value">${data.followers}</span>
         </div>
         <div class="stat-row">
-          <span class="stat-label">👤 Following</span>
+          <span class="stat-label"><i class="fa-regular fa-user-plus"></i> Following</span>
           <span class="stat-value">${data.following}</span>
         </div>
         <div class="stat-row">
-          <span class="stat-label">📷 Posts</span>
+          <span class="stat-label"><i class="fa-regular fa-image"></i> Posts</span>
           <span class="stat-value">${data.posts}</span>
         </div>
       `;
@@ -123,7 +119,6 @@ const SOCIAL_STATS = {
         
         const data = await response.json();
         
-        // Check if the response has data or is a placeholder
         if (data.message && data.message.includes('coming soon')) {
           return { 
             error: 'coming_soon', 
@@ -156,20 +151,20 @@ const SOCIAL_STATS = {
       if (data.error === 'coming_soon') {
         return `
           <div class="tooltip-header">
-            <span class="platform-icon">🎵</span>
+            <span class="platform-icon"><i class="fa-brands fa-tiktok"></i></span>
             <span class="platform-name">TikTok</span>
             <span class="platform-username">@${data.username || ''}</span>
           </div>
-          <div style="color:rgba(255,255,255,0.4);font-size:12px;padding:8px 0;">⏳ Coming soon</div>
+          <div style="color:rgba(255,255,255,0.4);font-size:12px;padding:8px 0;"><i class="fa-regular fa-clock"></i> Coming soon</div>
         `;
       }
       
       if (data.error === 'not_found') {
         return `
           <div class="tooltip-header">
-            <span class="platform-icon">🎵</span>
-          <span class="platform-name">TikTok</span>
-          <span class="platform-username">@${data.username || ''}</span>
+            <span class="platform-icon"><i class="fa-brands fa-tiktok"></i></span>
+            <span class="platform-name">TikTok</span>
+            <span class="platform-username">@${data.username || ''}</span>
           </div>
           <div class="tooltip-error" style="padding:8px 0;">User not found</div>
         `;
@@ -178,31 +173,30 @@ const SOCIAL_STATS = {
       if (data.error === 'fetch_failed' || data.error === 'api_error') {
         return `
           <div class="tooltip-header">
-            <span class="platform-icon">🎵</span>
+            <span class="platform-icon"><i class="fa-brands fa-tiktok"></i></span>
             <span class="platform-name">TikTok</span>
             <span class="platform-username">@${data.username || ''}</span>
           </div>
-          <div class="tooltip-error" style="padding:8px 0;">⚠️ Temporarily unavailable</div>
+          <div class="tooltip-error" style="padding:8px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Temporarily unavailable</div>
         `;
       }
       
-      // Normal data display
       return `
         <div class="tooltip-header">
-          <span class="platform-icon">🎵</span>
+          <span class="platform-icon"><i class="fa-brands fa-tiktok"></i></span>
           <span class="platform-name">TikTok</span>
           <span class="platform-username">@${data.username || ''}</span>
         </div>
         <div class="stat-row">
-          <span class="stat-label">👥 Followers</span>
+          <span class="stat-label"><i class="fa-regular fa-user"></i> Followers</span>
           <span class="stat-value">${data.followers}</span>
         </div>
         <div class="stat-row">
-          <span class="stat-label">❤️ Likes</span>
+          <span class="stat-label"><i class="fa-regular fa-heart"></i> Likes</span>
           <span class="stat-value">${data.likes}</span>
         </div>
         <div class="stat-row">
-          <span class="stat-label">🎬 Videos</span>
+          <span class="stat-label"><i class="fa-regular fa-play-circle"></i> Videos</span>
           <span class="stat-value">${data.videos}</span>
         </div>
       `;
@@ -230,10 +224,8 @@ const SOCIAL_STATS = {
           return { error: 'api_error', message: data?.error || 'API error' };
         }
         
-        // Get total artists
         let totalArtists = data.totalArtists || 0;
         
-        // If totalArtists is not provided, try with a larger limit
         if (!totalArtists || totalArtists <= 1) {
           try {
             const fullResponse = await fetch(`https://api.wxrn.lol/social/lastfm/top-artists?username=${username}&limit=1000`);
@@ -242,7 +234,6 @@ const SOCIAL_STATS = {
               totalArtists = fullData.totalArtists || fullData.topArtists?.length || 0;
             }
           } catch (e) {
-            // If the second request fails, use what we have
             console.warn('Could not fetch full artist count, using available data');
           }
         }
@@ -263,7 +254,7 @@ const SOCIAL_STATS = {
       if (data.error === 'not_found') {
         return `
           <div class="tooltip-header">
-            <span class="platform-icon">🎵</span>
+            <span class="platform-icon"><i class="fa-brands fa-lastfm"></i></span>
             <span class="platform-name">Last.fm</span>
             <span class="platform-username">@${data.username || ''}</span>
           </div>
@@ -274,11 +265,11 @@ const SOCIAL_STATS = {
       if (data.error === 'fetch_failed' || data.error === 'api_error') {
         return `
           <div class="tooltip-header">
-            <span class="platform-icon">🎵</span>
+            <span class="platform-icon"><i class="fa-brands fa-lastfm"></i></span>
             <span class="platform-name">Last.fm</span>
             <span class="platform-username">@${data.username || ''}</span>
           </div>
-          <div class="tooltip-error" style="padding:8px 0;">⚠️ Temporarily unavailable</div>
+          <div class="tooltip-error" style="padding:8px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Temporarily unavailable</div>
         `;
       }
       
@@ -287,20 +278,20 @@ const SOCIAL_STATS = {
       
       return `
         <div class="tooltip-header">
-          <span class="platform-icon">🎵</span>
+          <span class="platform-icon"><i class="fa-brands fa-lastfm"></i></span>
           <span class="platform-name">Last.fm</span>
           <span class="platform-username">@${data.username || ''}</span>
         </div>
         <div class="stat-row">
-          <span class="stat-label">🎶 Scrobbles</span>
+          <span class="stat-label"><i class="fa-solid fa-headphones"></i> Scrobbles</span>
           <span class="stat-value">${data.scrobbles}</span>
         </div>
         <div class="stat-row">
-          <span class="stat-label">🎤 Top Artist</span>
+          <span class="stat-label"><i class="fa-solid fa-star"></i> Top Artist</span>
           <span class="stat-value">${data.topArtist}</span>
         </div>
         <div class="stat-row">
-          <span class="stat-label">📊 ${artistText}</span>
+          <span class="stat-label"><i class="fa-solid fa-users"></i> ${artistText}</span>
           <span class="stat-value">${formattedArtists}</span>
         </div>
       `;
@@ -347,7 +338,7 @@ const SOCIAL_STATS = {
       if (data.error === 'not_found') {
         return `
           <div class="tooltip-header">
-            <span class="platform-icon">🐙</span>
+            <span class="platform-icon"><i class="fa-brands fa-github"></i></span>
             <span class="platform-name">GitHub</span>
             <span class="platform-username">@${data.username || ''}</span>
           </div>
@@ -358,33 +349,33 @@ const SOCIAL_STATS = {
       if (data.error === 'fetch_failed' || data.error === 'api_error') {
         return `
           <div class="tooltip-header">
-            <span class="platform-icon">🐙</span>
+            <span class="platform-icon"><i class="fa-brands fa-github"></i></span>
             <span class="platform-name">GitHub</span>
             <span class="platform-username">@${data.username || ''}</span>
           </div>
-          <div class="tooltip-error" style="padding:8px 0;">⚠️ Temporarily unavailable</div>
+          <div class="tooltip-error" style="padding:8px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Temporarily unavailable</div>
         `;
       }
       
       return `
         <div class="tooltip-header">
-          <span class="platform-icon">🐙</span>
+          <span class="platform-icon"><i class="fa-brands fa-github"></i></span>
           <span class="platform-name">GitHub</span>
           <span class="platform-username">@${data.username || ''}</span>
         </div>
         ${data.name ? `<div style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:4px;">${data.name}</div>` : ''}
         ${data.bio ? `<div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:6px;">${data.bio.substring(0, 50)}${data.bio.length > 50 ? '...' : ''}</div>` : ''}
-        ${data.location ? `<div style="font-size:10px;color:rgba(255,255,255,0.3);margin-bottom:4px;">📍 ${data.location}</div>` : ''}
+        ${data.location ? `<div style="font-size:10px;color:rgba(255,255,255,0.3);margin-bottom:4px;"><i class="fa-regular fa-location-dot"></i> ${data.location}</div>` : ''}
         <div class="stat-row">
-          <span class="stat-label">👥 Followers</span>
+          <span class="stat-label"><i class="fa-regular fa-user"></i> Followers</span>
           <span class="stat-value">${data.followers}</span>
         </div>
         <div class="stat-row">
-          <span class="stat-label">👤 Following</span>
+          <span class="stat-label"><i class="fa-regular fa-user-plus"></i> Following</span>
           <span class="stat-value">${data.following}</span>
         </div>
         <div class="stat-row">
-          <span class="stat-label">📁 Repos</span>
+          <span class="stat-label"><i class="fa-regular fa-folder"></i> Repos</span>
           <span class="stat-value">${data.repos}</span>
         </div>
       `;
@@ -405,7 +396,6 @@ async function loadSocialStats() {
     const config = SOCIAL_STATS[platform];
     if (!config) continue;
     
-    // Show loading state
     tooltip.innerHTML = `
       <div class="tooltip-loading">
         <span class="spinner"></span>
@@ -413,10 +403,8 @@ async function loadSocialStats() {
       </div>
     `;
     
-    // Fetch stats
     const data = await config.fetch(username);
     
-    // Update tooltip
     if (data) {
       data.username = username;
       tooltip.innerHTML = config.format(data);
@@ -430,13 +418,10 @@ async function loadSocialStats() {
   }
 }
 
-// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(loadSocialStats, 1000);
 });
 
-// Also refresh stats periodically (every 5 minutes)
 setInterval(loadSocialStats, 300000);
 
-// Expose for debugging
 window.loadSocialStats = loadSocialStats;

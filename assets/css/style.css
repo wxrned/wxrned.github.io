@@ -2,9 +2,42 @@
 
 @import url(variables.css);
 
+body, main { z-index: 0; position: relative; }
+
+.music-player, .flexbox, #view-counter { z-index: 1; position: relative; }
+
+.controls, .social-btn { z-index: 2; position: relative; }
+
+#overlay { z-index: 9990; position: fixed; }
+
+#popup { 
+  z-index: 99999 !important; 
+  position: fixed;
+}
+
+#lyrics-popup { 
+  z-index: 99999 !important; 
+  position: fixed;
+}
+
+.lastfm-tooltip { 
+  z-index: 9998; 
+  position: fixed;
+}
+
+.social-tooltip { 
+  z-index: 10000 !important; 
+  position: absolute;
+}
+
+#right-click-menu { z-index: 10000; position: fixed; }
+
+.copy-notification { z-index: 10001; position: fixed; }
+
+#entry-overlay { z-index: 9999; position: fixed; }
+
 #right-click-menu {
   position: fixed;
-  z-index: 10000;
   background-color: var(--btn-bg);
   border: var(--btn-border);
   border-radius: 8px;
@@ -284,7 +317,6 @@ a:hover,
   left: 0;
   width: 180px;
   height: 180px;
-  z-index: 9980 !important;
   pointer-events: none;
   transition: opacity 0.3s ease-in-out;
 }
@@ -315,7 +347,6 @@ a:hover,
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 9998;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(159, 74, 198, 0.15);
   pointer-events: none;
   text-align: center;
@@ -334,7 +365,6 @@ a:hover,
   filter: blur(3px);
   transform: scale(1.05);
   transition: opacity 0.5s ease;
-  z-index: 0;
   border-radius: 16px;
 }
 
@@ -356,7 +386,6 @@ a:hover,
 
 .lastfm-tooltip .tooltip-content {
   position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -372,7 +401,6 @@ a:hover,
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-top: 10px solid var(--accent-color);
-  z-index: 2;
 }
 
 .lastfm-tooltip.show {
@@ -385,7 +413,6 @@ a:hover,
   font-size: 20px;
   margin-bottom: 4px;
   position: relative;
-  z-index: 1;
   text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
@@ -406,7 +433,6 @@ a:hover,
   letter-spacing: 0.5px;
   line-height: 1.3;
   position: relative;
-  z-index: 1;
   text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
@@ -415,7 +441,6 @@ a:hover,
   font-size: 14px;
   font-family: monospace;
   position: relative;
-  z-index: 1;
   text-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
 }
 
@@ -426,7 +451,6 @@ a:hover,
   margin-top: 4px;
   font-style: italic;
   position: relative;
-  z-index: 1;
   text-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
 }
 
@@ -439,7 +463,6 @@ a:hover,
   font-family: monospace;
   font-size: 14px;
   position: relative;
-  z-index: 1;
 }
 
 .lastfm-tooltip .tooltip-loading .spinner {
@@ -482,7 +505,6 @@ a:hover,
 /* Social Button Tooltips */
 .social-btn {
   position: relative;
-  z-index: 10000;
   display: inline-block;
   text-decoration: none;
 }
@@ -494,7 +516,6 @@ a:hover,
 
 /* Social Tooltip Styles */
 .social-tooltip {
-  z-index: 10001 !important;
   position: absolute;
   bottom: calc(100% + 15px);
   left: 50%;
@@ -510,7 +531,6 @@ a:hover,
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 9997;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(159, 74, 198, 0.15);
   pointer-events: none;
   text-align: center;
@@ -795,7 +815,6 @@ a:hover,
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  z-index: 9990;
   width: 300px;
   height: 280px; /* 6x 280px | 9x 370px */
   opacity: 0;
@@ -849,12 +868,10 @@ a:hover,
   object-fit: cover;
   border-radius: 8px;
   filter: opacity(60%);
-  z-index: 0;
 }
 
 #popup ul li .friend-name {
   position: relative;
-  z-index: 1;
   color: white;
   font-weight: bold;
   text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
@@ -916,7 +933,6 @@ a:hover,
   border-top: 3px solid white;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  z-index: 2;
 }
 
 /* When avatar is loaded, hide loader */
@@ -942,7 +958,6 @@ a:hover,
   border-radius: 10px;
   width: 300px;
   height: 300px;
-  z-index: 9991;
   opacity: 0;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
   overflow: hidden;
@@ -951,7 +966,6 @@ a:hover,
 #lyrics-popup.show {
   display: block;
   pointer-events: auto;
-  z-index: 9991;
   opacity: 1;
 }
 
@@ -1147,20 +1161,12 @@ a:hover,
 
 #overlay {
   display: none;
-
   position: fixed;
-
   top: 0;
-
   left: 0;
-
   width: 100%;
-
   height: 100%;
-
   background: rgba(0, 0, 0, 0.7);
-
-  z-index: 999;
 }
 
 #overlay.show {
@@ -1173,24 +1179,14 @@ a:hover,
 
 #entry-overlay {
   display: flex;
-
   position: fixed;
-
   top: 0;
-
   left: 0;
-
   width: 100%;
-
   height: 100%;
-
   background: rgba(0, 0, 0, 0.8);
-
   justify-content: center;
-
   align-items: center;
-
-  z-index: 9999;
 }
 
 #entry-overlay p {
@@ -1199,7 +1195,6 @@ a:hover,
 
 .overlay-content {
   color: white;
-
   text-align: center;
 }
 
@@ -1284,7 +1279,6 @@ a:hover,
 
 .controls button {
   position: relative;
-  z-index: 2;
   background-color: var(--btn-bg);
   border: var(--btn-border);
   padding: 10px 15px;
@@ -1303,6 +1297,7 @@ a:hover,
   box-shadow: 0 0 15px var(--accent-color);
 }
 
+/* View Counter - Fixed top-left alignment */
 .view-counter {
   position: fixed;
   top: 10px;
@@ -1319,6 +1314,8 @@ a:hover,
   transition: all 0.2s ease-in-out;
   cursor: default;
   display: inline-block;
+  margin: 0; /* Remove any margin */
+  pointer-events: auto; /* Ensure it stays clickable if needed */
 }
 
 .view-counter span {
@@ -1327,8 +1324,17 @@ a:hover,
 
 .view-counter:hover {
   background-color: var(--btn-hover-bg);
-
   padding: 12px 22px;
+}
+
+#view-counter {
+  position: fixed !important;
+  top: 10px !important;
+  left: 10px !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin: 0 !important;
+  transform: none !important;
 }
 
 ::selection {
@@ -1382,7 +1388,8 @@ a:hover,
 @media (max-width: 870px) {
   body {
     background-size: cover;
-
+    padding: 0;
+    margin: 0;
     background-attachment: scroll;
   }
 
@@ -1422,7 +1429,6 @@ a:hover,
   width: 100%;
   height: 32%;
   background-color: transparent;
-  z-index: 9990;
   display: none;
   opacity: 0.75;
   image-rendering: auto;
@@ -1445,7 +1451,6 @@ a:hover,
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease-in-out;
-  z-index: 10001;
 }
 
 .copy-notification.show {
@@ -1550,4 +1555,61 @@ a:hover,
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* Right-click menu button styles */
+#right-click-menu button {
+  background: none;
+  border: none;
+  color: var(--btn-color);
+  font-family: monospace;
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+
+#right-click-menu button i {
+  margin-right: 10px;
+  width: 16px;
+  text-align: center;
+}
+
+#right-click-menu button:hover {
+  color: var(--text-color-light);
+  background: none;
+  padding: 0;
+  font-size: 14px;
+}
+
+#right-click-menu ul li {
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+}
+
+#right-click-menu ul li:hover {
+  background-color: var(--btn-hover-bg);
+}
+
+#right-click-menu ul li a {
+  color: var(--btn-color);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 14px;
+}
+
+#right-click-menu ul li a i {
+  margin-right: 10px;
+  width: 16px;
+  text-align: center;
+}
+
+#right-click-menu ul li a:hover {
+  color: var(--text-color-light);
 }

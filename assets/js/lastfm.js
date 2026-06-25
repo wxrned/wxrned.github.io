@@ -1,3 +1,5 @@
+// lastfm.js - Fixed time accuracy with Font Awesome icons
+
 const LASTFM_USERNAME = 'RoboCookieOff';
 const API_BASE = 'https://api.wxrn.lol';
 
@@ -45,28 +47,30 @@ async function fetchNowPlaying() {
     const playedAt = track.playedAt;
     
     let timeAgo = '';
-    if (playedAt) {
+    if (isNowPlaying) {
+      timeAgo = '<i class="fa-solid fa-play" style="color: #ff4444;"></i> Playing now';
+    } else if (playedAt) {
       const playedDate = new Date(playedAt);
       const now = new Date();
-      const diffMs = now - playedDate;
-      const diffMins = Math.floor(diffMs / 60000);
+      const diffSeconds = Math.floor((now.getTime() - playedDate.getTime()) / 1000);
       
-      if (isNowPlaying) {
-        timeAgo = '🎵 Currently playing';
-      } else if (diffMins < 1) {
-        timeAgo = 'Just now';
-      } else if (diffMins < 60) {
-        timeAgo = `${diffMins}m ago`;
-      } else if (diffMins < 1440) {
-        const hours = Math.floor(diffMins / 60);
-        timeAgo = `${hours}h ${diffMins % 60}m ago`;
+      if (diffSeconds < 60) {
+        timeAgo = `<i class="fa-regular fa-clock"></i> ${diffSeconds}s ago`;
+      } else if (diffSeconds < 3600) {
+        const minutes = Math.floor(diffSeconds / 60);
+        timeAgo = `<i class="fa-regular fa-clock"></i> ${minutes}m ${diffSeconds % 60}s ago`;
+      } else if (diffSeconds < 86400) {
+        const hours = Math.floor(diffSeconds / 3600);
+        const minutes = Math.floor((diffSeconds % 3600) / 60);
+        timeAgo = `<i class="fa-regular fa-clock"></i> ${hours}h ${minutes}m ago`;
       } else {
-        const days = Math.floor(diffMins / 1440);
-        timeAgo = `${days}d ago`;
+        const days = Math.floor(diffSeconds / 86400);
+        const hours = Math.floor((diffSeconds % 86400) / 3600);
+        timeAgo = `<i class="fa-regular fa-clock"></i> ${days}d ${hours}h ago`;
       }
     }
     
-    // Get album cover image - try different sizes
+    // Get album cover image
     let imageUrl = null;
     if (track.image) {
       imageUrl = track.image;
@@ -74,11 +78,8 @@ async function fetchNowPlaying() {
       imageUrl = track.album.image;
     }
     
-    // If we have an image URL, try to get a larger version
     if (imageUrl) {
-      // Replace size parameter for larger image if possible
       imageUrl = imageUrl.replace(/\/\d+x\d+\//, '/300x300/');
-      // Or use Last.fm's large size
       if (!imageUrl.includes('300x300')) {
         imageUrl = imageUrl.replace(/\/\d+x\d+\//, '/300x300/');
       }
@@ -118,7 +119,7 @@ function updateTooltip(trackData) {
   
   if (!tooltip) return;
   
-  // Update background image if available
+  // Update background image
   if (bgEl && trackData && trackData.image) {
     bgEl.style.backgroundImage = `url(${trackData.image})`;
     bgEl.style.opacity = '0.2';
@@ -131,20 +132,28 @@ function updateTooltip(trackData) {
   if (!trackData || trackData.error) {
     trackEl.textContent = trackData?.name || 'Nothing playing';
     artistEl.textContent = trackData?.artist || 'Check back later';
-    timeEl.textContent = '';
-    statusEl.textContent = '🎵';
+    timeEl.innerHTML = '';
+    statusEl.innerHTML = '<i class="fa-regular fa-circle"></i>';
     statusEl.className = 'tooltip-status';
     return;
   }
   
-  statusEl.textContent = trackData.isNowPlaying ? '🔴' : '🎵';
-  statusEl.className = 'tooltip-status' + (trackData.isNowPlaying ? ' playing' : '');
+  // Use Font Awesome icons for status
+  if (trackData.isNowPlaying) {
+    statusEl.innerHTML = '<i class="fa-solid fa-circle" style="color: #ff4444;"></i>';
+    statusEl.className = 'tooltip-status playing';
+    statusEl.style.animation = 'pulse-status 1.5s ease-in-out infinite';
+  } else {
+    statusEl.innerHTML = '<i class="fa-regular fa-circle"></i>';
+    statusEl.className = 'tooltip-status';
+    statusEl.style.animation = 'none';
+  }
   
   trackEl.textContent = trackData.name || 'Unknown Track';
   artistEl.textContent = trackData.artist || 'Unknown Artist';
-  timeEl.textContent = trackData.timeAgo || '';
+  timeEl.innerHTML = trackData.timeAgo || '';
   
-  // Apply accent color to border
+  // Apply accent color
   const accentColor = getComputedStyle(document.documentElement)
     .getPropertyValue('--accent-color').trim() || '#9f4ac6';
   tooltip.style.borderColor = accentColor;
@@ -175,7 +184,6 @@ function hideTooltip() {
   const tooltip = document.getElementById('lastfm-tooltip');
   if (tooltip) {
     tooltip.classList.remove('show');
-    // Reset background when hidden
     const bgEl = document.getElementById('tooltip-bg');
     if (bgEl) {
       bgEl.style.backgroundImage = 'none';
@@ -192,7 +200,6 @@ async function refreshNowPlaying(force = false) {
     return cachedTrack;
   }
   
-  // Show loading state
   const trackEl = document.getElementById('tooltip-track');
   if (trackEl) {
     trackEl.textContent = 'Loading...';
@@ -248,7 +255,6 @@ function setupTooltip() {
     }, 200);
   });
   
-  // Refresh when accent color changes
   const observer = new MutationObserver(() => {
     if (cachedTrack) {
       updateTooltip(cachedTrack);
