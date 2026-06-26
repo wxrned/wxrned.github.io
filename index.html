@@ -31,11 +31,32 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsmediatags/dist/jsmediatags.min.js"></script>
-
-    <title>_</title>
   </head>
 
   <body>
+    <div id="loading-screen" class="loading-screen">
+      <div class="loading-content">
+        <div class="loading-avatar-wrapper">
+          <div class="loading-avatar-glow"></div>
+          <img id="loading-pfp" src="assets/img/black.png" alt="Loading" />
+          <div class="loading-ring"></div>
+        </div>
+        <div class="loading-progress-container">
+          <div class="loading-progress-track">
+            <div class="loading-progress-bar" id="loading-progress-bar"></div>
+          </div>
+          <div class="loading-text">
+            <span id="loading-status">Initializing...</span>
+            <span id="loading-percent">0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progress-bar"></div>
+
+    <!-- Entry Overlay -->
     <div id="entry-overlay" class="entry-overlay">
       <div class="overlay-content">
         <p id="check-p">checking connection</p>
@@ -44,7 +65,7 @@
 
     <main>
       <div id="view-counter" class="view-counter">
-        <span><i class="fa-regular fa-eye"></i> </span>
+        <span class="counter-icon">✦</span>
         <span id="page_views">0</span>
       </div>
 
@@ -94,7 +115,6 @@
       </div>
 
       <div class="flexbox">
-        
         <a href="https://www.tiktok.com/@wxrnlol" target="_blank" 
           class="social-btn" data-social="tiktok" data-username="wxrnlol">
           <button>
@@ -124,14 +144,21 @@
             </span>
           </button>
         </a>
-
       </div>
     </main>
 
-    <div id="overlay"></div>
+    <!-- Particles Canvas -->
+    <canvas id="particles-canvas"></canvas>
 
-    <!-- <canvas id="visualizer" style="display: none"></canvas>
-    style="visibility: hidden" -->
+    <!-- <footer class="site-footer">
+      <span class="footer-divider">✦</span>
+      <a href="https://api.wxrn.lol/docs" target="_blank" rel="noopener noreferrer">
+        <i class="fa-solid fa-server"></i> api.wxrn.lol
+      </a>
+      <span class="footer-divider">✦</span>
+    </footer> -->
+
+    <div id="overlay"></div>
 
     <div id="lyrics-popup">
       <h2>𐕣 lyrics 𐕣</h2>
@@ -174,7 +201,10 @@
 
     <div id="right-click-menu" class="right-click-menu"><ul></ul></div>
 
-    <script src="assets/js/inspect.js"></script>
+    <!-- Scripts -->
+    <script src="assets/js/particles.js"></script>
+    <script src="assets/js/loading.js"></script>
+    <!-- <script src="assets/js/inspect.js"></script> -->
     <script src="assets/js/title.js"></script>
     <script src="assets/js/views.js"></script>
     <script src="assets/js/loadAssets.js"></script>
