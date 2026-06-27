@@ -13,6 +13,8 @@ class ChatClient {
     this.typingTimeout = null;
     this.isTyping = false;
     this.isChatOpen = false;
+    this.useHttpFallback = false;
+    this.messageQueue = [];
     
     this.init();
   }
@@ -20,6 +22,7 @@ class ChatClient {
   init() {
     this.createChatUI();
     this.setupChatToggle();
+    this.setupChatInput();
     this.loadHistory();
   }
 
@@ -70,11 +73,37 @@ class ChatClient {
     });
   }
 
-  showAuthModal() {
-    // Check if already authenticated
-    if (this.isAuthenticated) return;
+  setupChatInput() {
+    const input = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('chat-send-btn');
 
-    // Check if modal already exists
+    if (!input || !sendBtn) return;
+
+    // Send on button click
+    sendBtn.addEventListener('click', () => {
+      this.sendMessage();
+    });
+
+    // Send on Enter key
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        this.sendMessage();
+      }
+    });
+
+    // Typing indicator
+    input.addEventListener('input', () => {
+      this.handleTyping();
+    });
+  }
+
+  // ============================================
+  // AUTH MODAL METHODS
+  // ============================================
+
+  showAuthModal() {
+    if (this.isAuthenticated) return;
     if (document.getElementById('chat-auth-modal')) return;
 
     const modal = document.createElement('div');
@@ -111,25 +140,19 @@ class ChatClient {
 
     document.body.appendChild(modal);
 
-    // ============================================
-    // CLOSE BUTTON - Click to close modal
-    // ============================================
+    // Close button
     document.getElementById('chat-modal-close').addEventListener('click', () => {
       this.closeAuthModal();
     });
 
-    // ============================================
-    // CLICK OUTSIDE - Click on backdrop to close
-    // ============================================
+    // Click outside
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
         this.closeAuthModal();
       }
     });
 
-    // ============================================
-    // ESC KEY - Press Escape to close
-    // ============================================
+    // ESC key
     document.addEventListener('keydown', this.handleEscKey = (e) => {
       if (e.key === 'Escape' && document.getElementById('chat-auth-modal')) {
         this.closeAuthModal();
@@ -146,7 +169,6 @@ class ChatClient {
         document.querySelectorAll('.chat-form').forEach(f => f.classList.remove('active'));
         document.getElementById(`chat-${tabName}-form`).classList.add('active');
         
-        // Clear errors when switching tabs
         document.querySelectorAll('.chat-modal-error').forEach(el => {
           el.textContent = '';
           el.className = 'chat-modal-error';
@@ -166,7 +188,6 @@ class ChatClient {
       if (e.key === 'Enter') this.handleSignup();
     });
 
-    // Auto-focus first input
     setTimeout(() => {
       const firstInput = document.querySelector('.chat-form.active input');
       if (firstInput) firstInput.focus();
@@ -179,11 +200,9 @@ class ChatClient {
       modal.classList.add('fade-out');
       setTimeout(() => {
         modal.remove();
-        // Remove ESC key listener
         if (this.handleEscKey) {
           document.removeEventListener('keydown', this.handleEscKey);
         }
-        // Close the chat body too
         const body = document.getElementById('chat-body');
         const arrow = document.querySelector('.chat-toggle-arrow');
         if (body) {
@@ -226,12 +245,10 @@ class ChatClient {
       localStorage.setItem('chat_username', data.username);
       localStorage.setItem('chat_avatar_color', data.avatarColor || '#9f4ac6');
 
-      // Close modal
       const modal = document.getElementById('chat-auth-modal');
       modal.classList.add('fade-out');
       setTimeout(() => modal.remove(), 300);
 
-      // Connect to WebSocket
       this.connect();
       this.showNotification('✅ Logged in successfully!', 'success');
 
@@ -277,7 +294,6 @@ class ChatClient {
         return;
       }
 
-      // Switch to login tab
       document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
       document.querySelector('[data-tab="login"]').classList.add('active');
       document.querySelectorAll('.chat-form').forEach(f => f.classList.remove('active'));
@@ -296,6 +312,10 @@ class ChatClient {
     }
   }
 
+  // ============================================
+  // WEBSOCKET CONNECTION
+  // ============================================
+
   connect() {
     if (!this.isAuthenticated) return;
     if (this.ws && this.ws.readyState === WebSocket.OPEN) return;
@@ -308,10 +328,12 @@ class ChatClient {
       this.ws.onopen = () => {
         console.log('🟢 Connected to chat');
         this.isConnected = true;
+        this.useHttpFallback = false;
         this.reconnectAttempts = 0;
         this.updateStatus('connected');
         this.enableInput(true);
         this.showNotification('Connected to chat', 'success');
+        this.flushMessageQueue();
       };
 
       this.ws.onmessage = (event) => {
@@ -329,10 +351,13 @@ class ChatClient {
       this.ws.onerror = (error) => {
         console.error('WebSocket error:', error);
         this.updateStatus('error');
+        this.useHttpFallback = true;
+        this.showNotification('Using HTTP fallback for messages', 'info');
       };
 
     } catch (error) {
       console.error('Failed to connect:', error);
+      this.useHttpFallback = true;
       this.reconnect();
     }
   }
@@ -340,17 +365,24 @@ class ChatClient {
   reconnect() {
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
       console.log('Max reconnect attempts reached');
-      this.showNotification('Connection lost. Refresh to reconnect.', 'error');
+      this.showNotification('Connection lost. Using HTTP fallback.', 'error');
+      this.useHttpFallback = true;
       return;
     }
 
     this.reconnectAttempts++;
     const delay = Math.min(this.reconnectDelay * this.reconnectAttempts, 30000);
     
+    console.log(`Reconnecting in ${delay/1000}s... (attempt ${this.reconnectAttempts})`);
+    
     setTimeout(() => {
       this.connect();
     }, delay);
   }
+
+  // ============================================
+  // MESSAGE HANDLING
+  // ============================================
 
   handleMessage(data) {
     try {
@@ -394,26 +426,95 @@ class ChatClient {
 
   sendMessage() {
     const input = document.getElementById('chat-input');
-    const message = input.value.trim();
+    if (!input) return;
     
+    const message = input.value.trim();
     if (!message) return;
-    if (!this.isConnected) {
-      this.showNotification('Not connected to chat', 'error');
+    
+    console.log('Sending message:', message);
+    
+    // Try WebSocket first
+    if (this.isConnected && this.ws && this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify({
+        type: 'message',
+        message: message
+      }));
+      input.value = '';
+      this.isTyping = false;
+      clearTimeout(this.typingTimeout);
+      console.log('✅ Message sent via WebSocket');
       return;
     }
 
-    this.ws.send(JSON.stringify({
-      type: 'message',
-      message: message
-    }));
+    // Fallback to HTTP
+    if (this.useHttpFallback || !this.isConnected) {
+      console.log('Using HTTP fallback for message');
+      this.sendMessageHttp(message);
+      input.value = '';
+      this.isTyping = false;
+      clearTimeout(this.typingTimeout);
+      return;
+    }
 
+    // Queue message if not connected
+    this.messageQueue.push(message);
+    this.showNotification('Message queued. Will send when connected.', 'info');
     input.value = '';
-    this.isTyping = false;
-    clearTimeout(this.typingTimeout);
   }
+
+  async sendMessageHttp(message) {
+    try {
+      console.log('Sending HTTP message:', message);
+      const response = await fetch('https://api.wxrn.lol/chat/message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: this.username,
+          message: message
+        })
+      });
+
+      console.log('HTTP response status:', response.status);
+
+      if (response.ok) {
+        const data = await response.json();
+        this.messages.push(data);
+        this.renderMessages();
+        this.showNotification('Message sent ✓', 'success');
+        console.log('✅ Message sent via HTTP');
+      } else {
+        const error = await response.json();
+        console.error('HTTP send error:', error);
+        this.showNotification(`Failed to send: ${error.error || 'Unknown error'}`, 'error');
+      }
+    } catch (error) {
+      console.error('HTTP send error:', error);
+      this.showNotification('Failed to send message', 'error');
+    }
+  }
+
+  flushMessageQueue() {
+    while (this.messageQueue.length > 0) {
+      const message = this.messageQueue.shift();
+      if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+        this.ws.send(JSON.stringify({
+          type: 'message',
+          message: message
+        }));
+      }
+    }
+  }
+
+  // ============================================
+  // UI UPDATE METHODS
+  // ============================================
 
   handleTyping() {
     const input = document.getElementById('chat-input');
+    if (!input) return;
+    
     const isCurrentlyTyping = input.value.length > 0;
     
     if (isCurrentlyTyping !== this.isTyping && this.isConnected) {
@@ -442,7 +543,6 @@ class ChatClient {
     const container = document.getElementById('chat-messages');
     if (!container) return;
 
-    // Check if we need to preserve scroll position
     const shouldAutoScroll = container.scrollHeight - container.scrollTop - container.clientHeight < 50;
     
     const currentCount = container.children.length;
@@ -477,7 +577,6 @@ class ChatClient {
         <span class="chat-msg-time">${this.formatTime(message.timestamp)}</span>
       `;
     } else {
-      const isOwn = message.username === this.username;
       div.innerHTML = `
         <span class="chat-msg-username" style="color: ${this.getUserColor(message.userId)}">${this.escapeHtml(message.username)}</span>
         <span class="chat-msg-text">${this.escapeHtml(message.message)}</span>
@@ -501,7 +600,6 @@ class ChatClient {
   }
 
   showNotification(message, type = 'info') {
-    // Flash the chat toggle
     const toggle = document.getElementById('chat-toggle');
     if (toggle) {
       const colors = {
@@ -515,7 +613,6 @@ class ChatClient {
       }, 1500);
     }
 
-    // Update status icon
     const status = document.getElementById('chat-status');
     if (status) {
       if (type === 'success') status.style.color = '#4ade80';
@@ -548,7 +645,10 @@ class ChatClient {
   enableInput(enabled) {
     const input = document.getElementById('chat-input');
     const sendBtn = document.getElementById('chat-send-btn');
-    if (input) input.disabled = !enabled;
+    if (input) {
+      input.disabled = !enabled;
+      input.placeholder = enabled ? 'Type a message...' : 'Connecting...';
+    }
     if (sendBtn) sendBtn.disabled = !enabled;
   }
 
