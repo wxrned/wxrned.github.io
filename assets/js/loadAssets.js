@@ -224,6 +224,15 @@ function applyColorsFromImage(imgElement) {
     const darkenedBackgroundColor = adjustColorBrightness(dominantColorRgb, -90);
     document.documentElement.style.setProperty("--bg-color", darkenedBackgroundColor);
     document.body.style.backgroundColor = darkenedBackgroundColor;
+    
+    const event = new CustomEvent('colorsApplied', {
+      detail: {
+        accentColor: dominantColorRgb,
+        textColor: textColor,
+        bgColor: darkenedBackgroundColor
+      }
+    });
+    document.dispatchEvent(event);
 
     console.log("Colors applied based on the image");
   } catch (error) {

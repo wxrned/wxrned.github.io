@@ -16,6 +16,7 @@ class ChatClient {
     this.useHttpFallback = false;
     this.messageQueue = [];
     this.historyLoaded = false;
+    this.historyLoading = false;
     
     this.init();
   }
@@ -29,7 +30,7 @@ class ChatClient {
     // Load history after DOM is ready
     setTimeout(() => {
       this.loadHistory();
-    }, 800);
+    }, 1000);
   }
 
   createChatUI() {
@@ -79,7 +80,7 @@ class ChatClient {
       }
       
       // FORCE RENDER when chat opens
-      if (this.isChatOpen) {
+      if (this.isChatOpen && this.messages.length > 0) {
         console.log('📜 Chat opened, rendering messages...');
         this.renderMessages();
       }
@@ -394,11 +395,13 @@ class ChatClient {
       
       switch (parsed.type) {
         case 'history':
+          console.log('📜 Received history from WebSocket:', parsed.data.length, 'messages');
           this.messages = parsed.data;
           this.renderMessages();
           break;
           
         case 'new_message':
+          console.log('📩 New message:', parsed.data);
           this.messages.push(parsed.data);
           this.renderMessages();
           if (parsed.data.username !== this.username && !parsed.data.isSystem) {
@@ -692,6 +695,14 @@ class ChatClient {
   }
 
   async loadHistory() {
+    // Prevent multiple simultaneous loads
+    if (this.historyLoading) {
+      console.log('📜 History already loading...');
+      return;
+    }
+    
+    this.historyLoading = true;
+    
     try {
       console.log('📜 Loading chat history...');
       const response = await fetch('https://api.wxrn.lol/chat/history?limit=50');
@@ -712,13 +723,35 @@ class ChatClient {
       }
     } catch (error) {
       console.error('Failed to load chat history:', error);
+    } finally {
+      this.historyLoading = false;
     }
   }
 }
 
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   console.log('📋 DOM loaded, initializing chat...');
+  
+  // Wait for everything to load
+  const checkInterval = setInterval(() => {
+    const loadingScreen = document.getElementById('loading-screen');
+    const main = document.querySelector('main');
+    
+    if ((!loadingScreen || loadingScreen.style.display === 'none') && 
+        main && main.style.display !== 'none') {
+      clearInterval(checkInterval);
+      console.log('📋 Page loaded, initializing chat...');
+      setTimeout(() => {
+        window.chatClient = new ChatClient();
+      }, 500);
+    }
+  }, 500);
+  
   setTimeout(() => {
-    window.chatClient = new ChatClient();
-  }, 1500);
+    if (!window.chatClient) {
+      console.log('📋 Safety timeout, initializing chat...');
+      window.chatClient = new ChatClient();
+    }
+  }, 8000);
 });
