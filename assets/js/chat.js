@@ -15,15 +15,21 @@ class ChatClient {
     this.isChatOpen = false;
     this.useHttpFallback = false;
     this.messageQueue = [];
+    this.historyLoaded = false;
     
     this.init();
   }
 
   init() {
+    console.log('💬 ChatClient initializing...');
     this.createChatUI();
     this.setupChatToggle();
     this.setupChatInput();
-    this.loadHistory();
+    
+    // Load history after a small delay to ensure DOM is ready
+    setTimeout(() => {
+      this.loadHistory();
+    }, 500);
   }
 
   createChatUI() {
@@ -50,6 +56,7 @@ class ChatClient {
     `;
 
     document.body.insertAdjacentHTML('beforeend', chatHTML);
+    console.log('✅ Chat UI created');
   }
 
   setupChatToggle() {
@@ -62,6 +69,8 @@ class ChatClient {
       body.classList.toggle('open');
       arrow.textContent = this.isChatOpen ? '▾' : '▸';
       
+      console.log('Chat toggled:', this.isChatOpen ? 'open' : 'closed');
+      
       if (this.isChatOpen && !this.isAuthenticated) {
         this.showAuthModal();
       }
@@ -69,6 +78,12 @@ class ChatClient {
       if (this.isChatOpen && this.isAuthenticated && this.isConnected) {
         const input = document.getElementById('chat-input');
         if (input) input.focus();
+      }
+      
+      // If chat is opened and we have messages, render them
+      if (this.isChatOpen && this.messages.length > 0) {
+        console.log('Rendering messages on chat open');
+        this.renderMessages();
       }
     });
   }
@@ -79,12 +94,10 @@ class ChatClient {
 
     if (!input || !sendBtn) return;
 
-    // Send on button click
     sendBtn.addEventListener('click', () => {
       this.sendMessage();
     });
 
-    // Send on Enter key
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
@@ -92,10 +105,11 @@ class ChatClient {
       }
     });
 
-    // Typing indicator
     input.addEventListener('input', () => {
       this.handleTyping();
     });
+    
+    console.log('✅ Chat input setup complete');
   }
 
   // ============================================
@@ -140,26 +154,22 @@ class ChatClient {
 
     document.body.appendChild(modal);
 
-    // Close button
     document.getElementById('chat-modal-close').addEventListener('click', () => {
       this.closeAuthModal();
     });
 
-    // Click outside
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
         this.closeAuthModal();
       }
     });
 
-    // ESC key
     document.addEventListener('keydown', this.handleEscKey = (e) => {
       if (e.key === 'Escape' && document.getElementById('chat-auth-modal')) {
         this.closeAuthModal();
       }
     });
 
-    // Tab switching
     document.querySelectorAll('.chat-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
@@ -176,13 +186,11 @@ class ChatClient {
       });
     });
 
-    // Login
     document.getElementById('chat-login-btn').addEventListener('click', () => this.handleLogin());
     document.getElementById('chat-login-password').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') this.handleLogin();
     });
 
-    // Signup
     document.getElementById('chat-signup-btn').addEventListener('click', () => this.handleSignup());
     document.getElementById('chat-signup-password').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') this.handleSignup();
@@ -390,11 +398,13 @@ class ChatClient {
       
       switch (parsed.type) {
         case 'history':
+          console.log('📜 Received history from WebSocket:', parsed.data.length, 'messages');
           this.messages = parsed.data;
           this.renderMessages();
           break;
           
         case 'new_message':
+          console.log('📩 New message:', parsed.data);
           this.messages.push(parsed.data);
           this.renderMessages();
           if (parsed.data.username !== this.username && !parsed.data.isSystem) {
@@ -431,9 +441,8 @@ class ChatClient {
     const message = input.value.trim();
     if (!message) return;
     
-    console.log('Sending message:', message);
+    console.log('📤 Sending message:', message);
     
-    // Try WebSocket first
     if (this.isConnected && this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify({
         type: 'message',
@@ -446,9 +455,8 @@ class ChatClient {
       return;
     }
 
-    // Fallback to HTTP
     if (this.useHttpFallback || !this.isConnected) {
-      console.log('Using HTTP fallback for message');
+      console.log('📤 Using HTTP fallback for message');
       this.sendMessageHttp(message);
       input.value = '';
       this.isTyping = false;
@@ -456,7 +464,6 @@ class ChatClient {
       return;
     }
 
-    // Queue message if not connected
     this.messageQueue.push(message);
     this.showNotification('Message queued. Will send when connected.', 'info');
     input.value = '';
@@ -464,7 +471,7 @@ class ChatClient {
 
   async sendMessageHttp(message) {
     try {
-      console.log('Sending HTTP message:', message);
+      console.log('📤 Sending HTTP message:', message);
       const response = await fetch('https://api.wxrn.lol/chat/message', {
         method: 'POST',
         headers: {
@@ -541,29 +548,28 @@ class ChatClient {
 
   renderMessages() {
     const container = document.getElementById('chat-messages');
-    if (!container) return;
-
-    const shouldAutoScroll = container.scrollHeight - container.scrollTop - container.clientHeight < 50;
-    
-    const currentCount = container.children.length;
-    const newMessages = this.messages.slice(currentCount);
-    
-    if (newMessages.length === 0 && this.messages.length > 0 && currentCount === 0) {
-      container.innerHTML = '';
-      this.messages.forEach(msg => {
-        container.appendChild(this.createMessageElement(msg));
-      });
-      this.scrollToBottom();
+    if (!container) {
+      console.warn('📜 Chat container not found');
       return;
     }
 
-    newMessages.forEach(msg => {
+    console.log('📜 Rendering', this.messages.length, 'messages');
+    
+    // Clear container
+    container.innerHTML = '';
+    
+    if (this.messages.length === 0) {
+      container.innerHTML = '<div class="chat-message system"><span class="chat-msg-system">No messages yet. Be the first!</span></div>';
+      return;
+    }
+    
+    // Render all messages
+    this.messages.forEach(msg => {
       container.appendChild(this.createMessageElement(msg));
     });
-
-    if (newMessages.length > 0 && shouldAutoScroll) {
-      this.scrollToBottom();
-    }
+    
+    this.scrollToBottom();
+    console.log('✅ Messages rendered');
   }
 
   createMessageElement(message) {
@@ -688,13 +694,21 @@ class ChatClient {
 
   async loadHistory() {
     try {
+      console.log('📜 Loading chat history...');
       const response = await fetch('https://api.wxrn.lol/chat/history?limit=50');
       if (response.ok) {
         const data = await response.json();
+        console.log('📜 History loaded:', data.messages?.length || 0, 'messages');
         this.messages = data.messages || [];
         this.users = data.users || [];
+        this.historyLoaded = true;
+        
         this.renderMessages();
         this.updateUserCount();
+        
+        console.log('✅ History loaded and rendered');
+      } else {
+        console.error('Failed to load history:', response.status);
       }
     } catch (error) {
       console.error('Failed to load chat history:', error);
@@ -703,6 +717,7 @@ class ChatClient {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('📋 DOM loaded, initializing chat...');
   setTimeout(() => {
     window.chatClient = new ChatClient();
   }, 1500);
