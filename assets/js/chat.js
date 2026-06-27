@@ -26,10 +26,10 @@ class ChatClient {
     this.setupChatToggle();
     this.setupChatInput();
     
-    // Load history after a small delay to ensure DOM is ready
+    // Load history after DOM is ready
     setTimeout(() => {
       this.loadHistory();
-    }, 500);
+    }, 800);
   }
 
   createChatUI() {
@@ -69,8 +69,6 @@ class ChatClient {
       body.classList.toggle('open');
       arrow.textContent = this.isChatOpen ? '▾' : '▸';
       
-      console.log('Chat toggled:', this.isChatOpen ? 'open' : 'closed');
-      
       if (this.isChatOpen && !this.isAuthenticated) {
         this.showAuthModal();
       }
@@ -80,9 +78,9 @@ class ChatClient {
         if (input) input.focus();
       }
       
-      // If chat is opened and we have messages, render them
-      if (this.isChatOpen && this.messages.length > 0) {
-        console.log('Rendering messages on chat open');
+      // FORCE RENDER when chat opens
+      if (this.isChatOpen) {
+        console.log('📜 Chat opened, rendering messages...');
         this.renderMessages();
       }
     });
@@ -108,8 +106,6 @@ class ChatClient {
     input.addEventListener('input', () => {
       this.handleTyping();
     });
-    
-    console.log('✅ Chat input setup complete');
   }
 
   // ============================================
@@ -398,13 +394,11 @@ class ChatClient {
       
       switch (parsed.type) {
         case 'history':
-          console.log('📜 Received history from WebSocket:', parsed.data.length, 'messages');
           this.messages = parsed.data;
           this.renderMessages();
           break;
           
         case 'new_message':
-          console.log('📩 New message:', parsed.data);
           this.messages.push(parsed.data);
           this.renderMessages();
           if (parsed.data.username !== this.username && !parsed.data.isSystem) {
@@ -441,8 +435,6 @@ class ChatClient {
     const message = input.value.trim();
     if (!message) return;
     
-    console.log('📤 Sending message:', message);
-    
     if (this.isConnected && this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify({
         type: 'message',
@@ -451,12 +443,10 @@ class ChatClient {
       input.value = '';
       this.isTyping = false;
       clearTimeout(this.typingTimeout);
-      console.log('✅ Message sent via WebSocket');
       return;
     }
 
     if (this.useHttpFallback || !this.isConnected) {
-      console.log('📤 Using HTTP fallback for message');
       this.sendMessageHttp(message);
       input.value = '';
       this.isTyping = false;
@@ -471,7 +461,6 @@ class ChatClient {
 
   async sendMessageHttp(message) {
     try {
-      console.log('📤 Sending HTTP message:', message);
       const response = await fetch('https://api.wxrn.lol/chat/message', {
         method: 'POST',
         headers: {
@@ -483,17 +472,13 @@ class ChatClient {
         })
       });
 
-      console.log('HTTP response status:', response.status);
-
       if (response.ok) {
         const data = await response.json();
         this.messages.push(data);
         this.renderMessages();
         this.showNotification('Message sent ✓', 'success');
-        console.log('✅ Message sent via HTTP');
       } else {
         const error = await response.json();
-        console.error('HTTP send error:', error);
         this.showNotification(`Failed to send: ${error.error || 'Unknown error'}`, 'error');
       }
     } catch (error) {
@@ -515,7 +500,7 @@ class ChatClient {
   }
 
   // ============================================
-  // UI UPDATE METHODS
+  // UI UPDATE METHODS - FIXED
   // ============================================
 
   handleTyping() {
@@ -546,47 +531,59 @@ class ChatClient {
     }, 2000);
   }
 
+  // FIXED: This now properly renders messages
   renderMessages() {
     const container = document.getElementById('chat-messages');
     if (!container) {
-      console.warn('📜 Chat container not found');
+      console.warn('⚠️ Chat container not found');
       return;
     }
 
     console.log('📜 Rendering', this.messages.length, 'messages');
     
-    // Clear container
+    // Clear the container
     container.innerHTML = '';
     
     if (this.messages.length === 0) {
-      container.innerHTML = '<div class="chat-message system"><span class="chat-msg-system">No messages yet. Be the first!</span></div>';
+      container.innerHTML = `<div class="chat-message system"><span class="chat-msg-system">✨ No messages yet. Start the conversation!</span></div>`;
       return;
     }
     
-    // Render all messages
+    // Create and append each message
     this.messages.forEach(msg => {
-      container.appendChild(this.createMessageElement(msg));
+      const el = this.createMessageElement(msg);
+      if (el) {
+        container.appendChild(el);
+      }
     });
     
-    this.scrollToBottom();
-    console.log('✅ Messages rendered');
+    // Scroll to bottom
+    container.scrollTop = container.scrollHeight;
+    console.log('✅ Messages rendered:', this.messages.length);
   }
 
   createMessageElement(message) {
+    if (!message) return null;
+    
     const div = document.createElement('div');
     div.className = `chat-message ${message.isSystem ? 'system' : ''}`;
-    div.dataset.userId = message.userId;
+    div.dataset.userId = message.userId || 'unknown';
 
     if (message.isSystem) {
       div.innerHTML = `
-        <span class="chat-msg-system">${this.escapeHtml(message.message)}</span>
+        <span class="chat-msg-system">${this.escapeHtml(message.message || '')}</span>
         <span class="chat-msg-time">${this.formatTime(message.timestamp)}</span>
       `;
     } else {
+      const username = this.escapeHtml(message.username || 'unknown');
+      const msgText = this.escapeHtml(message.message || '');
+      const color = this.getUserColor(message.userId || 'unknown');
+      const time = this.formatTime(message.timestamp);
+      
       div.innerHTML = `
-        <span class="chat-msg-username" style="color: ${this.getUserColor(message.userId)}">${this.escapeHtml(message.username)}</span>
-        <span class="chat-msg-text">${this.escapeHtml(message.message)}</span>
-        <span class="chat-msg-time">${this.formatTime(message.timestamp)}</span>
+        <span class="chat-msg-username" style="color: ${color}">${username}</span>
+        <span class="chat-msg-text">${msgText}</span>
+        <span class="chat-msg-time">${time}</span>
       `;
     }
 
@@ -670,13 +667,14 @@ class ChatClient {
       '#f87171', '#fb923c', '#facc15', '#4ade80', '#2dd4bf', 
       '#60a5fa', '#818cf8', '#c084fc', '#f472b6'
     ];
-    const hash = userId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hash = String(userId).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return colors[hash % colors.length];
   }
 
   formatTime(timestamp) {
     if (!timestamp) return '';
     const date = new Date(timestamp);
+    if (isNaN(date.getTime())) return '';
     const now = new Date();
     const isToday = date.toDateString() === now.toDateString();
     
@@ -687,6 +685,7 @@ class ChatClient {
   }
 
   escapeHtml(text) {
+    if (!text) return '';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
@@ -703,9 +702,10 @@ class ChatClient {
         this.users = data.users || [];
         this.historyLoaded = true;
         
+        // CRITICAL: Render messages immediately after loading
+        console.log('📜 Rendering messages...');
         this.renderMessages();
         this.updateUserCount();
-        
         console.log('✅ History loaded and rendered');
       } else {
         console.error('Failed to load history:', response.status);
