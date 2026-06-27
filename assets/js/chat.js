@@ -1,92 +1,26 @@
-// chat.js - Full chat client with username entry
-
 class ChatClient {
   constructor() {
     this.ws = null;
     this.messages = [];
     this.users = [];
     this.username = null;
+    this.userId = null;
     this.isConnected = false;
+    this.isAuthenticated = false;
     this.reconnectAttempts = 0;
     this.maxReconnectAttempts = 10;
     this.reconnectDelay = 3000;
     this.typingTimeout = null;
     this.isTyping = false;
-    this.isUsernameSet = false;
+    this.isChatOpen = false;
     
     this.init();
   }
 
   init() {
     this.createChatUI();
-    this.showUsernameModal();
+    this.setupChatToggle();
     this.loadHistory();
-  }
-
-  showUsernameModal() {
-    const savedUsername = localStorage.getItem('chat_username');
-    if (savedUsername) {
-      this.username = savedUsername;
-      this.isUsernameSet = true;
-      this.connect();
-      return;
-    }
-
-    // Create username modal
-    const modal = document.createElement('div');
-    modal.id = 'chat-username-modal';
-    modal.className = 'chat-modal';
-    modal.innerHTML = `
-      <div class="chat-modal-content">
-        <div class="chat-modal-header">
-          <span class="chat-modal-title">✦ enter chat</span>
-        </div>
-        <div class="chat-modal-body">
-          <p class="chat-modal-desc">Choose a username to join the chat</p>
-          <input type="text" id="chat-username-input" class="chat-modal-input" 
-                 placeholder="username" maxlength="20" autofocus />
-          <div class="chat-modal-error" id="chat-username-error"></div>
-          <button id="chat-username-join" class="chat-modal-btn">join chat →</button>
-        </div>
-      </div>
-    `;
-
-    document.body.appendChild(modal);
-
-    const input = document.getElementById('chat-username-input');
-    const joinBtn = document.getElementById('chat-username-join');
-    const errorEl = document.getElementById('chat-username-error');
-
-    const joinChat = () => {
-      const username = input.value.trim();
-      if (!username) {
-        errorEl.textContent = '⚠️ Please enter a username';
-        return;
-      }
-      if (!/^[a-zA-Z0-9_\s]+$/.test(username)) {
-        errorEl.textContent = '⚠️ Only letters, numbers, spaces, and underscores allowed';
-        return;
-      }
-      if (username.length > 20) {
-        errorEl.textContent = '⚠️ Username must be 20 characters or less';
-        return;
-      }
-
-      this.username = username;
-      this.isUsernameSet = true;
-      localStorage.setItem('chat_username', username);
-      modal.classList.add('fade-out');
-      setTimeout(() => {
-        modal.remove();
-        this.connect();
-      }, 300);
-    };
-
-    joinBtn.addEventListener('click', joinChat);
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') joinChat();
-    });
-    input.focus();
   }
 
   createChatUI() {
@@ -98,6 +32,7 @@ class ChatClient {
           <span class="chat-title">✦ chat</span>
           <span class="chat-status" id="chat-status">●</span>
           <span class="chat-users" id="chat-user-count">0</span>
+          <span class="chat-toggle-arrow">▸</span>
         </div>
         <div class="chat-body" id="chat-body">
           <div class="chat-messages" id="chat-messages"></div>
@@ -112,41 +47,257 @@ class ChatClient {
     `;
 
     document.body.insertAdjacentHTML('beforeend', chatHTML);
+  }
 
-    // Setup event listeners
+  setupChatToggle() {
     const toggle = document.getElementById('chat-toggle');
     const body = document.getElementById('chat-body');
-    const input = document.getElementById('chat-input');
-    const sendBtn = document.getElementById('chat-send-btn');
+    const arrow = document.querySelector('.chat-toggle-arrow');
 
     toggle.addEventListener('click', () => {
+      this.isChatOpen = !this.isChatOpen;
       body.classList.toggle('open');
-      if (body.classList.contains('open') && this.isConnected) {
-        input.focus();
+      arrow.textContent = this.isChatOpen ? '▾' : '▸';
+      
+      if (this.isChatOpen && !this.isAuthenticated) {
+        this.showAuthModal();
+      }
+      
+      if (this.isChatOpen && this.isAuthenticated && this.isConnected) {
+        const input = document.getElementById('chat-input');
+        if (input) input.focus();
+      }
+    });
+  }
+
+  showAuthModal() {
+    // Check if already authenticated
+    if (this.isAuthenticated) return;
+
+    // Check if modal already exists
+    if (document.getElementById('chat-auth-modal')) return;
+
+    const modal = document.createElement('div');
+    modal.id = 'chat-auth-modal';
+    modal.className = 'chat-modal';
+    modal.innerHTML = `
+      <div class="chat-modal-content">
+        <button class="chat-modal-close" id="chat-modal-close">✕</button>
+        <div class="chat-modal-header">
+          <span class="chat-modal-title">✦ welcome to chat</span>
+        </div>
+        <div class="chat-modal-tabs">
+          <button class="chat-tab active" data-tab="login">login</button>
+          <button class="chat-tab" data-tab="signup">sign up</button>
+        </div>
+        <div class="chat-modal-body">
+          <div id="chat-login-form" class="chat-form active">
+            <p class="chat-modal-desc">Login to join the chat</p>
+            <input type="text" id="chat-login-username" class="chat-modal-input" placeholder="username" />
+            <input type="password" id="chat-login-password" class="chat-modal-input" placeholder="password" />
+            <div class="chat-modal-error" id="chat-login-error"></div>
+            <button id="chat-login-btn" class="chat-modal-btn">login →</button>
+          </div>
+          <div id="chat-signup-form" class="chat-form">
+            <p class="chat-modal-desc">Create a new account</p>
+            <input type="text" id="chat-signup-username" class="chat-modal-input" placeholder="username" />
+            <input type="password" id="chat-signup-password" class="chat-modal-input" placeholder="password (min 4 chars)" />
+            <div class="chat-modal-error" id="chat-signup-error"></div>
+            <button id="chat-signup-btn" class="chat-modal-btn">create account →</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // ============================================
+    // CLOSE BUTTON - Click to close modal
+    // ============================================
+    document.getElementById('chat-modal-close').addEventListener('click', () => {
+      this.closeAuthModal();
+    });
+
+    // ============================================
+    // CLICK OUTSIDE - Click on backdrop to close
+    // ============================================
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        this.closeAuthModal();
       }
     });
 
-    sendBtn.addEventListener('click', () => this.sendMessage());
-
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        this.sendMessage();
+    // ============================================
+    // ESC KEY - Press Escape to close
+    // ============================================
+    document.addEventListener('keydown', this.handleEscKey = (e) => {
+      if (e.key === 'Escape' && document.getElementById('chat-auth-modal')) {
+        this.closeAuthModal();
       }
     });
 
-    input.addEventListener('input', () => {
-      this.handleTyping();
+    // Tab switching
+    document.querySelectorAll('.chat-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        const tabName = tab.dataset.tab;
+        document.querySelectorAll('.chat-form').forEach(f => f.classList.remove('active'));
+        document.getElementById(`chat-${tabName}-form`).classList.add('active');
+        
+        // Clear errors when switching tabs
+        document.querySelectorAll('.chat-modal-error').forEach(el => {
+          el.textContent = '';
+          el.className = 'chat-modal-error';
+        });
+      });
     });
 
-    // Auto-open chat after a few seconds
+    // Login
+    document.getElementById('chat-login-btn').addEventListener('click', () => this.handleLogin());
+    document.getElementById('chat-login-password').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') this.handleLogin();
+    });
+
+    // Signup
+    document.getElementById('chat-signup-btn').addEventListener('click', () => this.handleSignup());
+    document.getElementById('chat-signup-password').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') this.handleSignup();
+    });
+
+    // Auto-focus first input
     setTimeout(() => {
-      body.classList.add('open');
-    }, 4000);
+      const firstInput = document.querySelector('.chat-form.active input');
+      if (firstInput) firstInput.focus();
+    }, 100);
+  }
+
+  closeAuthModal() {
+    const modal = document.getElementById('chat-auth-modal');
+    if (modal) {
+      modal.classList.add('fade-out');
+      setTimeout(() => {
+        modal.remove();
+        // Remove ESC key listener
+        if (this.handleEscKey) {
+          document.removeEventListener('keydown', this.handleEscKey);
+        }
+        // Close the chat body too
+        const body = document.getElementById('chat-body');
+        const arrow = document.querySelector('.chat-toggle-arrow');
+        if (body) {
+          body.classList.remove('open');
+          this.isChatOpen = false;
+          if (arrow) arrow.textContent = '▸';
+        }
+      }, 300);
+    }
+  }
+
+  async handleLogin() {
+    const username = document.getElementById('chat-login-username').value.trim();
+    const password = document.getElementById('chat-login-password').value.trim();
+    const errorEl = document.getElementById('chat-login-error');
+
+    if (!username || !password) {
+      errorEl.textContent = '⚠️ Please enter username and password';
+      return;
+    }
+
+    errorEl.textContent = '';
+
+    try {
+      const response = await fetch('https://api.wxrn.lol/chat/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        errorEl.textContent = `⚠️ ${data.error || 'Login failed'}`;
+        return;
+      }
+
+      this.username = data.username;
+      this.isAuthenticated = true;
+      localStorage.setItem('chat_username', data.username);
+      localStorage.setItem('chat_avatar_color', data.avatarColor || '#9f4ac6');
+
+      // Close modal
+      const modal = document.getElementById('chat-auth-modal');
+      modal.classList.add('fade-out');
+      setTimeout(() => modal.remove(), 300);
+
+      // Connect to WebSocket
+      this.connect();
+      this.showNotification('✅ Logged in successfully!', 'success');
+
+    } catch (error) {
+      errorEl.textContent = '⚠️ Connection error. Please try again.';
+      console.error('Login error:', error);
+    }
+  }
+
+  async handleSignup() {
+    const username = document.getElementById('chat-signup-username').value.trim();
+    const password = document.getElementById('chat-signup-password').value.trim();
+    const errorEl = document.getElementById('chat-signup-error');
+
+    if (!username || !password) {
+      errorEl.textContent = '⚠️ Please enter username and password';
+      return;
+    }
+
+    if (password.length < 4) {
+      errorEl.textContent = '⚠️ Password must be at least 4 characters';
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9_\s]{2,20}$/.test(username)) {
+      errorEl.textContent = '⚠️ Use 2-20 characters, letters, numbers, spaces, underscores';
+      return;
+    }
+
+    errorEl.textContent = '';
+
+    try {
+      const response = await fetch('https://api.wxrn.lol/chat/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        errorEl.textContent = `⚠️ ${data.error || 'Signup failed'}`;
+        return;
+      }
+
+      // Switch to login tab
+      document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
+      document.querySelector('[data-tab="login"]').classList.add('active');
+      document.querySelectorAll('.chat-form').forEach(f => f.classList.remove('active'));
+      document.getElementById('chat-login-form').classList.add('active');
+
+      document.getElementById('chat-login-username').value = username;
+      document.getElementById('chat-login-password').value = '';
+      document.getElementById('chat-login-password').focus();
+
+      errorEl.textContent = '✅ Account created! Login below.';
+      errorEl.style.color = '#4ade80';
+
+    } catch (error) {
+      errorEl.textContent = '⚠️ Connection error. Please try again.';
+      console.error('Signup error:', error);
+    }
   }
 
   connect() {
-    if (!this.isUsernameSet) return;
+    if (!this.isAuthenticated) return;
     if (this.ws && this.ws.readyState === WebSocket.OPEN) return;
 
     const wsUrl = `wss://api.wxrn.lol/chat/ws?username=${encodeURIComponent(this.username)}`;
@@ -195,8 +346,6 @@ class ChatClient {
 
     this.reconnectAttempts++;
     const delay = Math.min(this.reconnectDelay * this.reconnectAttempts, 30000);
-    
-    console.log(`Reconnecting in ${delay/1000}s... (attempt ${this.reconnectAttempts})`);
     
     setTimeout(() => {
       this.connect();
