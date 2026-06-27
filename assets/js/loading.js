@@ -1,5 +1,3 @@
-// loading.js - Clean version with proper color handoff
-
 class LoadingManager {
   constructor() {
     this.loadingScreen = document.getElementById('loading-screen');
@@ -236,9 +234,7 @@ class LoadingManager {
     
     this.updateProgress(100, 'Done!');
     
-    // Pass colors to the main page
     if (this.loadedColors) {
-      // Apply colors to CSS variables for the main page
       document.documentElement.style.setProperty('--accent-color', this.loadedColors.rgb);
       const textColor = this.adjustColorBrightness(this.loadedColors.rgb, 80);
       const lighterTextColor = this.adjustColorBrightness(this.loadedColors.rgb, 95);

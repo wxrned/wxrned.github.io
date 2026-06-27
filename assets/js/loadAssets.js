@@ -1,9 +1,6 @@
-// loadAssets.js - Prevents double fetching
-
 const colorThief = new ColorThief();
 const bannerSync = true;
 
-// Default avatar as data URI
 const DEFAULT_AVATAR = 'data:image/svg+xml,' + encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
   <rect width="128" height="128" fill="#7289da" rx="64"/>
@@ -15,7 +12,6 @@ let isFetching = false;
 let hasFetched = false;
 
 async function fetchAvatarsForAll() {
-  // Prevent multiple simultaneous fetches
   if (isFetching || hasFetched) {
     console.log('Skipping avatar fetch (already done or in progress)');
     return;
@@ -35,7 +31,6 @@ async function fetchAvatarsForAll() {
       return;
     }
 
-    // Check if PFP was already loaded by loading screen
     if (avatarElement.src && !avatarElement.src.includes('black.png') && !avatarElement.src.includes('data:image')) {
       console.log('PFP already loaded by loading screen, skipping main avatar fetch');
     } else {
@@ -56,7 +51,6 @@ async function fetchAvatarsForAll() {
       }
     }
     
-    // Fetch banner and decoration
     const userData = await fetchUserData(mainUserId);
     if (userData) {
       if (userData.avatarUrl && faviconElement) {
@@ -245,27 +239,20 @@ function adjustColorBrightness(color, percent) {
   return `rgb(${adjustedColor[0]}, ${adjustedColor[1]}, ${adjustedColor[2]})`;
 }
 
-// ============================================
-// INITIALIZATION - Single fetch
-// ============================================
-
 function initAvatarFetch() {
   const loadingScreen = document.getElementById('loading-screen');
   
-  // If loading screen is already gone, fetch immediately
   if (!loadingScreen || loadingScreen.style.display === 'none') {
     console.log('Loading screen already gone, fetching avatars...');
     fetchAvatarsForAll();
     return;
   }
   
-  // Listen for loadingComplete event
   document.addEventListener('loadingComplete', () => {
     console.log('loadingComplete event received, fetching avatars...');
     setTimeout(fetchAvatarsForAll, 300);
   }, { once: true });
   
-  // Also check periodically as fallback
   let checkCount = 0;
   const checkInterval = setInterval(() => {
     checkCount++;

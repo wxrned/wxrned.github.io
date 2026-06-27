@@ -1,5 +1,3 @@
-// lastfm.js - Fixed time accuracy with Font Awesome icons
-
 const LASTFM_USERNAME = 'RoboCookieOff';
 const API_BASE = 'https://api.wxrn.lol';
 
@@ -70,7 +68,6 @@ async function fetchNowPlaying() {
       }
     }
     
-    // Get album cover image
     let imageUrl = null;
     if (track.image) {
       imageUrl = track.image;
@@ -138,7 +135,6 @@ function updateTooltip(trackData) {
     return;
   }
   
-  // Use Font Awesome icons for status
   if (trackData.isNowPlaying) {
     statusEl.innerHTML = '<i class="fa-solid fa-circle" style="color: #ff4444;"></i>';
     statusEl.className = 'tooltip-status playing';
@@ -153,13 +149,11 @@ function updateTooltip(trackData) {
   artistEl.textContent = trackData.artist || 'Unknown Artist';
   timeEl.innerHTML = trackData.timeAgo || '';
   
-  // Apply accent color
   const accentColor = getComputedStyle(document.documentElement)
     .getPropertyValue('--accent-color').trim() || '#9f4ac6';
   tooltip.style.borderColor = accentColor;
   tooltip.style.boxShadow = `0 8px 32px rgba(0,0,0,0.6), 0 0 20px ${accentColor}40`;
   
-  // Update arrow color
   const style = document.getElementById('tooltip-arrow-style');
   if (!style) {
     const newStyle = document.createElement('style');

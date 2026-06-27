@@ -1,5 +1,3 @@
-// particles.js - Ambient Background Particles
-
 class ParticleSystem {
   constructor() {
     this.canvas = document.getElementById('particles-canvas');
@@ -20,7 +18,6 @@ class ParticleSystem {
     this.setupEventListeners();
     this.animate();
     
-    // Show after loading completes
     document.addEventListener('loadingComplete', () => {
       this.isVisible = true;
       this.canvas.style.opacity = '1';
@@ -65,16 +62,13 @@ class ParticleSystem {
     
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     
-    // Only draw if visible
     if (this.isVisible) {
       const time = Date.now() * 0.001;
       
       this.particles.forEach((p, i) => {
-        // Update position
         p.x += p.speedX;
         p.y += p.speedY;
         
-        // Bounce off edges
         if (p.x < 0 || p.x > this.canvas.width) p.speedX *= -1;
         if (p.y < 0 || p.y > this.canvas.height) p.speedY *= -1;
         
@@ -82,7 +76,6 @@ class ParticleSystem {
         const pulse = Math.sin(time * p.pulseSpeed + p.pulseOffset) * 0.3 + 0.7;
         const currentOpacity = p.baseOpacity * pulse;
         
-        // Mouse interaction - particles move away from mouse
         const dx = p.x - this.mouseX;
         const dy = p.y - this.mouseY;
         const distance = Math.sqrt(dx * dx + dy * dy);
@@ -93,7 +86,6 @@ class ParticleSystem {
           p.y += (dy / distance) * force;
         }
         
-        // Draw particle
         this.ctx.beginPath();
         this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         
@@ -105,7 +97,6 @@ class ParticleSystem {
         this.ctx.fill();
         this.ctx.globalAlpha = 1;
         
-        // Draw connections
         for (let j = i + 1; j < this.particles.length; j++) {
           const p2 = this.particles[j];
           const dx2 = p.x - p2.x;
@@ -136,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Wait for loading to complete before showing particles
   const particleSystem = new ParticleSystem();
   
-  // Update accent color when it changes
   const observer = new MutationObserver(() => {
     // Particles will pick up new color on next frame
   });
