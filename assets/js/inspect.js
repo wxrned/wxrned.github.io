@@ -1,4 +1,4 @@
-// inspect.js - Enhanced anti-inspect with persistent warning (FIXED)
+// inspect.js - Enhanced anti-inspect with persistent warning (SIMPLIFIED)
 
 (function() {
   'use strict';
@@ -63,6 +63,20 @@
       e.stopPropagation();
       return false;
     }
+
+    // Ctrl+S (Save Page)
+    if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.keyCode === 83)) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+    
+    // Ctrl+P (Print)
+    if (e.ctrlKey && (e.key === 'p' || e.key === 'P' || e.keyCode === 80)) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
   });
 
   // ============================================
@@ -92,7 +106,44 @@
   });
 
   // ============================================
-  // LAYER 4: DevTools Detection - IMPROVED
+  // LAYER 4: Block View Source
+  // ============================================
+
+  // Block view-source protocol
+  if (window.location.protocol === 'view-source:') {
+    window.location.href = window.location.href.replace('view-source:', '');
+  }
+
+  // Block view source via beforeunload
+  window.addEventListener('beforeunload', function(e) {
+    if (document.referrer && document.referrer.includes('view-source:')) {
+      window.location.href = window.location.href;
+    }
+  });
+
+  // Block view-source links
+  document.addEventListener('click', function(e) {
+    const target = e.target.closest('a');
+    if (target && target.href && target.href.includes('view-source:')) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  // Override window.open to block view-source
+  const originalOpen = window.open;
+  window.open = function(url, name, features) {
+    if (url && typeof url === 'string' && url.includes('view-source:')) {
+      return null;
+    }
+    if (name === '_blank' && features && features.includes('devtools')) {
+      return null;
+    }
+    return originalOpen.call(this, url, name, features);
+  };
+
+  // ============================================
+  // LAYER 5: DevTools Detection
   // ============================================
 
   let devtoolsDetected = false;
@@ -111,28 +162,47 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.95);
-      color: #ff4444;
+      background: rgba(0, 0, 0, 0.92);
+      color: #fff;
       display: none;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 20px;
       font-family: monospace;
       z-index: 999999;
       flex-direction: column;
-      gap: 20px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      gap: 16px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.02);
     `;
     overlay.innerHTML = `
-      <div style="font-size: 64px; animation: pulse 1.5s ease-in-out infinite;">🔒</div>
-      <div style="font-weight: bold; letter-spacing: 2px;">DEVELOPER TOOLS DETECTED</div>
-      <div style="font-size: 16px; color: rgba(255,255,255,0.4);">Please close DevTools to continue</div>
-      <div style="font-size: 14px; color: rgba(255,255,255,0.15); margin-top: 10px;">Press F12 or Ctrl+Shift+I to close</div>
+      <div style="font-size: 48px; color: var(--accent-color, #9f4ac6); margin-bottom: 4px;">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <div style="font-size: 14px; color: rgba(255,255,255,0.5); letter-spacing: 2px; text-transform: uppercase; font-weight: 300;">
+        Developer Tools Detected
+      </div>
+      <div style="font-size: 13px; color: rgba(255,255,255,0.2); font-weight: 300; letter-spacing: 0.5px;">
+        Close DevTools to continue
+      </div>
+      <div style="font-size: 11px; color: rgba(255,255,255,0.08); margin-top: 4px; letter-spacing: 0.5px;">
+        <i class="fa-regular fa-keyboard"></i> F12 · Ctrl+Shift+I
+      </div>
       <style>
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.05); opacity: 0.8; }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: scale(0.96); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        #devtools-warning {
+          animation: fadeIn 0.3s ease;
+        }
+        #devtools-warning i {
+          animation: pulse-icon 2s ease-in-out infinite;
+        }
+        @keyframes pulse-icon {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.7; transform: scale(0.95); }
         }
       </style>
     `;
@@ -156,20 +226,14 @@
   }
 
   // ============================================
-  // IMPROVED: More reliable DevTools detection
+  // LAYER 6: Reliable DevTools detection
   // ============================================
 
   function detectDevTools() {
-    // Only check if we're not in a false-positive state
-    // Use multiple methods with higher thresholds
-    
     // Method 1: Check window size difference (most reliable)
     const widthDiff = window.outerWidth - window.innerWidth;
     const heightDiff = window.outerHeight - window.innerHeight;
     
-    // Higher thresholds to avoid false positives
-    // Normal browser UI typically adds 0-50px difference
-    // DevTools adds 200+px difference
     const WIDTH_THRESHOLD = 150;
     const HEIGHT_THRESHOLD = 150;
     
@@ -177,44 +241,18 @@
       return true;
     }
     
-    // Method 2: Check for debugger statement (very reliable)
+    // Method 2: Check for debugger statement
     try {
-      const start = performance.now();
-      // Use a more reliable debugger check
-      const isDebugger = (function() {
-        let result = false;
-        try {
-          // This will trigger the debugger if DevTools is open
-          const test = new Function('debugger;');
-          test();
-        } catch (e) {
-          result = true;
-        }
-        return result;
-      })();
-      
-      // Actually, let's use a simpler approach
-      const debuggerCheck = function() {
-        const startTime = performance.now();
-        let endTime = startTime;
-        try {
-          // eslint-disable-next-line no-debugger
-          debugger;
-          endTime = performance.now();
-        } catch (e) {
-          endTime = performance.now();
-        }
-        return (endTime - startTime) > 50;
-      };
-      
-      if (debuggerCheck()) {
+      const startTime = performance.now();
+      // eslint-disable-next-line no-debugger
+      debugger;
+      const endTime = performance.now();
+      if ((endTime - startTime) > 50) {
         return true;
       }
-    } catch (e) {
-      // Ignore errors
-    }
+    } catch (e) {}
     
-    // Method 3: Check for DevTools specific properties (Chrome)
+    // Method 3: Check for DevTools specific properties
     try {
       if (window.devtools && window.devtools.open) {
         return true;
@@ -228,34 +266,11 @@
       }
     } catch (e) {}
     
-    // Method 5: Check for devtools in iframe (less reliable)
-    try {
-      const devtoolsElement = document.createElement('div');
-      devtoolsElement.id = '__devtools_element';
-      devtoolsElement.style.display = 'block';
-      devtoolsElement.style.position = 'absolute';
-      devtoolsElement.style.left = '-100000px';
-      devtoolsElement.style.top = '-100000px';
-      devtoolsElement.style.width = '100px';
-      devtoolsElement.style.height = '100px';
-      document.body.appendChild(devtoolsElement);
-      
-      // Check if element size changed (indicates DevTools)
-      const rect = devtoolsElement.getBoundingClientRect();
-      const detected = rect.width !== 100 || rect.height !== 100;
-      
-      document.body.removeChild(devtoolsElement);
-      
-      if (detected) {
-        return true;
-      }
-    } catch (e) {}
-    
     return false;
   }
 
   // ============================================
-  // LAYER 5: Persistent DevTools Monitoring
+  // LAYER 7: Persistent DevTools Monitoring
   // ============================================
 
   let warningShown = false;
@@ -275,8 +290,6 @@
         if (!warningShown) {
           warningShown = true;
           console.clear();
-          console.log('%cDeveloper tools detected', 'color: #ff4444; font-size: 20px; font-weight: bold;');
-          console.log('%cPlease close DevTools to continue.', 'color: #ffaa00; font-size: 14px;');
           showWarning();
         }
       }
@@ -285,35 +298,12 @@
       if (warningShown) {
         warningShown = false;
         hideWarning();
-        console.log('%cDevTools closed. Welcome back!', 'color: #4ade80; font-size: 16px; font-weight: bold;');
       }
     }
   }
 
-  // Wait for page to fully load before starting detection
-  window.addEventListener('load', function() {
-    setTimeout(checkDevTools, 1500);
-  });
-
-  // Check periodically (less frequently to reduce false positives)
-  setInterval(checkDevTools, 1000);
-
-  // Check on window resize with debouncing
-  let resizeTimeout;
-  window.addEventListener('resize', function() {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(checkDevTools, 300);
-  });
-
-  // Check on focus
-  document.addEventListener('visibilitychange', function() {
-    if (!document.hidden) {
-      setTimeout(checkDevTools, 500);
-    }
-  });
-
   // ============================================
-  // LAYER 6: Override Console Methods
+  // LAYER 8: Override Console Methods
   // ============================================
 
   if (typeof console !== 'undefined') {
@@ -339,7 +329,7 @@
   }
 
   // ============================================
-  // LAYER 7: Prevent Selection
+  // LAYER 9: Prevent Selection
   // ============================================
 
   document.addEventListener('selectstart', function(e) {
@@ -352,7 +342,7 @@
   });
 
   // ============================================
-  // LAYER 8: Disable Right-Click on Images
+  // LAYER 10: Disable Right-Click on Images
   // ============================================
 
   document.addEventListener('mousedown', function(e) {
@@ -366,58 +356,26 @@
   });
 
   // ============================================
-  // LAYER 9: Block additional shortcuts
+  // LAYER 11: Initialize
   // ============================================
 
-  document.addEventListener('keydown', function(e) {
-    // Ctrl+S (Save Page)
-    if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.keyCode === 83)) {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
-    }
-    
-    // Ctrl+P (Print)
-    if (e.ctrlKey && (e.key === 'p' || e.key === 'P' || e.keyCode === 80)) {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
-    }
-    
-    // Ctrl+Shift+P (Print - Firefox)
-    if (e.ctrlKey && e.shiftKey && (e.key === 'p' || e.key === 'P' || e.keyCode === 80)) {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
-    }
+  window.addEventListener('load', function() {
+    setTimeout(checkDevTools, 1500);
+  });
 
-    // Ctrl+Shift+A (Search - Chrome)
-    if (e.ctrlKey && e.shiftKey && (e.key === 'a' || e.key === 'A' || e.keyCode === 65)) {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
+  setInterval(checkDevTools, 1000);
+
+  let resizeTimeout;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(checkDevTools, 300);
+  });
+
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+      setTimeout(checkDevTools, 500);
     }
   });
 
-  // ============================================
-  // LAYER 10: Block View Source
-  // ============================================
-
-  if (window.location.protocol === 'view-source:') {
-    window.location.href = window.location.href.replace('view-source:', '');
-  }
-
-  // ============================================
-  // LAYER 11: Disable DevTools via window.open
-  // ============================================
-
-  const originalOpen = window.open;
-  window.open = function(url, name, features) {
-    if (name === '_blank' && features && features.includes('devtools')) {
-      return null;
-    }
-    return originalOpen.call(this, url, name, features);
-  };
-
-  console.log('Enhanced protection enabled with improved DevTools detection');
+  console.log('Enhanced protection enabled');
 })();
