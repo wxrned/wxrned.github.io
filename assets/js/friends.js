@@ -37,7 +37,7 @@ const friendsData = [
     discordId: "463360937949134852",
     name: "sudo",
     description: "mr paygate bypass",
-    color: "#fd79a8",
+    color: "#FF8C00",
   },
   {
     id: "repax",
@@ -51,14 +51,14 @@ const friendsData = [
     discordId: "903969587031339019",
     name: "reject",
     description: "uh idk yet",
-    color: "#00b894",
+    color: "#FF7F7F",
   },
   {
     id: "jade",
     discordId: "925155098223591434",
     name: "jade",
     description: "twerkprincess lol",
-    color: "#00b894",
+    color: "#fd79a8",
   },
 ];
 
