@@ -1,3 +1,5 @@
+// loadAssets.js - Updated with friends menu support
+
 const colorThief = new ColorThief();
 const bannerSync = true;
 
@@ -11,14 +13,18 @@ const DEFAULT_AVATAR = 'data:image/svg+xml,' + encodeURIComponent(`
 let isFetching = false;
 let hasFetched = false;
 
+// ============================================
+// MAIN AVATAR FETCHING
+// ============================================
+
 async function fetchAvatarsForAll() {
   if (isFetching || hasFetched) {
-    console.log('Skipping avatar fetch (already done or in progress)');
+    console.log('⏭️ Skipping avatar fetch (already done or in progress)');
     return;
   }
   
   isFetching = true;
-  console.log('Starting avatar fetch...');
+  console.log('🔄 Starting avatar fetch...');
   
   try {
     const mainUserId = "1158429903629336646";
@@ -26,22 +32,23 @@ async function fetchAvatarsForAll() {
     const faviconElement = document.getElementById("short-icon");
     
     if (!avatarElement) {
-      console.error('Avatar element not found!');
+      console.error('❌ Avatar element not found!');
       isFetching = false;
       return;
     }
 
+    // Check if PFP was already loaded by loading screen
     if (avatarElement.src && !avatarElement.src.includes('black.png') && !avatarElement.src.includes('data:image')) {
-      console.log('PFP already loaded by loading screen, skipping main avatar fetch');
+      console.log('✅ PFP already loaded by loading screen, skipping main avatar fetch');
     } else {
-      console.log('Fetching main user data for:', mainUserId);
+      console.log('📸 Fetching main user data for:', mainUserId);
       
       const userData = await fetchUserData(mainUserId);
-      console.log('User data received:', userData);
+      console.log('📦 User data received:', userData);
       
       if (userData && userData.avatarUrl) {
         avatarElement.src = userData.avatarUrl;
-        console.log('Main avatar loaded:', userData.avatarUrl);
+        console.log('✅ Main avatar loaded:', userData.avatarUrl);
         
         avatarElement.onload = () => {
           applyColorsFromImage(avatarElement);
@@ -51,6 +58,7 @@ async function fetchAvatarsForAll() {
       }
     }
     
+    // Fetch banner and decoration for main user
     const userData = await fetchUserData(mainUserId);
     if (userData) {
       if (userData.avatarUrl && faviconElement) {
@@ -61,7 +69,7 @@ async function fetchAvatarsForAll() {
         document.body.style.backgroundImage = `url(${userData.bannerUrl}?size=1024)`;
         document.body.style.backgroundSize = "cover";
         document.body.style.backgroundPosition = "center";
-        console.log('Banner applied');
+        console.log('✅ Banner applied');
       }
       
       if (userData.profileDecorationUrl) {
@@ -69,17 +77,22 @@ async function fetchAvatarsForAll() {
       }
     }
 
+    // Fetch friend avatars (both old popup and new friends menu)
     console.log('👥 Fetching friend avatars...');
     await fetchFriendAvatars();
     
-    console.log('Avatar fetch complete!');
+    console.log('✅ Avatar fetch complete!');
     hasFetched = true;
   } catch (error) {
-    console.error('Error fetching avatars:', error);
+    console.error('❌ Error fetching avatars:', error);
   } finally {
     isFetching = false;
   }
 }
+
+// ============================================
+// USER DATA FETCHING
+// ============================================
 
 async function fetchUserData(userId) {
   try {
@@ -90,7 +103,7 @@ async function fetchUserData(userId) {
     }
     
     const data = await response.json();
-    console.log('API Response:', data);
+    console.log('📡 API Response:', data);
     
     if (data.error) {
       throw new Error(data.error);
@@ -109,7 +122,20 @@ async function fetchUserData(userId) {
   }
 }
 
+// ============================================
+// FRIEND AVATARS - BOTH OLD AND NEW SYSTEMS
+// ============================================
+
 async function fetchFriendAvatars() {
+  // 1. Fetch avatars for old popup friends (if they exist)
+  await fetchOldPopupAvatars();
+  
+  // 2. Fetch avatars for new friends menu
+  await fetchFriendsMenuAvatars();
+}
+
+// Old popup system (backward compatibility)
+async function fetchOldPopupAvatars() {
   const friendImages = document.querySelectorAll('#popup li img');
   
   for (let img of friendImages) {
@@ -133,7 +159,7 @@ async function fetchFriendAvatars() {
       
       if (data.avatarUrl) {
         img.src = data.avatarUrl;
-        console.log(`Friend avatar loaded for ${userId}`);
+        console.log(`✅ Friend avatar loaded for ${userId}`);
       } else {
         img.src = DEFAULT_AVATAR;
       }
@@ -143,6 +169,58 @@ async function fetchFriendAvatars() {
     }
   }
 }
+
+// New friends menu system
+async function fetchFriendsMenuAvatars() {
+  const friendCards = document.querySelectorAll('.friend-card');
+  
+  for (const card of friendCards) {
+    const discordId = card.dataset.discordId;
+    const avatarImg = card.querySelector('.friend-avatar');
+    const decoEl = card.querySelector('.friend-decoration');
+    
+    if (!avatarImg) continue;
+    
+    if (!discordId || discordId === '') {
+      avatarImg.src = DEFAULT_AVATAR;
+      continue;
+    }
+    
+    try {
+      const response = await fetch(`https://api.wxrn.lol/discord/user/${discordId}`);
+      
+      if (!response.ok) {
+        avatarImg.src = DEFAULT_AVATAR;
+        continue;
+      }
+      
+      const data = await response.json();
+      
+      if (data.avatarUrl) {
+        avatarImg.src = data.avatarUrl;
+        console.log(`✅ Friends menu avatar loaded for ${discordId}`);
+        
+        // Check for profile decoration
+        if (data.profileDecorationUrl && decoEl) {
+          decoEl.style.backgroundImage = `url(${data.profileDecorationUrl})`;
+          decoEl.style.backgroundSize = 'cover';
+          decoEl.style.backgroundPosition = 'center';
+          decoEl.style.opacity = '0.6';
+          console.log(`✅ Decoration applied for ${discordId}`);
+        }
+      } else {
+        avatarImg.src = DEFAULT_AVATAR;
+      }
+    } catch (error) {
+      console.error(`Failed to fetch friends menu avatar for ${discordId}:`, error);
+      avatarImg.src = DEFAULT_AVATAR;
+    }
+  }
+}
+
+// ============================================
+// PROFILE DECORATION
+// ============================================
 
 function applyProfileDecoration(avatarElement, decorationUrl) {
   let avatarContainer = document.getElementById("avatar-container");
@@ -191,12 +269,16 @@ function applyProfileDecoration(avatarElement, decorationUrl) {
   decorationElement.style.maxWidth = "none";
   decorationElement.style.maxHeight = "none";
   
-  console.log('Profile decoration applied with proper alignment:', decorationUrl);
+  console.log('✅ Profile decoration applied with proper alignment:', decorationUrl);
 }
+
+// ============================================
+// COLOR EXTRACTION
+// ============================================
 
 function applyColorsFromImage(imgElement) {
   if (!imgElement.complete) {
-    console.warn("Image not fully loaded for color extraction");
+    console.warn("⚠️ Image not fully loaded for color extraction");
     return;
   }
 
@@ -234,9 +316,9 @@ function applyColorsFromImage(imgElement) {
     });
     document.dispatchEvent(event);
 
-    console.log("Colors applied based on the image");
+    console.log("🎨 Colors applied based on the image");
   } catch (error) {
-    console.error("Error extracting colors:", error);
+    console.error("❌ Error extracting colors:", error);
   }
 }
 
@@ -248,39 +330,74 @@ function adjustColorBrightness(color, percent) {
   return `rgb(${adjustedColor[0]}, ${adjustedColor[1]}, ${adjustedColor[2]})`;
 }
 
+// ============================================
+// INITIALIZATION
+// ============================================
+
 function initAvatarFetch() {
   const loadingScreen = document.getElementById('loading-screen');
   
   if (!loadingScreen || loadingScreen.style.display === 'none') {
-    console.log('Loading screen already gone, fetching avatars...');
+    console.log('📋 Loading screen already gone, fetching avatars...');
     fetchAvatarsForAll();
     return;
   }
   
   document.addEventListener('loadingComplete', () => {
-    console.log('loadingComplete event received, fetching avatars...');
+    console.log('📋 loadingComplete event received, fetching avatars...');
     setTimeout(fetchAvatarsForAll, 300);
   }, { once: true });
+  
+  // Also listen for popup opened to refresh friends avatars
+  document.addEventListener('popupOpened', () => {
+    console.log('📋 Popup opened, refreshing friend avatars...');
+    // Only fetch friends if they haven't been loaded yet
+    if (hasFetched) {
+      fetchFriendsMenuAvatars();
+    }
+  });
   
   let checkCount = 0;
   const checkInterval = setInterval(() => {
     checkCount++;
     if (!loadingScreen || loadingScreen.style.display === 'none') {
-      console.log('Loading screen gone (check), fetching avatars...');
+      console.log('📋 Loading screen gone (check), fetching avatars...');
       clearInterval(checkInterval);
       fetchAvatarsForAll();
     } else if (checkCount > 15) {
       clearInterval(checkInterval);
-      console.log('Timeout, fetching avatars anyway...');
+      console.log('📋 Timeout, fetching avatars anyway...');
       fetchAvatarsForAll();
     }
   }, 300);
 }
 
+// Listen for friends menu initialization to fetch their avatars
+document.addEventListener('friendsMenuReady', () => {
+  console.log('📋 Friends menu ready, fetching avatars...');
+  setTimeout(fetchFriendsMenuAvatars, 500);
+});
+
+// DOM ready
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM loaded, waiting for loading screen...');
+  console.log('📋 DOM loaded, waiting for loading screen...');
   setTimeout(initAvatarFetch, 200);
 });
 
+// Window load fallback
+window.addEventListener('load', () => {
+  console.log('📋 Window loaded, checking avatars...');
+  setTimeout(() => {
+    const loadingScreen = document.getElementById('loading-screen');
+    if (!loadingScreen || loadingScreen.style.display === 'none') {
+      if (!hasFetched) {
+        fetchAvatarsForAll();
+      }
+    }
+  }, 1000);
+});
+
 window.fetchAvatarsForAll = fetchAvatarsForAll;
+window.fetchFriendsMenuAvatars = fetchFriendsMenuAvatars;
+
 console.log('loadAssets.js loaded, waiting for loading to complete...');

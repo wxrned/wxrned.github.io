@@ -1,5 +1,3 @@
-// particles.js - Fixed color syncing
-
 class ParticleSystem {
   constructor() {
     this.canvas = document.getElementById('particles-canvas');
@@ -10,7 +8,7 @@ class ParticleSystem {
     this.mouseX = 0;
     this.mouseY = 0;
     this.isVisible = false;
-    this.accentColor = '#9f4ac6'; // Default fallback
+    this.accentColor = '#9f4ac6';
     this.isInitialized = false;
     this.animationFrame = null;
     
@@ -22,10 +20,8 @@ class ParticleSystem {
     this.createParticles();
     this.setupEventListeners();
     
-    // Get initial color
     this.updateAccentColor();
     
-    // Listen for loading complete
     document.addEventListener('loadingComplete', () => {
       this.isVisible = true;
       this.canvas.style.opacity = '1';
@@ -33,7 +29,6 @@ class ParticleSystem {
       setTimeout(() => this.updateAccentColor(), 100);
     });
     
-    // Also listen for color changes from loadAssets
     document.addEventListener('colorsApplied', (e) => {
       this.updateAccentColor();
     });

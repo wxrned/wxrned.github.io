@@ -12,7 +12,6 @@ class CursorTrail {
   }
 
   init() {
-    // Create canvas
     this.canvas = document.createElement('canvas');
     this.canvas.id = 'cursor-trail';
     this.canvas.style.position = 'fixed';

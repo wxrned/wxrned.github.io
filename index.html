@@ -166,35 +166,22 @@
       <button id="lyrics-close">close</button>
     </div>
 
-    <div id="popup">
-      <h2>$</h2>
-      <ul>
-        <li>
-          <img src="" id="zaza" alt="1467259512829382950" />
-          <span class="friend-name">zaza</span>
-        </li>
-        <li>
-          <img src="" id="eddie" alt="959190681472077834" />
-          <span class="friend-name">eddie</span>
-        </li>
-        <li>
-          <img src="" id="emir" alt="1414249903055437884" />
-          <span class="friend-name">emir</span>
-        </li>
-        <li>
-          <img src="" id="vods" alt="235718964213186560" />
-          <span class="friend-name">vods</span>
-        </li>
-        <li>
-          <img src="" id="sudo" alt="463360937949134852" />
-          <span class="friend-name">sudo</span>
-        </li>
-        <li>
-          <img src="" id="gid" alt="473072537916538890" />
-          <span class="friend-name">gid</span>
-        </li>
-      </ul>
-      <button onclick="closePopup()">close</button>
+    <div id="popup" class="friends-popup">
+      <div class="friends-popup-header">
+        <h2>✦ friends</h2>
+        <button class="friends-popup-close" onclick="closePopup()">✕</button>
+      </div>
+      <div class="friends-scroll-container" id="friends-scroll-container">
+        <div class="friends-track" id="friends-track">
+        </div>
+      </div>
+      <!-- Carousel Controls -->
+      <div class="carousel-controls">
+        <button class="carousel-btn prev" id="carousel-prev">‹</button>
+        <div class="carousel-dots" id="carousel-dots">
+        </div>
+        <button class="carousel-btn next" id="carousel-next">›</button>
+      </div>
     </div>
 
     <audio id="audio"></audio>
@@ -214,6 +201,7 @@
     <script src="assets/js/reactions.js"></script>
     <script src="assets/js/particles.js"></script>
     <script src="assets/js/cursor-trail.js"></script>
+    <script src="assets/js/friends.js"></script>
     <script src="assets/js/loading.js"></script>
   </body>
 </html>
