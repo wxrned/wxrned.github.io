@@ -1,4 +1,4 @@
-// reactions.js - Floating reaction button with hover popup
+// reactions.js - Floating reaction button with domain tracking
 
 class ReactionSystem {
   constructor() {
@@ -11,6 +11,7 @@ class ReactionSystem {
     this.feedbackTimeout = null;
     this.ip = null;
     this.domain = null;
+    this.apiKey = null;
     this.isApiAvailable = true;
     
     this.init();
@@ -18,11 +19,11 @@ class ReactionSystem {
 
   init() {
     this.getUserInfo();
+    this.getApiKey(); // This method must exist!
     this.createUI();
-    // Wait a bit before loading reactions
     setTimeout(() => {
       this.loadReactions();
-    }, 2000);
+    }, 500);
     this.setupEventListeners();
   }
 
@@ -39,6 +40,36 @@ class ReactionSystem {
         })
         .catch(() => {});
     }
+  }
+
+  // ============================================
+  // API KEY METHODS - FIXED
+  // ============================================
+
+  getApiKey() {
+    // First try to get from localStorage
+    this.apiKey = localStorage.getItem('api_key');
+    
+    // If not found, try to get from the domain
+    if (!this.apiKey) {
+      const domain = window.location.hostname;
+      
+      // Known domain mapping
+      const domainKeys = {
+        'wxrn.lol': 'd31e48dc475e0cc703c4a1a063415e8a',
+        'localhost': 'd31e48dc475e0cc703c4a1a063415e8a',
+        '127.0.0.1': 'd31e48dc475e0cc703c4a1a063415e8a'
+      };
+      
+      this.apiKey = domainKeys[domain] || null;
+      
+      if (this.apiKey) {
+        localStorage.setItem('api_key', this.apiKey);
+      }
+    }
+    
+    console.log('🔑 API Key:', this.apiKey ? '✓ Loaded' : '✗ Not found');
+    return this.apiKey;
   }
 
   createUI() {
@@ -166,9 +197,27 @@ class ReactionSystem {
     }
   }
 
+  // ============================================
+  // API CALLS - FIXED
+  // ============================================
+
   async loadReactions() {
+    // Ensure we have an API key
+    if (!this.apiKey) {
+      this.getApiKey();
+      if (!this.apiKey) {
+        this.showFeedback('API key not found', 'error');
+        return;
+      }
+    }
+
     try {
-      const response = await fetch('https://api.wxrn.lol/reactions');
+      const response = await fetch('https://api.wxrn.lol/reactions', {
+        headers: {
+          'x-api-key': this.apiKey
+        }
+      });
+      
       if (response.ok) {
         const data = await response.json();
         this.reactions = data.reactions || [];
@@ -176,6 +225,10 @@ class ReactionSystem {
         this.updateDisplay();
         this.isLoaded = true;
         this.isApiAvailable = true;
+      } else if (response.status === 403) {
+        console.warn('Invalid API key for this domain');
+        this.isApiAvailable = false;
+        this.showFeedback('Domain not registered', 'error');
       } else if (response.status === 404) {
         console.warn('Reactions API not available');
         this.isApiAvailable = false;
@@ -189,7 +242,11 @@ class ReactionSystem {
     // Load user's reactions
     if (this.isApiAvailable) {
       try {
-        const response = await fetch('https://api.wxrn.lol/reactions/my');
+        const response = await fetch('https://api.wxrn.lol/reactions/my', {
+          headers: {
+            'x-api-key': this.apiKey
+          }
+        });
         if (response.ok) {
           const data = await response.json();
           this.userReactions = data.emojis || [];
@@ -203,15 +260,24 @@ class ReactionSystem {
 
   async toggleReaction(emoji) {
     if (!this.isApiAvailable) {
-      this.showFeedback('⚠️ Reactions unavailable', 'error');
+      this.showFeedback('Reactions unavailable', 'error');
       return;
+    }
+
+    if (!this.apiKey) {
+      this.getApiKey();
+      if (!this.apiKey) {
+        this.showFeedback('API key not found', 'error');
+        return;
+      }
     }
 
     try {
       const response = await fetch('https://api.wxrn.lol/reactions', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'x-api-key': this.apiKey
         },
         body: JSON.stringify({ emoji })
       });
@@ -237,15 +303,21 @@ class ReactionSystem {
         this.updateDisplay();
         this.updateButtonStates();
         this.updateFabTotal();
+      } else if (response.status === 403) {
+        this.showFeedback('Invalid API key', 'error');
       } else {
         const error = await response.json();
-        this.showFeedback(`⚠️ ${error.error || 'Error'}`, 'error');
+        this.showFeedback(`${error.error || 'Error'}`, 'error');
       }
     } catch (error) {
       console.error('Failed to toggle reaction:', error);
-      this.showFeedback('⚠️ Try again', 'error');
+      this.showFeedback('Try again', 'error');
     }
   }
+
+  // ============================================
+  // UI UPDATE METHODS
+  // ============================================
 
   updateDisplay() {
     this.reactions.forEach(r => {
@@ -300,14 +372,41 @@ class ReactionSystem {
   }
 }
 
+// ============================================
+// INITIALIZATION
+// ============================================
+
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM loaded, initializing reactions...');
+  
   const checkInterval = setInterval(() => {
     const loadingScreen = document.getElementById('loading-screen');
     if (!loadingScreen || loadingScreen.style.display === 'none') {
       clearInterval(checkInterval);
       setTimeout(() => {
-        window.reactionSystem = new ReactionSystem();
+        try {
+          window.reactionSystem = new ReactionSystem();
+          console.log('ReactionSystem initialized');
+        } catch (error) {
+          console.error('Failed to initialize ReactionSystem:', error);
+        }
       }, 1000);
     }
   }, 500);
+  
+  // Safety timeout
+  setTimeout(() => {
+    if (!window.reactionSystem) {
+      console.log('Safety timeout, initializing reactions...');
+      try {
+        window.reactionSystem = new ReactionSystem();
+      } catch (error) {
+        console.error('Failed to initialize ReactionSystem (timeout):', error);
+      }
+    }
+  }, 8000);
 });
+
+// Export for debugging
+window.ReactionSystem = ReactionSystem;
+console.log('reactions.js loaded');
