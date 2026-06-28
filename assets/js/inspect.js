@@ -261,7 +261,6 @@
   let warningShown = false;
 
   function checkDevTools() {
-    // Skip initial check to avoid false positives on load
     if (isInitialCheck) {
       isInitialCheck = false;
       setTimeout(checkDevTools, 1000);
@@ -270,15 +269,13 @@
     
     const isOpen = detectDevTools();
     
-    // Add some debouncing to prevent flickering
     if (isOpen) {
       detectionCount++;
-      // Require 2 consecutive detections to trigger warning
       if (detectionCount >= 2) {
         if (!warningShown) {
           warningShown = true;
           console.clear();
-          console.log('%c🔒 Developer tools detected!', 'color: #ff4444; font-size: 20px; font-weight: bold;');
+          console.log('%cDeveloper tools detected', 'color: #ff4444; font-size: 20px; font-weight: bold;');
           console.log('%cPlease close DevTools to continue.', 'color: #ffaa00; font-size: 14px;');
           showWarning();
         }
@@ -288,7 +285,7 @@
       if (warningShown) {
         warningShown = false;
         hideWarning();
-        console.log('%c✅ DevTools closed. Welcome back!', 'color: #4ade80; font-size: 16px; font-weight: bold;');
+        console.log('%cDevTools closed. Welcome back!', 'color: #4ade80; font-size: 16px; font-weight: bold;');
       }
     }
   }
