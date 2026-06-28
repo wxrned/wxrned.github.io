@@ -1,0 +1,14 @@
+{
+  "name": "wxrn-website",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node build.js",
+    "build:minify": "node build.js"
+  },
+  "devDependencies": {
+    "clean-css-cli": "^5.6.0",
+    "esbuild": "^0.19.0",
+    "terser": "^5.27.0",
+    "uglify-js": "^3.17.0"
+  }
+}
