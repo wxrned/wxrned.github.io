@@ -65,6 +65,9 @@ const tracks = [
   { title: "boolymon - kookoo", path: "assets/music/kookoo.mp3" },
   { title: "boolymon - hilfiger", path: "assets/music/hilfiger.mp3" },
   { title: "fakemink - Look At Me", path: "assets/music/LookAtMe.mp3" },
+  { title: "bleood - i kno u kno wat u did", path: "assets/music/IKnoUKnoWatUDid.mp3" },
+  { title: "bleood - alucard", path: "assets/music/alucard.mp3" },
+  { title: "Che - Tell U Sum", path: "assets/music/TellUSum.mp3" },
   {
     title: "Destroy Lonely - vvs valentine",
     path: "assets/music/vvsvalentine.mp3",
