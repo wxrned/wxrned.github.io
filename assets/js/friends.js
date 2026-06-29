@@ -1,8 +1,3 @@
-// friends.js - Horizontal carousel friends menu
-
-// ============================================
-// FRIENDS DATA - Add your friends here
-// ============================================
 const friendsData = [
   {
     id: "eddie",

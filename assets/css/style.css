@@ -729,7 +729,7 @@ a {
 }
 
 /* ============================================
-   LYRICS POPUP - REVAMPED WITH SLIDING
+   LYRICS POPUP
    ============================================ */
 
 #lyrics-popup {
@@ -841,7 +841,7 @@ a {
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: 200px;
+  min-height: 180px;
   max-height: 100%;
   overflow: hidden;
   padding: 4px 0;
@@ -861,21 +861,6 @@ a {
   gap: 2px;
 }
 
-/* ============================================
-   LYRICS SLIDING CONTAINER
-   ============================================ */
-
-.lyrics-slider {
-  position: relative;
-  width: 100%;
-  min-height: 160px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  will-change: transform;
-}
-
 .lyrics-container {
   display: flex;
   flex-direction: column;
@@ -883,12 +868,12 @@ a {
   width: 100%;
   gap: 4px;
   padding: 8px 0;
-  min-height: 140px;
+  min-height: 120px;
   justify-content: center;
 }
 
 /* ============================================
-   LYRIC LINE STYLES - PREVIOUS, CURRENT, NEXT
+   LYRIC LINE STYLES
    ============================================ */
 
 .lyric-line {
@@ -896,7 +881,7 @@ a {
   color: rgba(255, 255, 255, 0.15);
   font-size: 16px;
   padding: 6px 12px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
   max-width: 100%;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -908,6 +893,7 @@ a {
   border-radius: 6px;
 }
 
+/* Title - Always visible */
 .lyric-line.title {
   display: block !important;
   color: var(--text-color-light);
@@ -929,34 +915,18 @@ a {
    ============================================ */
 
 .lyric-line.slide-in {
-  animation: lyricSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: lyricSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   display: block !important;
 }
 
 @keyframes lyricSlideIn {
   0% {
     opacity: 0;
-    transform: translateY(20px) scale(0.95);
+    transform: translateY(15px) scale(0.95);
   }
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
-  }
-}
-
-.lyric-line.slide-out {
-  animation: lyricSlideOut 0.3s ease forwards;
-  display: block !important;
-}
-
-@keyframes lyricSlideOut {
-  0% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-15px) scale(0.95);
   }
 }
 
@@ -985,8 +955,8 @@ a {
 .lyric-line.previous {
   display: block !important;
   font-size: 14px;
-  opacity: 0.5 !important;
-  color: rgba(255, 255, 255, 0.4) !important;
+  opacity: 0.4 !important;
+  color: rgba(255, 255, 255, 0.35) !important;
   transform: scale(0.95);
 }
 
@@ -994,8 +964,8 @@ a {
 .lyric-line.next {
   display: block !important;
   font-size: 14px;
-  opacity: 0.25 !important;
-  color: rgba(255, 255, 255, 0.2) !important;
+  opacity: 0.2 !important;
+  color: rgba(255, 255, 255, 0.15) !important;
   transform: scale(0.95);
 }
 
@@ -1099,9 +1069,6 @@ a {
     transition: none;
   }
   .lyric-line.slide-in {
-    animation: none;
-  }
-  .lyric-line.slide-out {
     animation: none;
   }
   .lyric-line.highlight {
