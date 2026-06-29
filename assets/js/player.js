@@ -1,5 +1,3 @@
-// player.js - Fully updated with minimal lyrics style and sliding animations
-
 const mainContent = document.querySelector("main");
 const overlay = document.getElementById("overlay");
 const audioPlayer = document.getElementById("audio");
@@ -85,7 +83,6 @@ let lastTrackPlayed = null;
 let lastRenderedIndex = -1;
 let cachedLyrics = null;
 let abortController;
-let lyricAnimationTimeout = null;
 
 // ============================================
 // ALBUM COVER FUNCTIONS
@@ -268,7 +265,7 @@ async function fetchLyrics(songName, artistName) {
 }
 
 // ============================================
-// LYRICS DISPLAY - MINIMAL STYLE WITH SLIDING ANIMATIONS
+// LYRICS DISPLAY - MINIMAL STYLE
 // ============================================
 
 // Ensure lyrics display container exists
@@ -312,7 +309,7 @@ function getLyricsDisplay() {
   return lyricsDisplay;
 }
 
-// MINIMAL LYRICS DISPLAY WITH SLIDING ANIMATIONS
+// MINIMAL LYRICS DISPLAY - Shows previous, current, and next lines
 async function displayLyrics(songName, artistName, audioPlayer) {
   const lyricsDisplay = getLyricsDisplay();
   
@@ -340,18 +337,16 @@ async function displayLyrics(songName, artistName, audioPlayer) {
       return;
     }
 
-    // Build minimal lyrics HTML with sliding container
+    // Build minimal lyrics HTML
     let lyricsHTML = `<div class="lyrics-wrapper">`;
     lyricsHTML += `<div class="lyric-line title">${artistName}<br><span style="font-size:14px;opacity:0.2;">—</span><br>${songName}</div>`;
-    lyricsHTML += `<div class="lyrics-slider" id="lyrics-slider">`;
-    lyricsHTML += `<div class="lyrics-container" id="lyrics-container">`;
     
+    // Store all lyric lines with their indices
+    lyricsHTML += `<div class="lyrics-container">`;
     lyricsArray.forEach((line, index) => {
       const className = index === 0 ? 'lyric-line highlight' : 'lyric-line';
       lyricsHTML += `<div class="${className}" data-time="${line.timestamp}" data-index="${index}">${line.lyrics}</div>`;
     });
-    
-    lyricsHTML += `</div>`;
     lyricsHTML += `</div>`;
     lyricsHTML += `</div>`;
     
@@ -359,13 +354,13 @@ async function displayLyrics(songName, artistName, audioPlayer) {
     
     // Initialize highlight state
     setTimeout(() => {
-      updateMinimalLyricsWithSlide();
+      updateMinimalLyricsHighlight();
     }, 100);
     
-    // Add timeupdate listener for highlighting with slide animation
+    // Add timeupdate listener for highlighting
     if (audioPlayer) {
-      audioPlayer.removeEventListener('timeupdate', updateMinimalLyricsWithSlide);
-      audioPlayer.addEventListener('timeupdate', updateMinimalLyricsWithSlide);
+      audioPlayer.removeEventListener('timeupdate', updateMinimalLyricsHighlight);
+      audioPlayer.addEventListener('timeupdate', updateMinimalLyricsHighlight);
     }
     
   } catch (error) {
@@ -374,13 +369,10 @@ async function displayLyrics(songName, artistName, audioPlayer) {
   }
 }
 
-// MINIMAL HIGHLIGHT WITH SLIDING ANIMATION
-let lastSlideIndex = -1;
-
-function updateMinimalLyricsWithSlide() {
-  const lyricsContainer = document.getElementById('lyrics-container');
-  const slider = document.getElementById('lyrics-slider');
-  if (!lyricsContainer || !slider) return;
+// MINIMAL HIGHLIGHT - Shows previous, current, and next lines
+function updateMinimalLyricsHighlight() {
+  const lyricsContainer = document.querySelector('.lyrics-container');
+  if (!lyricsContainer) return;
   
   const currentTime = audioPlayer.currentTime * 1000;
   const allLines = lyricsContainer.querySelectorAll('.lyric-line');
@@ -401,41 +393,31 @@ function updateMinimalLyricsWithSlide() {
     currentIndex = 0;
   }
   
-  // Only update if index changed
-  if (currentIndex === lastSlideIndex) return;
-  lastSlideIndex = currentIndex;
-  
-  // Calculate the height for sliding
-  const lineHeight = 48; // Approximate height per line
-  const offset = Math.max(0, currentIndex - 1) * lineHeight;
-  
-  // Apply slide animation
-  slider.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-  slider.style.transform = `translateY(-${offset}px)`;
-  
   // Update visibility - only show previous, current, and next
   allLines.forEach((line, index) => {
-    // Reset classes
-    line.classList.remove('highlight', 'previous', 'next', 'slide-in', 'slide-out');
+    // Hide all lines by default
+    line.style.display = 'none';
+    line.classList.remove('highlight', 'previous', 'next');
     
     // Only show previous, current, and next lines
     if (index === currentIndex) {
-      line.classList.add('highlight', 'slide-in');
+      line.style.display = 'block';
+      line.classList.add('highlight');
     } else if (index === currentIndex - 1) {
-      line.classList.add('previous', 'slide-in');
+      line.style.display = 'block';
+      line.classList.add('previous');
     } else if (index === currentIndex + 1) {
-      line.classList.add('next', 'slide-in');
+      line.style.display = 'block';
+      line.classList.add('next');
     }
   });
   
-  // Trigger slide animations for individual lines
-  setTimeout(() => {
-    allLines.forEach((line) => {
-      if (line.classList.contains('slide-in')) {
-        line.classList.remove('slide-in');
-      }
-    });
-  }, 500);
+  // Ensure at least one line is visible
+  const visibleLines = lyricsContainer.querySelectorAll('.lyric-line[style*="display: block"]');
+  if (visibleLines.length === 0 && allLines.length > 0) {
+    allLines[0].style.display = 'block';
+    allLines[0].classList.add('highlight');
+  }
 }
 
 // ============================================
@@ -460,9 +442,6 @@ function closeLyricsPopup() {
   if (avatarDecoration) {
     avatarDecoration.classList.remove('fade-out');
   }
-  
-  // Reset slide position
-  lastSlideIndex = -1;
   
   setTimeout(() => {
     if (lyricsPopup) lyricsPopup.style.display = 'none';
@@ -526,11 +505,6 @@ seekBar.addEventListener("input", (e) => {
   const seekTo = (e.target.value / 100) * audioPlayer.duration;
   audioPlayer.currentTime = seekTo;
   isDragging = false;
-  
-  // Update lyrics when seeking
-  setTimeout(() => {
-    updateMinimalLyricsWithSlide();
-  }, 50);
 });
 
 playPauseBtn.addEventListener("click", () => {
