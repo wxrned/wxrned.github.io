@@ -1,4 +1,4 @@
-// player.js - Fully updated with revamped lyrics popup
+// player.js - Fully updated with minimal lyrics style
 
 const mainContent = document.querySelector("main");
 const overlay = document.getElementById("overlay");
@@ -90,11 +90,6 @@ let abortController;
 // ALBUM COVER FUNCTIONS
 // ============================================
 
-/**
- * @param {string} artist
- * @param {string} title
- * @returns {Promise<string|null>}
- */
 async function fetchLastFmAlbumCover(artist, title) {
   try {
     const apiUrl = `https://api.wxrn.lol/lastfm/cover?artist=${encodeURIComponent(
@@ -118,9 +113,6 @@ async function fetchLastFmAlbumCover(artist, title) {
   }
 }
 
-/**
- * @param {string|null} imageUrl
- */
 function updateAlbumCover(imageUrl) {
   if (imageUrl) {
     if (!pfpImage.dataset.originalSrc) {
@@ -275,19 +267,17 @@ async function fetchLyrics(songName, artistName) {
 }
 
 // ============================================
-// LYRICS DISPLAY - REVAMPED
+// LYRICS DISPLAY - MINIMAL STYLE
 // ============================================
 
 // Ensure lyrics display container exists
 function getLyricsDisplay() {
   let lyricsDisplay = document.getElementById('lyricsDisplay');
   if (!lyricsDisplay) {
-    // Create the display element if it doesn't exist
     lyricsDisplay = document.createElement('div');
     lyricsDisplay.id = 'lyricsDisplay';
     lyricsDisplay.className = 'lyrics-display';
     
-    // Find or create the lyrics popup container
     let lyricsPopup = document.getElementById('lyrics-popup');
     if (!lyricsPopup) {
       lyricsPopup = document.createElement('div');
@@ -304,7 +294,6 @@ function getLyricsDisplay() {
       document.body.appendChild(lyricsPopup);
       lyricsDisplay = lyricsPopup.querySelector('#lyricsDisplay');
     } else {
-      // If popup exists but display doesn't, add it
       const container = lyricsPopup.querySelector('.lyrics-display-container');
       if (container && !container.querySelector('#lyricsDisplay')) {
         container.innerHTML = '';
@@ -322,7 +311,7 @@ function getLyricsDisplay() {
   return lyricsDisplay;
 }
 
-// Display lyrics function - updated for revamped popup
+// MINIMAL LYRICS DISPLAY - Shows previous, current, and next lines
 async function displayLyrics(songName, artistName, audioPlayer) {
   const lyricsDisplay = getLyricsDisplay();
   
@@ -350,22 +339,30 @@ async function displayLyrics(songName, artistName, audioPlayer) {
       return;
     }
 
-    // Build lyrics HTML with proper structure
+    // Build minimal lyrics HTML
     let lyricsHTML = `<div class="lyrics-wrapper">`;
-    lyricsHTML += `<div class="lyric-line title">${artistName}<br><span style="font-size:14px;opacity:0.3;">—</span><br>${songName}</div>`;
+    lyricsHTML += `<div class="lyric-line title">${artistName}<br><span style="font-size:14px;opacity:0.2;">—</span><br>${songName}</div>`;
     
+    // Store all lyric lines with their indices
+    lyricsHTML += `<div class="lyrics-container">`;
     lyricsArray.forEach((line, index) => {
       const className = index === 0 ? 'lyric-line highlight' : 'lyric-line';
       lyricsHTML += `<div class="${className}" data-time="${line.timestamp}" data-index="${index}">${line.lyrics}</div>`;
     });
-    
     lyricsHTML += `</div>`;
+    lyricsHTML += `</div>`;
+    
     lyricsDisplay.innerHTML = lyricsHTML;
+    
+    // Initialize highlight state
+    setTimeout(() => {
+      updateMinimalLyricsHighlight();
+    }, 100);
     
     // Add timeupdate listener for highlighting
     if (audioPlayer) {
-      audioPlayer.removeEventListener('timeupdate', updateLyricsHighlight);
-      audioPlayer.addEventListener('timeupdate', updateLyricsHighlight);
+      audioPlayer.removeEventListener('timeupdate', updateMinimalLyricsHighlight);
+      audioPlayer.addEventListener('timeupdate', updateMinimalLyricsHighlight);
     }
     
   } catch (error) {
@@ -374,39 +371,61 @@ async function displayLyrics(songName, artistName, audioPlayer) {
   }
 }
 
-// Separate function for updating lyrics highlight
-function updateLyricsHighlight() {
-  const lyricsWrapper = document.querySelector('.lyrics-wrapper');
-  if (!lyricsWrapper) return;
+// MINIMAL HIGHLIGHT - Shows previous, current, and next lines
+function updateMinimalLyricsHighlight() {
+  const lyricsContainer = document.querySelector('.lyrics-container');
+  if (!lyricsContainer) return;
   
   const currentTime = audioPlayer.currentTime * 1000;
-  const lines = lyricsWrapper.querySelectorAll('.lyric-line:not(.title)');
+  const allLines = lyricsContainer.querySelectorAll('.lyric-line');
   
+  if (allLines.length === 0) return;
+  
+  // Find current line index
   let currentIndex = -1;
-  lines.forEach((line, index) => {
+  allLines.forEach((line, index) => {
     const timestamp = parseInt(line.dataset.time);
     if (timestamp && currentTime >= timestamp) {
       currentIndex = index;
     }
   });
   
-  lines.forEach((line, index) => {
+  // If no line found, show first line
+  if (currentIndex === -1 && allLines.length > 0) {
+    currentIndex = 0;
+  }
+  
+  // Update visibility - only show previous, current, and next
+  allLines.forEach((line, index) => {
+    // Hide all lines by default
+    line.style.display = 'none';
     line.classList.remove('highlight', 'previous', 'next');
+    
+    // Only show previous, current, and next lines
     if (index === currentIndex) {
+      line.style.display = 'block';
       line.classList.add('highlight');
     } else if (index === currentIndex - 1) {
+      line.style.display = 'block';
       line.classList.add('previous');
     } else if (index === currentIndex + 1) {
+      line.style.display = 'block';
       line.classList.add('next');
     }
   });
+  
+  // Ensure at least one line is visible
+  const visibleLines = lyricsContainer.querySelectorAll('.lyric-line[style*="display: block"]');
+  if (visibleLines.length === 0 && allLines.length > 0) {
+    allLines[0].style.display = 'block';
+    allLines[0].classList.add('highlight');
+  }
 }
 
 // ============================================
 // LYRICS POPUP CONTROLS
 // ============================================
 
-// Close lyrics popup
 function closeLyricsPopup() {
   const lyricsPopup = document.getElementById('lyrics-popup');
   const overlay = document.getElementById('overlay');
@@ -432,7 +451,6 @@ function closeLyricsPopup() {
   }, 300);
 }
 
-// Open lyrics popup
 function openLyricsPopup() {
   const lyricsPopup = document.getElementById('lyrics-popup');
   const overlay = document.getElementById('overlay');
@@ -506,45 +524,32 @@ playPauseBtn.addEventListener("click", () => {
   }
 });
 
-// Lyrics close button
 if (lyricsCloseBtn) {
   lyricsCloseBtn.addEventListener('click', closeLyricsPopup);
 }
 
-// Lyrics open button
 if (lyricsButton) {
   lyricsButton.addEventListener('click', openLyricsPopup);
 }
 
-// Footer click to open lyrics
 if (footer) {
   footer.addEventListener('click', openLyricsPopup);
 }
 
-// Close on ESC
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     const lyricsPopup = document.getElementById('lyrics-popup');
     if (lyricsPopup && lyricsPopup.classList.contains('show')) {
       closeLyricsPopup();
     }
-    const popup = document.getElementById('popup');
-    if (popup && popup.classList.contains('show') && typeof closePopup === 'function') {
-      closePopup();
-    }
   }
 });
 
-// Click overlay to close
 if (overlay) {
   overlay.addEventListener('click', (e) => {
     const lyricsPopup = document.getElementById('lyrics-popup');
-    const popup = document.getElementById('popup');
     if (lyricsPopup && lyricsPopup.classList.contains('show')) {
       closeLyricsPopup();
-    }
-    if (popup && popup.classList.contains('show') && typeof closePopup === 'function') {
-      closePopup();
     }
   });
 }
@@ -595,7 +600,6 @@ window.onload = async function () {
 
   loadRandomTrack();
   
-  // Use the updated display function
   const currentTrackData = tracks[currentTrack];
   if (currentTrackData && currentTrackData.song && currentTrackData.artist) {
     displayLyrics(currentTrackData.song, currentTrackData.artist, audioPlayer);
