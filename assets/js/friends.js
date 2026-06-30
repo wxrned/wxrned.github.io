@@ -28,6 +28,13 @@ const friendsData = [
     color: "#6c5ce7",
   },
   {
+    id: "solar",
+    discordId: "461338622310875146",
+    name: "solar",
+    description: "my babygirl",
+    color: "#FF7F7F",
+  },
+  {
     id: "sudo",
     discordId: "463360937949134852",
     name: "sudo",
@@ -42,18 +49,25 @@ const friendsData = [
     color: "#00b894",
   },
   {
-    id: "reject",
-    discordId: "903969587031339019",
-    name: "reject",
-    description: "uh idk yet",
-    color: "#FF7F7F",
-  },
-  {
     id: "jade",
     discordId: "925155098223591434",
     name: "jade",
     description: "twerkprincess lol",
     color: "#fd79a8",
+  },
+  {
+    id: "reject",
+    discordId: "903969587031339019",
+    name: "reject",
+    description: "the one and only",
+    color: "#FF7F7F",
+  },
+  {
+    id: "gid",
+    discordId: "473072537916538890",
+    name: "gid",
+    description: "og rift client",
+    color: "#FF7F7F",
   },
 ];
 
